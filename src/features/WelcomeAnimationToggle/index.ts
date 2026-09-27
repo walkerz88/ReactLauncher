@@ -1,0 +1,1 @@
+export { WelcomeAnimationToggle } from './WelcomeAnimationToggle';

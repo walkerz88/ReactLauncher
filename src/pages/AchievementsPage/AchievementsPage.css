@@ -1,0 +1,518 @@
+:root,
+:root[data-theme="dark"] {
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
+  --series-5: #d55181;
+  --series-6: #008300;
+}
+
+:root[data-theme="light"] {
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+  --series-5: #e87ba4;
+  --series-6: #008300;
+}
+
+.achievements__wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-top: 16px;
+}
+
+.achievements__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 12px;
+  max-width: 1100px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.level-card {
+  display: flex;
+  gap: 24px;
+  max-width: 1100px;
+  padding: 20px 24px;
+}
+
+.level-card__badge {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 88px;
+}
+
+.level-card__level {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 210deg,
+    var(--color-accent),
+    var(--color-accent-subtle),
+    var(--color-accent)
+  );
+}
+
+.level-card__profile-name {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text-muted);
+}
+
+.level-card__manage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  color: var(--color-text-muted);
+}
+
+.level-card__manage:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.level-card__level-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  background-color: var(--color-surface);
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.level-card__main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.level-card__heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+
+.level-card__title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.level-card__caption,
+.level-card__xp {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.level-card__bar {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background-color: var(--color-border);
+}
+
+.level-card__bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background-color: var(--color-accent);
+  transition: width 0.4s ease;
+}
+
+.level-card__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  margin: 8px 0 0;
+}
+
+.level-card__stat {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.level-card__stat dd {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.level-card__stat dt {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.achievement-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+}
+
+.achievement-card--unlocked {
+  border-color: var(--color-accent-subtle);
+  background-color: var(--color-accent-subtle);
+}
+
+.achievement-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.achievement-card__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.achievement-card__description {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--color-text-muted);
+}
+
+.achievement-card__status {
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.achievement-card__progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.achievement-card__bar {
+  flex: 1;
+  height: 5px;
+  overflow: hidden;
+  border-radius: 999px;
+  background-color: var(--color-border);
+}
+
+.achievement-card__bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background-color: var(--color-text-muted);
+}
+
+.achievement-card__count {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.achievement-card__xp {
+  align-self: flex-start;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.achievement-card--unlocked .achievement-card__xp {
+  color: var(--color-accent);
+}
+
+.stats-empty {
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+/* A flat "stats bar" instead of a grid of boxed cards: one framed strip, items divided by
+   hairlines rather than each wrapped in its own card. */
+.stats__tiles {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1200px;
+}
+
+.stat-tile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px 16px 0;
+}
+
+.stat-tile__icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  color: var(--color-accent);
+  background-color: var(--color-accent-subtle);
+}
+
+.stat-tile__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.stat-tile__value {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.stat-tile__label {
+  overflow: hidden;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text-muted);
+}
+
+.stats__charts {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 24px;
+}
+
+.stats__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.stats__row > .stats-card {
+  flex: 1 1 320px;
+}
+
+.stats-card {
+  max-width: 1200px;
+}
+
+.stats-card .recharts-wrapper,
+.stats-card .recharts-wrapper * {
+  font-family: inherit;
+}
+
+.stats-card .recharts-cartesian-axis-tick-value {
+  font-family: inherit;
+}
+
+/* Recharts' hover highlight rectangle defaults to a heavy fill; the cursor prop already sets our own color,
+   this just keeps it from drawing on top with full opacity. */
+.stats-card .recharts-tooltip-cursor {
+  opacity: 0.6;
+}
+
+.stats-card .recharts-bar-rectangle:focus,
+.stats-card .recharts-surface:focus {
+  outline: none;
+}
+
+/* Activity calendar: a GitHub-style contribution grid, shaded from `--color-border` up to full
+ * `--color-accent` (a magnitude, so one hue, light → dark — see the other stats charts). */
+.activity-calendar {
+  display: flex;
+  gap: 3px;
+  margin-top: 12px;
+  padding-bottom: 4px;
+  overflow-x: auto;
+}
+
+.activity-calendar__col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.activity-calendar__cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  background-color: var(--color-border);
+}
+
+.activity-calendar__cell--future {
+  background-color: transparent;
+}
+
+.activity-calendar__cell--1 {
+  background-color: color-mix(in srgb, var(--color-accent) 30%, var(--color-border));
+}
+
+.activity-calendar__cell--2 {
+  background-color: color-mix(in srgb, var(--color-accent) 55%, var(--color-border));
+}
+
+.activity-calendar__cell--3 {
+  background-color: color-mix(in srgb, var(--color-accent) 78%, var(--color-border));
+}
+
+.activity-calendar__cell--4 {
+  background-color: var(--color-accent);
+}
+
+/* Active-hours heatmap: same shading scale as the calendar above, applied to a weekday × hour grid. */
+.hours-heatmap {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 12px;
+  padding-bottom: 4px;
+  overflow-x: auto;
+}
+
+.hours-heatmap__row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hours-heatmap__row-label {
+  flex-shrink: 0;
+  width: 26px;
+  font-size: 11px;
+  color: var(--color-text-muted);
+  text-align: right;
+}
+
+.hours-heatmap__cells {
+  display: flex;
+  gap: 3px;
+}
+
+.hours-heatmap__cell {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  background-color: var(--color-border);
+}
+
+.hours-heatmap__hour {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  font-size: 9px;
+  color: var(--color-text-muted);
+}
+
+.hours-heatmap__cell--1 {
+  background-color: color-mix(in srgb, var(--color-accent) 30%, var(--color-border));
+}
+
+.hours-heatmap__cell--2 {
+  background-color: color-mix(in srgb, var(--color-accent) 55%, var(--color-border));
+}
+
+.hours-heatmap__cell--3 {
+  background-color: color-mix(in srgb, var(--color-accent) 78%, var(--color-border));
+}
+
+.hours-heatmap__cell--4 {
+  background-color: var(--color-accent);
+}
+
+.genre-trend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.genre-trend__item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 90px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background-color: var(--color-surface-hover);
+}
+
+.genre-trend__month {
+  font-size: 11px;
+  text-transform: capitalize;
+  color: var(--color-text-muted);
+}
+
+.genre-trend__genre {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.favorite-games {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.favorite-games__item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.favorite-games__period {
+  flex-shrink: 0;
+  width: 60px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+
+.favorite-games__name {
+  flex: 1;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.favorite-games__time {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}

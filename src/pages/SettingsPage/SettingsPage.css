@@ -1,0 +1,16 @@
+.settings-section {
+  margin-top: 8px;
+}
+
+.settings-section + .settings-section {
+  margin-top: 44px;
+}
+
+.settings-section__title {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}

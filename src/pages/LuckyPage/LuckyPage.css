@@ -1,0 +1,186 @@
+.lucky-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  gap: 8px;
+}
+
+/* Icon + revealed winner's name/rating, side by side. Centered as a group while there's no winner yet
+ * (just the icon); once a winner lands, adding the text pushes the icon left of center and the text
+ * reads as sliding out from under it, via the icon's own `layout` animation + the text's enter transition. */
+.lucky-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+/* Dimmed down from the badge's normal full-saturation gold — here it's decoration above the reel,
+ * not an earned achievement, so it shouldn't compete with it for attention. */
+.lucky-page__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  opacity: 0.8;
+  filter: saturate(0.7) brightness(0.9);
+}
+
+.lucky-page__winner {
+  display: flex;
+  flex-direction: column;
+  /* Without this, a flex column's children default to stretching to the container's full cross-axis
+   * width — the rating pill would span the same width as the name instead of sizing to its own content. */
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.lucky-page__winner-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* Centers the icon + reel + button + result as a group in the remaining page space,
+ * and re-centers itself as that group grows (e.g. once the result card appears). */
+.lucky-page__stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 24px 0;
+}
+
+.lucky-reel {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 900px;
+  height: 320px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 100%);
+  border: 1px solid var(--color-border);
+  mask-image: linear-gradient(90deg, transparent 0%, black 12%, black 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 12%, black 88%, transparent 100%);
+}
+
+.lucky-reel__track {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 100%;
+}
+
+.lucky-reel__item {
+  flex-shrink: 0;
+  transform-origin: center;
+  will-change: transform;
+  cursor: pointer;
+}
+
+.lucky-reel__item .app-card__cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  height: auto;
+}
+
+/* Real covers fade in the first time they replace the "?" placeholders. */
+.lucky-reel__cover-reveal {
+  animation: lucky-reel-cover-reveal 0.4s ease forwards;
+}
+
+@keyframes lucky-reel-cover-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Sized to match the centered tile at its full coverflow scale
+ * (CARD_WIDTH/height * SCALE_CENTER from LuckyPage.tsx). */
+.lucky-reel__pointer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 196px;
+  height: 293px;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--color-accent);
+  border-radius: 12px;
+  box-shadow: 0 0 0 3px var(--color-accent-subtle);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Same style as `.icon-btn` on the game page (PreviewPage.css) — just round instead of `border-radius: 9px`. */
+.lucky-page__spin-btn--icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background-color: var(--color-surface);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.lucky-page__spin-btn--icon:hover:not(:disabled) {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.lucky-page__spin-btn--icon:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.lucky-page__spin-btn--icon:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.lucky-result {
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border);
+}
+
+.lucky-result__label {
+  margin: 0 0 12px;
+  color: var(--color-text-muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+.lucky-result__card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.app-card__cover.lucky-result__cover {
+  width: 120px;
+  flex-shrink: 0;
+  aspect-ratio: 2 / 3;
+}
+
+.lucky-result__info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.lucky-result__name {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}

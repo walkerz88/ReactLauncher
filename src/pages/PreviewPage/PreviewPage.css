@@ -1,0 +1,858 @@
+.app-page {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.app-page > *:not(.app-page__hero) {
+  max-width: 1000px;
+}
+
+/* Description / facts / media / player gallery — and any future block — share one consistent,
+ * more generous gap than the header area above them. */
+.app-page__sections {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Full-bleed: cancels `.app-main`'s padding so the hero spans the page edge to edge.
+ * `flex-shrink: 0` is required, not decorative: `.app-page` is a flex column that scrolls
+ * (`overflow: auto`) rather than growing, and this element itself has `overflow: hidden` —
+ * which, per the flexbox spec, zeroes a flex item's *automatic* minimum size instead of
+ * basing it on content. Every sibling here keeps its content-based minimum (default
+ * overflow), so without `flex-shrink: 0` this is the only child allowed to shrink, and on
+ * any page long enough to need scrolling the flex algorithm squeezes it down to ~0 height
+ * to make the rest fit — reproduced on real games (long pages) but not short ones. */
+.app-page__hero {
+  position: relative;
+  flex-shrink: 0;
+  margin: calc(-1 * var(--page-padding, 24px)) calc(-1 * var(--page-padding, 24px)) 0;
+  width: calc(100% + var(--page-padding, 24px) * 2);
+  aspect-ratio: 16 / 6;
+  overflow: hidden;
+  background-color: var(--color-surface);
+}
+
+.app-page__hero-fill {
+  position: absolute;
+  inset: 0;
+}
+
+.app-page__hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, transparent 30%);
+  pointer-events: none;
+}
+
+.app-page__hero img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.app-page__hero-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 72px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.app-page__back {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px 8px 10px;
+  border: none;
+  border-radius: 999px;
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.app-page__back:hover {
+  background-color: rgba(0, 0, 0, 0.65);
+}
+
+.app-page__back--standalone {
+  position: static;
+  width: fit-content;
+  padding: 0;
+  background: none;
+  backdrop-filter: none;
+  color: var(--color-text-muted);
+}
+
+.app-page__back--standalone:hover {
+  background: none;
+  color: var(--color-text);
+}
+
+.app-page__title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-page__title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.app-page__note {
+  margin-top: 12px;
+  color: var(--color-text-muted);
+}
+
+.app-page__description {
+  max-width: 110ch;
+}
+
+.app-page__facts {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 78ch;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.app-page__fact {
+  display: flex;
+  gap: 10px;
+}
+
+.app-page__fact dt {
+  flex-shrink: 0;
+  min-width: 132px;
+  font-weight: 600;
+}
+
+.app-page__fact dd {
+  margin: 0;
+}
+
+.app-page__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-page__nav {
+  display: flex;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.spin {
+  animation: app-page-spin 1s linear infinite;
+}
+
+@keyframes app-page-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* --- loading skeleton (matches the loaded layout's shape) --- */
+
+.app-page__skeleton {
+  border-radius: 9px;
+  background-color: var(--color-surface);
+  animation: app-page-skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+.app-page__hero-fill.app-page__skeleton {
+  border-radius: 0;
+}
+
+.app-page__skeleton--title {
+  width: 320px;
+  max-width: 60%;
+  height: 28px;
+}
+
+.app-page__skeleton--button {
+  width: 140px;
+  height: 40px;
+}
+
+.app-page__skeleton--icon {
+  width: 40px;
+  height: 40px;
+}
+
+@keyframes app-page-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* --- buttons --- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 9px;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.btn:hover:not(:disabled) {
+  background-color: var(--color-surface-hover);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Chromium only shows `:focus-visible` for keyboard-driven focus, not for
+   `element.focus()` calls (e.g. auto-focusing Play on page load) — style
+   plain `:focus` too so a programmatic focus is still visible. */
+.btn:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.btn--danger {
+  border-color: var(--color-danger);
+  background-color: var(--color-danger-subtle);
+  color: var(--color-danger);
+}
+
+.btn--danger:hover:not(:disabled) {
+  background-color: var(--color-danger);
+  color: #fff;
+}
+
+.btn--accent {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-accent-text);
+}
+
+.btn--accent:hover:not(:disabled) {
+  background-color: var(--color-accent);
+  filter: brightness(1.08);
+}
+
+.btn--small {
+  height: 28px;
+  padding: 0 12px;
+  font-size: 12px;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: 9px;
+  background-color: var(--color-surface);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.icon-btn:hover:not(:disabled) {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.icon-btn:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.icon-btn[aria-pressed='true'] {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent);
+}
+
+/* --- gear dropdown (GameSettingsMenu) --- */
+
+.game-settings-menu {
+  position: relative;
+}
+
+.game-settings-menu__dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  min-width: 180px;
+  padding: 6px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background-color: var(--color-surface);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+.game-settings-menu__item {
+  padding: 9px 12px;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.game-settings-menu__item:hover {
+  background-color: var(--color-surface-hover);
+}
+
+/* --- instructions popup (InstructionsModal) --- */
+
+.instructions-modal__text {
+  margin: 0;
+  color: var(--color-text);
+  font: inherit;
+  word-break: break-word;
+  line-height: 1.6;
+}
+
+.instructions-modal__text > *:first-child {
+  margin-top: 0;
+}
+
+.instructions-modal__text > *:last-child {
+  margin-bottom: 0;
+}
+
+.instructions-modal__text h1,
+.instructions-modal__text h2,
+.instructions-modal__text h3 {
+  margin: 20px 0 8px;
+  line-height: 1.3;
+  color: var(--color-text);
+}
+
+.instructions-modal__text h1 {
+  font-size: 20px;
+}
+
+.instructions-modal__text h2 {
+  font-size: 17px;
+}
+
+.instructions-modal__text h3 {
+  font-size: 15px;
+}
+
+.instructions-modal__text p {
+  margin: 0 0 12px;
+}
+
+.instructions-modal__text ul,
+.instructions-modal__text ol {
+  margin: 0 0 12px;
+  padding-left: 22px;
+}
+
+.instructions-modal__text li {
+  margin-bottom: 4px;
+}
+
+.instructions-modal__text a {
+  color: var(--color-accent);
+}
+
+.instructions-modal__text strong {
+  font-weight: 700;
+}
+
+.instructions-modal__text blockquote {
+  margin: 0 0 12px;
+  padding: 4px 12px;
+  border-left: 3px solid var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.instructions-modal__text code {
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: var(--color-surface);
+  font-size: 0.9em;
+}
+
+.instructions-modal__text pre {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--color-surface);
+  overflow-x: auto;
+}
+
+.instructions-modal__text pre code {
+  padding: 0;
+  background: none;
+}
+
+.instructions-modal__text hr {
+  margin: 16px 0;
+  border: none;
+  border-top: 1px solid var(--color-border);
+}
+
+.instructions-modal__text table {
+  width: 100%;
+  margin: 0 0 12px;
+  border-collapse: collapse;
+}
+
+.instructions-modal__text th,
+.instructions-modal__text td {
+  padding: 6px 10px;
+  border: 1px solid var(--color-border);
+  text-align: left;
+}
+
+/* --- config editor (EditConfigModal) --- */
+
+/* Pushed to the far edge of the (flex, right-aligned) footer, opposite "Автоматически"/"Сохранить". */
+.edit-config-modal__cancel {
+  margin-right: auto;
+}
+
+.edit-config-modal__spin {
+  animation: edit-config-modal-spin 1s linear infinite;
+}
+
+@keyframes edit-config-modal-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.edit-config-modal__error,
+.edit-config-modal__loading {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.edit-config-modal__error {
+  color: var(--color-danger);
+}
+
+.edit-config-modal__section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.edit-config-modal__section:last-child {
+  margin-bottom: 0;
+}
+
+.edit-config-modal__section h3 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 2px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.edit-config-modal__markup-hint {
+  cursor: help;
+}
+
+.edit-config-modal__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.edit-config-modal__facts {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-config-modal__fact {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+  list-style: none;
+}
+
+.edit-config-modal__fact:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.edit-config-modal__fact-fields {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.edit-config-modal__notes {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-config-modal__note {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+  list-style: none;
+}
+
+.edit-config-modal__note:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.edit-config-modal__handle {
+  flex-shrink: 0;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: grab;
+  touch-action: none;
+}
+
+.edit-config-modal__handle:active {
+  cursor: grabbing;
+}
+
+.edit-config-modal__note-fields {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+
+/* --- running indicator / play time --- */
+
+.app-page__running {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background-color: var(--color-success-subtle);
+  color: var(--color-success);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.app-page__running-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: currentColor;
+  animation: app-page-running-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes app-page-running-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.app-page__playtime {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.app-page__playtime strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+/* --- trailer + screenshots (MediaSection) --- */
+
+.app-page__media {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.app-page__section-title {
+  /* Spacing to the content below comes from the parent's flex `gap`, not this margin — the two would
+   * otherwise stack. */
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.app-page__screens {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+}
+
+.app-page__screen {
+  position: relative;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: 16 / 9;
+}
+
+.app-page__screen:hover,
+.app-page__screen:focus {
+  border-color: var(--color-accent);
+  outline: none;
+}
+
+.app-page__screen img,
+.app-page__screen video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.app-page__screen-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* Wraps a player-gallery thumbnail so its delete button (a sibling, not nested inside the
+ * `<button>` that opens the viewer — buttons can't nest) can sit on top of it. */
+.app-page__screen-slot {
+  position: relative;
+}
+
+.app-page__screen-delete,
+.app-page__screen-reveal {
+  position: absolute;
+  top: 6px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+.app-page__screen-delete {
+  right: 6px;
+}
+
+.app-page__screen-reveal {
+  right: 38px;
+}
+
+.app-page__screen-slot:hover .app-page__screen-delete,
+.app-page__screen-slot:hover .app-page__screen-reveal,
+.app-page__screen-delete:focus,
+.app-page__screen-reveal:focus {
+  opacity: 1;
+}
+
+.app-page__screen-delete:hover {
+  background-color: var(--color-danger);
+}
+
+.app-page__screen-reveal:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* --- player gallery (PlayerGallery) --- */
+
+.app-page__player-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.app-page__player-gallery-hint {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.app-page__hint-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.app-page__hint-row kbd {
+  padding: 1px 6px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background-color: var(--color-surface);
+  font-family: inherit;
+  font-size: 11px;
+  color: var(--color-text);
+}
+
+/* F9/F10 — fixed width (instead of `padding` alone) so both rows' text lines up. */
+.app-page__hint-key {
+  width: 32px;
+  text-align: center;
+}
+
+/* --- save backups (BackupsModal) --- */
+
+.backups-modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.backups-modal__intro,
+.backups-modal__empty {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.backups-modal__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.backups-modal__list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.backups-modal__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.backups-modal__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.backups-modal__date {
+  font-weight: 600;
+}
+
+.backups-modal__meta {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  word-break: break-all;
+}
+
+.backups-modal__actions,
+.backups-modal__confirm {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 8px;
+  font-size: 13px;
+}

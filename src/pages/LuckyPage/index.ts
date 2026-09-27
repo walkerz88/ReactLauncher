@@ -1,0 +1,1 @@
+export { LuckyPage } from './LuckyPage';

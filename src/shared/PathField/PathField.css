@@ -1,0 +1,16 @@
+.path-field__row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.path-field__row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.path-field__row .icon-btn {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+}

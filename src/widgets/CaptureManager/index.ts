@@ -1,0 +1,1 @@
+export { CaptureManager } from './CaptureManager';

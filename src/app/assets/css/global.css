@@ -1,0 +1,97 @@
+/* App-wide globals. Browser normalization is handled by `modern-normalize`
+   (imported before this file in `src/index.tsx`).
+
+   Theme tokens: the default `:root` set is the dark theme; `[data-theme="light"]`
+   overrides them. `<html data-theme>` is driven by the Zustand theme store. */
+
+:root,
+:root[data-theme="dark"] {
+  --color-bg: #15181c;
+  --color-surface: #1f2329;
+  --color-surface-hover: rgba(255, 255, 255, 0.08);
+  --color-border: rgba(255, 255, 255, 0.07);
+  --color-text: #e6eaf0;
+  --color-text-muted: #9aa4b2;
+  --color-accent: #5a9aff;
+  --color-accent-subtle: rgba(90, 154, 255, 0.16);
+  --color-accent-text: #0b1220;
+  --color-danger: #e0736b;
+  --color-danger-subtle: rgba(224, 115, 107, 0.14);
+  --color-warning: #e0b34a;
+  --color-warning-subtle: rgba(224, 179, 74, 0.14);
+  --color-success: #5cc292;
+  --color-success-subtle: rgba(92, 194, 146, 0.14);
+  --color-info: #5a9aff;
+  --color-info-subtle: rgba(90, 154, 255, 0.14);
+
+  --gradient-app:
+    radial-gradient(1100px 620px at 12% -8%, rgba(90, 154, 255, 0.14), transparent 60%),
+    radial-gradient(900px 640px at 108% 4%, rgba(150, 92, 255, 0.12), transparent 55%),
+    linear-gradient(180deg, #1a1f26 0%, #131519 60%, #101216 100%);
+
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --color-bg: #f4f5f7;
+  --color-surface: #ffffff;
+  --color-surface-hover: rgba(0, 0, 0, 0.05);
+  --color-border: rgba(0, 0, 0, 0.09);
+  --color-text: #1c2024;
+  --color-text-muted: #5c6672;
+  --color-accent: #2563eb;
+  --color-accent-subtle: rgba(37, 99, 235, 0.12);
+  --color-accent-text: #ffffff;
+  --color-danger: #dc2626;
+  --color-danger-subtle: rgba(220, 38, 38, 0.1);
+  --color-warning: #b45309;
+  --color-warning-subtle: rgba(180, 83, 9, 0.1);
+  --color-success: #15803d;
+  --color-success-subtle: rgba(21, 128, 61, 0.1);
+  --color-info: #2563eb;
+  --color-info-subtle: rgba(37, 99, 235, 0.1);
+
+  --gradient-app:
+    radial-gradient(1100px 620px at 12% -8%, rgba(37, 99, 235, 0.1), transparent 60%),
+    radial-gradient(900px 640px at 108% 4%, rgba(139, 92, 246, 0.08), transparent 55%),
+    linear-gradient(180deg, #ffffff 0%, #f1f3f7 60%, #eceff4 100%);
+
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Scrollbars follow the theme: the thumb is the muted text color, the hover/drag state the accent.
+   Uses the WebKit pseudo-elements because Electron 27's Chromium predates `scrollbar-color`. */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--color-text-muted) 45%, transparent);
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--color-text-muted) 75%, transparent);
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: var(--color-accent);
+  background-clip: padding-box;
+}

@@ -1,0 +1,181 @@
+.media-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(4, 6, 9, 0.97);
+  outline: none;
+  animation: media-viewer-in 0.15s ease both;
+}
+
+.media-viewer__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-shrink: 0;
+  padding: 10px 16px;
+}
+
+.media-viewer__counter {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.media-viewer__bar-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.media-viewer__button,
+.media-viewer__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.media-viewer__button {
+  border-radius: 50%;
+}
+
+.media-viewer__arrow {
+  border-radius: 9px;
+}
+
+.media-viewer__button:hover,
+.media-viewer__arrow:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.media-viewer__button:focus,
+.media-viewer__arrow:focus,
+.media-viewer__thumb:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.media-viewer__stage {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 0 72px;
+}
+
+.media-viewer__media {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 4px;
+  object-fit: contain;
+  user-select: none;
+  animation: media-viewer-media-in 0.2s ease both;
+}
+
+.media-viewer__arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  transform: translateY(-50%);
+}
+
+.media-viewer__arrow--prev {
+  left: 10px;
+}
+
+.media-viewer__arrow--next {
+  /* Matches `.media-viewer__bar`'s `padding: 10px 16px`, so this lines up with the close button above it. */
+  right: 16px;
+}
+
+.media-viewer__thumbs {
+  display: flex;
+  flex-shrink: 0;
+  gap: 8px;
+  padding: 12px 16px 16px;
+  overflow-x: auto;
+}
+
+.media-viewer__thumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 124px;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  background: none;
+  opacity: 0.55;
+  overflow: hidden;
+  cursor: pointer;
+  transition: opacity 0.15s ease, border-color 0.15s ease;
+}
+
+.media-viewer__thumb:hover {
+  opacity: 0.9;
+}
+
+.media-viewer__thumb--active {
+  border-color: var(--color-accent);
+  opacity: 1;
+}
+
+.media-viewer__thumb img,
+.media-viewer__thumb video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.media-viewer__thumb-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+@keyframes media-viewer-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes media-viewer-media-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 720px) {
+  .media-viewer__stage {
+    padding: 0 8px;
+  }
+
+  .media-viewer__thumb {
+    width: 96px;
+  }
+}

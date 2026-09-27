@@ -1,0 +1,16 @@
+.switch-field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.switch-field + .switch-field {
+  margin-top: 12px;
+}
+
+.switch-field__label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+}

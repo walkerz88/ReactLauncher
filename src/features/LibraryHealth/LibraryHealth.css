@@ -1,0 +1,330 @@
+.library-health__summary {
+  margin: 0 0 32px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.library-health__spin {
+  animation: library-health-spin 1s linear infinite;
+}
+
+@keyframes library-health-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.library-health__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.library-health__table th {
+  padding: 0 12px 8px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.library-health__row {
+  border-top: 1px solid var(--color-border);
+}
+
+.library-health__table td {
+  padding: 8px 12px;
+  vertical-align: middle;
+}
+
+.library-health__table th.library-health__col-checkbox,
+.library-health__table td.library-health__col-checkbox {
+  width: 1%;
+  padding-left: 0;
+}
+
+.library-health__col-cover {
+  width: 1%;
+}
+
+.library-health__col-open {
+  width: 1%;
+}
+
+.library-health__col-status {
+  width: 1%;
+}
+
+.library-health__table th.library-health__col-status,
+.library-health__table td.library-health__col-status {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.library-health__checkbox {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-accent);
+}
+
+.library-health__cover {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  overflow: hidden;
+  border-radius: 6px;
+  background-color: var(--color-surface);
+}
+
+.library-health__cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.library-health__cover-fallback {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.library-health__name {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.library-health__scan-spinner {
+  margin-right: 6px;
+  vertical-align: -2px;
+  color: var(--color-text-muted);
+}
+
+.library-health__tag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.library-health__tag--status {
+  margin-left: 8px;
+  background-color: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.library-health__open {
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.library-health__field-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+}
+
+.library-health__field-status--ok {
+  color: var(--color-success);
+  background-color: var(--color-success-subtle);
+}
+
+.library-health__field-status--missing {
+  color: var(--color-text-muted);
+  background-color: var(--color-surface-hover);
+}
+
+.library-health__field-status--warning {
+  color: var(--color-warning);
+  background-color: var(--color-warning-subtle);
+}
+
+/* Floating instead of a permanent block above the table — it only exists once there's something to
+ * act on. Pinned to the window (not `sticky` within the scrolling table) so a big table never pushes
+ * it down into the middle of the screen — `left` matches the sidebar's own width so it stays clear of
+ * it. The anchor spans the full content width so it can center the pill without also capturing clicks
+ * on the table underneath it. */
+.library-health__action-bar-anchor {
+  position: fixed;
+  left: 56px;
+  right: 0;
+  bottom: 24px;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.library-health__action-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 8px 8px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background-color: var(--color-surface);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  pointer-events: auto;
+  animation: library-health-bar-in 0.2s ease both;
+}
+
+@keyframes library-health-bar-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.library-health__action-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.library-health__field-status--none {
+  color: var(--color-text-muted);
+}
+
+.library-health__sizes {
+  margin-top: 48px;
+}
+
+.library-health__title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.library-health__sizes-overview {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 24px 40px;
+  margin-bottom: 24px;
+}
+
+.library-health__sizes-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 220px;
+}
+
+.library-health__disk-space {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 260px;
+}
+
+.library-health__disk-space-stats {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.library-health__disk-space-stats strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.library-health__disk-space-bar {
+  display: flex;
+  height: 8px;
+  gap: 2px;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.library-health__disk-space-bar-used {
+  background-color: var(--color-accent);
+}
+
+.library-health__disk-space-bar-free {
+  background-color: var(--color-accent-subtle);
+}
+
+.library-health__totals {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1 1 320px;
+  max-width: 560px;
+}
+
+.library-health__table th.library-health__col-size,
+.library-health__table td.library-health__col-size {
+  width: 1%;
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.library-health__sort-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.library-health__sort-button:hover {
+  color: var(--color-text);
+}
+
+.library-health__sizes-loading {
+  max-width: 320px;
+}
+
+/* Fill sits behind the label and grows from the left as the scan progresses, instead of a separate
+ * progress bar under the button. */
+.library-health__scan-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.library-health__scan-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background-color: var(--color-accent-subtle);
+  transition: width 0.2s ease;
+}
+
+.library-health__scan-label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}

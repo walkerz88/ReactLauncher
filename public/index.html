@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="%REACT_APP_PRODUCT_NAME% - Desktop Application"
+    />
+    <title>%REACT_APP_PRODUCT_NAME%</title>
+    <script>
+      // Paint the correct theme background before any CSS/JS has loaded, so the
+      // window doesn't flash the browser's default white while the bundle starts
+      // up (`themeStore` redoes this properly once React mounts).
+      (function () {
+        try {
+          var snapshot = window.electronAPI && window.electronAPI.profiles && window.electronAPI.profiles.loadSync();
+          var raw = snapshot && snapshot.stores && snapshot.stores.theme;
+          var stored = raw ? JSON.parse(raw) : null;
+          var state = stored && stored.state;
+          var theme = state && (state.themeMode === 'light' || state.theme === 'light') ? 'light' : 'dark';
+          var fallback = theme === 'light' ? '#f4f5f7' : '#15181c';
+          var background = state && /^#[0-9a-f]{6}$/i.test(state.themeBg) ? state.themeBg : fallback;
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.backgroundColor = background;
+        } catch (e) {
+          document.documentElement.style.backgroundColor = '#15181c';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>

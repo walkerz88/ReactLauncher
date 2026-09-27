@@ -1,0 +1,18 @@
+.steam-no-match-modal__caption {
+  margin: 0 0 16px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.steam-no-match-modal__spin {
+  animation: steam-no-match-modal-spin 1s linear infinite;
+}
+
+@keyframes steam-no-match-modal-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

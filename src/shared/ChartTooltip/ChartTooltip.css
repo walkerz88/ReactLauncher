@@ -1,0 +1,33 @@
+.chart-tooltip {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
+}
+
+.chart-tooltip__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.chart-tooltip__swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+.chart-tooltip__label {
+  color: var(--color-text-muted);
+}
+
+.chart-tooltip__value {
+  margin-left: auto;
+  font-weight: 700;
+  color: var(--color-text);
+}

@@ -1,0 +1,60 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  color: var(--color-text);
+}
+
+/* Sits behind everything as a real `position: fixed` layer instead of using
+ * `background-attachment: fixed` on the scrolling `.app-main` — the browser
+ * had to repaint that fixed background on every scroll frame, which was the
+ * main cause of scroll jank in the grids. A genuinely fixed, separate layer
+ * is composited once and never repainted just because content scrolls under it.
+ * `z-index: -1` is required, not just DOM order: a `position: fixed` element
+ * with `z-index: auto` paints ABOVE normal-flow (static) siblings regardless
+ * of where it sits in the DOM — without this it covered the whole UI. */
+.app-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--color-bg);
+  background-image: var(--gradient-app);
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.app-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.app-main {
+  --page-padding: 24px;
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  overflow: hidden;
+  color: var(--color-text);
+}
+
+/* Each page owns its own scroll container instead of `.app-main` scrolling as
+ * one shared element — a route switch mounts a fresh node here, whose scroll
+ * position starts natively at 0 instead of relying on a manual JS reset.
+ * `width`/`height: 100%` + `border-box` (rather than making `.app-main` a flex
+ * container and this a flex item) so the page fills exactly the same box
+ * `.app-main` used to fill itself — no flex-basis/stretch to second-guess. */
+.app-main > * {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: var(--page-padding);
+}
+
+/* Extra room below a page's content, so scrolling to the end doesn't leave it flush against the
+ * window edge. Opt-in per page — only "Мне повезёт" keeps the base padding only. */
+.app-main > .page--scroll-pad {
+  padding-bottom: calc(var(--page-padding) + 64px);
+}

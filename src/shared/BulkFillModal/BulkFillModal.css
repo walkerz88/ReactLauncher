@@ -1,0 +1,70 @@
+.bulk-fill-modal__caption {
+  margin: 0 0 16px;
+  padding: 6px 10px;
+  border-left: 3px solid var(--color-warning);
+  border-radius: 0 6px 6px 0;
+  background-color: var(--color-warning-subtle);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
+.bulk-fill-modal__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bulk-fill-modal__row {
+  border-top: 1px solid var(--color-border);
+}
+
+.bulk-fill-modal__row:first-child {
+  border-top: none;
+}
+
+.bulk-fill-modal__table thead .bulk-fill-modal__row {
+  border-top: none;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.bulk-fill-modal__table thead label {
+  font-weight: 700;
+}
+
+.bulk-fill-modal__table td {
+  padding: 8px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.bulk-fill-modal__table td label {
+  display: block;
+  cursor: pointer;
+}
+
+.bulk-fill-modal__table td.bulk-fill-modal__col-checkbox {
+  width: 1%;
+  padding-right: 12px;
+}
+
+.bulk-fill-modal__checkbox {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-accent);
+}
+
+.bulk-fill-modal__spin {
+  animation: bulk-fill-modal-spin 1s linear infinite;
+}
+
+@keyframes bulk-fill-modal-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

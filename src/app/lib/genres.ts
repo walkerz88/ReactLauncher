@@ -1,0 +1,21 @@
+/** i18n keys of the genre buckets a game's `config.json` `genre` may hold. */
+export const GENRE_KEYS = [
+  'genre.action',
+  'genre.adventure',
+  'genre.rpg',
+  'genre.simulation',
+  'genre.strategy',
+  'genre.shooter',
+  'genre.horror',
+  'genre.puzzle',
+  'genre.platformer',
+  'genre.racing',
+  'genre.sports',
+  'genre.fighting',
+  'genre.survival',
+  'genre.sandbox',
+  'genre.arcade',
+  'genre.indie',
+  'genre.casual',
+  'genre.app',
+];

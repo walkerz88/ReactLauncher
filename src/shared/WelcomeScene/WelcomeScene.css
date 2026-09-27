@@ -1,0 +1,356 @@
+.welcome-scene {
+  --scene-font-size: 44px;
+  --scene-underline: 160px;
+  --scene-bar: calc(var(--scene-font-size) * 8);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.welcome-scene--preview {
+  --scene-font-size: 22px;
+  --scene-underline: 80px;
+}
+
+.welcome-scene__glow {
+  position: absolute;
+  inset: 0;
+  background-image: var(--gradient-app);
+  animation: welcome-scene-fade-in 1.2s ease both;
+}
+
+.welcome-scene__text {
+  position: relative;
+  display: flex;
+  font-size: var(--scene-font-size);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: pre;
+  color: var(--color-text);
+}
+
+.welcome-scene__letter {
+  display: inline-block;
+  white-space: pre;
+  opacity: 0;
+}
+
+/* reveal */
+
+.welcome-scene--reveal .welcome-scene__letter {
+  animation: welcome-scene-letter-in 0.5s ease calc(var(--i) * 45ms) both;
+}
+
+.welcome-scene__underline {
+  position: relative;
+  width: 0;
+  height: 3px;
+  margin-top: 14px;
+  border-radius: 999px;
+  background-color: var(--color-accent);
+  box-shadow: 0 0 16px var(--color-accent);
+  animation: welcome-scene-underline-in 0.6s ease var(--underline-delay, 0.5s) both;
+}
+
+/* cinematic */
+
+.welcome-scene--cinematic {
+  --underline-delay: 1s;
+}
+
+.welcome-scene--converge {
+  --underline-delay: 0.8s;
+}
+
+.welcome-scene--wave {
+  --underline-delay: 1.5s;
+}
+
+.welcome-scene--flip {
+  --underline-delay: 1s;
+}
+
+.welcome-scene--cinematic .welcome-scene__text {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-text) 35%,
+    var(--color-accent) 50%,
+    var(--color-text) 65%
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation:
+    welcome-scene-cinematic-in 1.1s ease both,
+    welcome-scene-shine 1.2s ease 0.9s both;
+}
+
+/* typewriter */
+
+.welcome-scene--typewriter .welcome-scene__letter {
+  position: relative;
+}
+
+.welcome-scene--typewriter .welcome-scene__letter--typed {
+  opacity: 1;
+}
+
+.welcome-scene--typewriter .welcome-scene__letter--current::after {
+  content: '';
+  position: absolute;
+  top: 0.1em;
+  bottom: 0.1em;
+  right: -0.08em;
+  width: 0.08em;
+  background-color: var(--color-accent);
+}
+
+.welcome-scene__text--done .welcome-scene__letter--current::after {
+  animation: welcome-scene-caret-blink 0.8s steps(1) infinite;
+}
+
+/* converge */
+
+.welcome-scene--converge .welcome-scene__letter {
+  --from: -1em;
+  animation: welcome-scene-converge-in 0.6s ease calc(var(--i) * 40ms) both;
+}
+
+.welcome-scene--converge .welcome-scene__letter:nth-child(even) {
+  --from: 1em;
+}
+
+/* wave */
+
+.welcome-scene--wave .welcome-scene__letter {
+  animation: welcome-scene-wave-in 0.9s ease calc(var(--i) * 55ms) both;
+}
+
+/* scan */
+
+.welcome-scene__scan {
+  position: relative;
+}
+
+.welcome-scene--scan .welcome-scene__text {
+  animation: welcome-scene-scan-reveal 1s ease-in-out 0.2s both;
+}
+
+.welcome-scene__scanline {
+  position: absolute;
+  left: -8%;
+  width: 116%;
+  height: 2px;
+  background-color: var(--color-accent);
+  box-shadow: 0 0 12px var(--color-accent);
+  animation: welcome-scene-scan-line 1.5s linear 0.2s both;
+}
+
+/* flip */
+
+.welcome-scene--flip .welcome-scene__text {
+  perspective: 500px;
+}
+
+.welcome-scene--flip .welcome-scene__letter {
+  transform-origin: 50% 100%;
+  animation: welcome-scene-flip-in 0.6s ease calc(var(--i) * 50ms) both;
+}
+
+/* lines */
+
+.welcome-scene__lines {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.welcome-scene__bar {
+  width: 0;
+  height: 2px;
+  border-radius: 999px;
+  background-color: var(--color-accent);
+  box-shadow: 0 0 12px var(--color-accent);
+  animation: welcome-scene-bar-in 0.7s ease 0.1s both;
+}
+
+.welcome-scene--lines .welcome-scene__text {
+  /* line-height 1 leaves more space above the caps than below the baseline; the negative margin evens both gaps out. */
+  margin-top: -0.128em;
+  line-height: 1;
+  animation: welcome-scene-lines-text-in 0.8s ease 0.4s both;
+}
+
+@keyframes welcome-scene-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes welcome-scene-letter-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes welcome-scene-underline-in {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: var(--scene-underline);
+  }
+}
+
+@keyframes welcome-scene-cinematic-in {
+  from {
+    opacity: 0;
+    letter-spacing: 0.5em;
+  }
+
+  to {
+    opacity: 1;
+    letter-spacing: 0.04em;
+  }
+}
+
+@keyframes welcome-scene-shine {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: 0 0;
+  }
+}
+
+@keyframes welcome-scene-caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes welcome-scene-converge-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--from));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes welcome-scene-wave-in {
+  0% {
+    opacity: 0;
+    color: var(--color-accent);
+    transform: translateY(0.6em);
+  }
+
+  40% {
+    opacity: 1;
+    color: var(--color-accent);
+    transform: translateY(-0.35em);
+  }
+
+  70% {
+    transform: translateY(0.12em);
+  }
+
+  100% {
+    opacity: 1;
+    color: var(--color-text);
+    transform: translateY(0);
+  }
+}
+
+@keyframes welcome-scene-scan-reveal {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* First 2/3 (1s) sweeps down in step with the text reveal, the rest collapses the line horizontally.
+   Ends 14px below the text, the same distance the other variants' underline sits below theirs. */
+@keyframes welcome-scene-scan-line {
+  0% {
+    top: 0;
+    transform: scaleX(1);
+    animation-timing-function: ease-in-out;
+  }
+
+  67% {
+    top: calc(100% + 14px);
+    transform: scaleX(1);
+    animation-timing-function: ease-in;
+  }
+
+  100% {
+    top: calc(100% + 14px);
+    transform: scaleX(0);
+  }
+}
+
+@keyframes welcome-scene-flip-in {
+  from {
+    opacity: 0;
+    transform: rotateX(-90deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: rotateX(0);
+  }
+}
+
+@keyframes welcome-scene-bar-in {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: var(--scene-bar);
+  }
+}
+
+@keyframes welcome-scene-lines-text-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

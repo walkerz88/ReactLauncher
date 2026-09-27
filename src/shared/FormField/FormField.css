@@ -1,0 +1,28 @@
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.form-field input[type='text'],
+.form-field input[type='number'],
+.form-field select,
+.form-field textarea {
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}

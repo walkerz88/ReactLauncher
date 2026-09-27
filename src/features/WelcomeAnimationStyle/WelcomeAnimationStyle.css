@@ -1,0 +1,43 @@
+.welcome-animation-style {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 480px;
+  margin-top: 16px;
+}
+
+.welcome-animation-style__options {
+  flex-wrap: wrap;
+}
+
+.welcome-animation-style__preview {
+  position: relative;
+  height: 170px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-bg);
+  overflow: hidden;
+}
+
+.welcome-animation-style__replay {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.welcome-animation-style__replay:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text);
+}

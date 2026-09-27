@@ -1,0 +1,111 @@
+{
+  "name": "react-launcher",
+  "version": "1.0.0",
+  "description": "React Launcher - Desktop app with React and Electron",
+  "main": "public/electron.js",
+  "homepage": "./",
+  "author": {
+    "name": "Alexander Anikin",
+    "email": "mailwalkerz@yandex.ru",
+    "url": "https://walkerz.ru"
+  },
+  "license": "MIT",
+  "scripts": {
+    "react-start": "craco start",
+    "react-build": "craco build",
+    "react-test": "craco test",
+    "build:electron": "tsc -p tsconfig.electron.json",
+    "electron-start": "electron .",
+    "electron-dev": "npm run build:electron && concurrently \"npm run react-start\" \"wait-on http://localhost:3000 && npm run electron-start\"",
+    "build": "npm run build:electron && npm run react-build",
+    "start": "npm run electron-dev",
+    "build:exe": "npm run build:electron && npm run react-build && electron-builder",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.electron.json --noEmit"
+  },
+  "eslintConfig": {
+    "extends": "react-app",
+    "rules": {
+      "padding-line-between-statements": [
+        "error",
+        {
+          "blankLine": "always",
+          "prev": "*",
+          "next": "return"
+        }
+      ]
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "build": {
+    "appId": "com.reactlauncher.app",
+    "productName": "React Launcher",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*",
+      "public/*.js",
+      ".env"
+    ],
+    "directories": {
+      "buildResources": "public"
+    },
+    "win": {
+      "icon": "public/assets/icon.png",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "devDependencies": {
+    "@craco/craco": "^7.1.0",
+    "@types/node": "^18.19.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "concurrently": "^7.6.0",
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.4",
+    "react-scripts": "5.0.1",
+    "typescript": "^4.9.5",
+    "wait-on": "^7.0.1"
+  },
+  "dependencies": {
+    "archiver": "^5.3.2",
+    "extract-zip": "^2.0.1",
+    "framer-motion": "^13.3.0",
+    "lucide-react": "^1.44.0",
+    "modern-normalize": "^3.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^6.30.6",
+    "recharts": "^3.10.1",
+    "remark-breaks": "^4.0.0",
+    "remark-gfm": "^4.0.1",
+    "zustand": "^5.0.15"
+  }
+}
