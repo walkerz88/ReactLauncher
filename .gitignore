@@ -21,5 +21,5 @@ yarn-error.log*
 # Profiles (data/profiles) live next to the app
 /data/
 
-# Personal Claude Code permissions/paths, not meant to be shared
-.claude/settings.local.json
+# Local Claude Code state (personal permissions, lock files) — not meant to be shared
+.claude/
