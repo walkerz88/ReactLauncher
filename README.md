@@ -1,296 +1,311 @@
+🇬🇧 English | [🇷🇺 Русский](README.ru.md)
+
 # React Launcher
 
-Десктопный лаунчер для Windows (Electron + React + TypeScript) — единая витрина
-для вашей личной коллекции игр: старых, портированных вручную, купленных на
-разных площадках или просто раскиданных по папкам. Кладёте игру в свою папку —
-лаунчер сам подтягивает обложку, трейлер, описание и запускает её одной кнопкой.
+A Windows desktop launcher (Electron + React + TypeScript) — a single home for
+your personal game collection: old titles, hand-ported copies, games bought on
+different storefronts, or anything just scattered across folders. Drop a game
+into its own folder and the launcher pulls in the cover, trailer and
+description, then launches it with one button.
 
-## Зачем это нужно
+## Why this exists
 
-Со временем у любого геймера накапливается коллекция игр, которая не помещается
-ни в один магазинный клиент: старые диски, портативные копии, инди без Steam,
-игры из разных сторов сразу. У всего этого нет общей витрины, статистики и
-единого способа запуска — приходится помнить, где что лежит, и держать десяток
-ярлыков на рабочем столе.
+Over time every gamer ends up with a collection that doesn't fit into any
+single store client: old discs, portable copies, indie games without Steam,
+titles from several storefronts at once. None of it has a shared library,
+stats, or a single way to launch — you end up remembering where everything
+lives and keeping a dozen shortcuts on the desktop.
 
-React Launcher решает именно это:
+React Launcher solves exactly that:
 
-- **Одна библиотека вместо кучи папок и ярлыков** — любая игра, лежащая в
-  `content/`, появляется в общей галерее с обложкой, описанием и кнопкой «Играть».
-- **Метаданные не нужно собирать руками** — мастер добавления игры находит её
-  в Steam и сам подтягивает обложки, скриншоты, трейлер, описание и факты.
-- **Видно, чего не хватает и сколько всё это весит** — health-check библиотеки
-  подсвечивает игры без обложки/описания и показывает, сколько места на диске
-  занимает каждая игра (и сколько свободно на диске в целом).
-- **Игровая статистика и мотивация** — профили, время в игре, уровни/опыт и
-  достижения, чтобы возвращаться в старые игры было интереснее.
-- **Один интерфейс для всей семьи** — несколько локальных зашифрованных
-  профилей на одном компьютере, у каждого свой прогресс и избранное.
+- **One library instead of a pile of folders and shortcuts** — any game
+  dropped into `content/` shows up in the shared gallery with a cover,
+  description and a "Play" button.
+- **No manual metadata wrangling** — the add-game wizard looks the game up on
+  Steam and fills in covers, screenshots, the trailer, description and facts
+  by itself.
+- **See what's missing and how much space it takes** — the library health
+  check flags games without a cover/description and shows how much disk
+  space each game uses (and how much free space is left overall).
+- **Play stats and motivation** — profiles, playtime, levels/XP and
+  achievements, so going back to old games is more fun.
+- **One interface for the whole family** — several local encrypted profiles
+  on the same computer, each with its own progress and favorites.
 
-## Возможности
+## Features
 
-- **Библиотека игр** — папки в `content/` превращаются в карточки с обложкой,
-  трейлером, описанием, жанром/серией и рейтингом; поиск, фильтры, группировка.
-- **Мастер добавления игры** с поиском по Steam: автозаполнение названия,
-  жанра, рейтинга, описания, фактов и загрузка обложек/скриншотов/трейлера —
-  без ручного редактирования `config.json`.
-- **Health-check библиотеки** — таблица игр без обложки/трейлера/описания с
-  массовой дозагрузкой недостающего из Steam; анализ размера каждой игры на
-  диске (инсталлятор / данные / трейлер / обложки) и сводка по диску целиком.
-- **Профили** — несколько локальных профилей на одном ПК; данные каждого
-  (статистика, избранное, тема, достижения, скриншоты) зашифрованы
-  (AES-256-GCM) и не читаются вне приложения.
-- **Геймификация** — уровни и опыт, около 160 достижений (бронза / серебро /
-  золото за игровые привычки + одноразовые секретные) — считается только
-  на основе реальной активности, подделать правкой файла нельзя.
-- **Скриншоты и запись геймплея** — `Ctrl+Shift+F9` скриншот, `Ctrl+Shift+F10`
-  запись до 20 секунд прямо во время игры; галерея на странице каждой игры.
-- **Резервные копии сохранений** — бэкап и восстановление сохранений одной
-  кнопкой, с автоархивом текущего состояния перед восстановлением.
-- **Темы оформления** — тёмная/светлая и набор готовых пресетов, плюс
-  собственный редактор темы.
-- **Геймпад и полноэкранный режим** из коробки — навигация без мыши и клавиатуры.
-- **«Мне повезёт»** — крутящийся барабан со случайным выбором игры из библиотеки.
-- **Избранное**, инструкции по установке/совместимости на странице игры,
-  кнопка внешних настроек игры, свои аргументы командной строки на запуск.
-- **Русский и English** интерфейс.
+- **Game library** — folders under `content/` turn into cards with a cover,
+  trailer, description, genre/series and rating; search, filters, grouping.
+- **Add-game wizard** with Steam search: auto-fills the name, genre, rating,
+  description and facts, and downloads covers/screenshots/trailer — no manual
+  `config.json` editing.
+- **Library health check** — a table of games missing a cover/trailer/
+  description with bulk re-fetch from Steam; per-game disk usage breakdown
+  (installer / data / trailer / covers) plus a whole-drive summary.
+- **Profiles** — several local profiles on one PC; each profile's data
+  (stats, favorites, theme, achievements, screenshots) is encrypted
+  (AES-256-GCM) and unreadable outside the app.
+- **Gamification** — levels and XP, around 160 achievements (bronze / silver
+  / gold for play habits, plus one-off secrets) — computed only from real
+  activity, so editing a file can't fake it.
+- **Screenshot and gameplay recording** — `Ctrl+Shift+F9` for a screenshot,
+  `Ctrl+Shift+F10` for up to 20 seconds of recording, right while the game is
+  running; a gallery on each game's page.
+- **Save backups** — one-click backup and restore of save files, with the
+  current state auto-archived before a restore.
+- **Themes** — dark/light plus a set of ready-made presets, and your own
+  theme editor.
+- **Gamepad and fullscreen support** out of the box — full mouse/keyboard-free
+  navigation.
+- **"Feeling Lucky"** — a spinning reel that randomly picks a game from your
+  library.
+- **Favorites**, install/compatibility instructions on a game's page, a
+  button for the game's own external settings tool, and custom launch
+  arguments.
+- **Russian and English** UI.
 
-## Из коробки: быстрый старт
+## Out of the box: quick start
 
-Готовых сборок (installer/portable `.exe`) в репозитории пока нет — приложение
-собирается из исходников. Это займёт пять минут.
+There are no prebuilt installer/portable `.exe` files in the repository yet —
+the app is built from source. This takes about five minutes.
 
-1. **Требования**: Windows, [Node.js](https://nodejs.org/) 16 или новее, npm.
-2. **Установка зависимостей**:
+1. **Requirements**: Windows, [Node.js](https://nodejs.org/) 16 or newer, npm.
+2. **Install dependencies**:
    ```bash
    npm install
    ```
-3. **Ключ шифрования профилей** — обязательный шаг, без него приложение не
-   запустится (`PROFILE_ENCRYPTION_KEY` отсутствует → главный процесс сразу
-   завершает работу):
+3. **Profile encryption key** — a required step; without it the app won't
+   start (no `PROFILE_ENCRYPTION_KEY` → the main process exits immediately):
    ```bash
    cp .env.example .env
    node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
    ```
-   Вставьте полученную строку в `.env` как значение `PROFILE_ENCRYPTION_KEY`.
-   Один раз сгенерированный ключ дальше не меняйте — иначе старые профили
-   перестанут читаться.
-4. **Запуск**:
+   Paste the resulting string into `.env` as the value of
+   `PROFILE_ENCRYPTION_KEY`. Don't change the key once generated — otherwise
+   existing profiles stop being readable.
+4. **Run it**:
    ```bash
    npm start
    ```
-   Поднимет dev-сервер React и окно Electron. При первом запуске профилей ещё
-   нет — приложение попросит создать первый (просто имя, без пароля).
-5. **Добавьте первую игру** — на главном экране кнопка добавления игры
-   открывает мастер: впишите название, при желании найдите игру в Steam для
-   автозаполнения обложек/описания, укажите папку с файлами игры и путь к
-   `.exe`. Либо разложите игру в `content/` вручную — см. раздел
-   [«Библиотека контента»](#библиотека-контента) ниже.
-6. Чтобы собрать готовый `.exe` (portable и NSIS-инсталлятор) — `npm run
-   build:exe`, подробнее в разделе [«Сборка»](#сборка).
+   This starts the React dev server and the Electron window together. On the
+   first run there are no profiles yet — the app asks you to create one
+   (just a name, no password).
+5. **Add your first game** — on the home screen, the add-game button opens a
+   wizard: type the name, optionally search Steam to auto-fill covers/
+   description, then point it at the game's files and its `.exe`.
+   Alternatively, lay the game out under `content/` by hand — see
+   [Content library](#content-library) below.
+6. To build an actual `.exe` (portable and an NSIS installer), run `npm run
+   build:exe` — see [Build](#build) below.
 
-## Установка
+## Setup
 
-### Требования
-- Node.js 16 или новее
+### Requirements
+- Node.js 16 or newer
 - npm
 
-### Установка
+### Install
 
 ```bash
 npm install
 ```
 
-### Разработка
+### Development
 
 ```bash
 npm start
 ```
 
-Поднимает одновременно dev-сервер React и приложение Electron.
+Starts the React dev server and the Electron app together.
 
-### Сборка
+### Build
 
-Собрать исполняемый файл:
+Build a standalone executable:
 
 ```bash
 npm run build:exe
 ```
 
-Результат — в папке `dist`: `React Launcher Setup <версия>.exe` (установщик NSIS) и
-`React Launcher <версия>.exe` (portable). Папка `dist/win-unpacked/` — промежуточная,
-не для распространения.
+Output goes into `dist/`: `React Launcher Setup <version>.exe` (NSIS
+installer) and `React Launcher <version>.exe` (portable). `dist/win-unpacked/`
+is an intermediate folder, not meant for distribution.
 
-## Алиас путей
+## Path alias
 
-`@` указывает на `src/`, поэтому `import { X } from '@/widgets/X'` работает из
-любого места. Сборку рендерера прогоняет [CRACO](https://craco.js.org/)
-(`craco.config.js`) — он добавляет алиас для webpack и jest, а
-`tsconfig.paths.json` (подключён в `tsconfig.json` через `extends`) дублирует его
-для TypeScript. `paths` держится в отдельном файле, чтобы `react-scripts` не
-вырезал его при каждом запуске/сборке. Тот же `craco.config.js` — единственный
-источник данных о приложении (имя, версия, автор), он пробрасывает их из
-`package.json` в `process.env.REACT_APP_*` для рендерера.
+`@` points at `src/`, so `import { X } from '@/widgets/X'` works from
+anywhere. [CRACO](https://craco.js.org/) (`craco.config.js`) runs the
+renderer build — it adds the alias for webpack and jest, while
+`tsconfig.paths.json` (pulled into `tsconfig.json` via `extends`) mirrors it
+for TypeScript. `paths` lives in its own file so `react-scripts` doesn't
+strip it on every run/build. The same `craco.config.js` is also the single
+source of truth for app identity (name, version, author) — it forwards those
+from `package.json` into `process.env.REACT_APP_*` for the renderer.
 
-## Структура проекта
+## Project structure
 
 ```
 React Launcher/
 ├── electron/
-│   ├── electron.ts          # Главный процесс Electron (исходник TS)
-│   ├── content.ts           # Сканер ./content, протокол content://, запуск приложений
-│   ├── profiles.ts          # Профили: индекс, чтение/запись зашифрованных файлов
-│   ├── profileCrypto.ts     # AES-256-GCM шифрование файлов профиля
-│   ├── achievements.ts      # Достижения/XP: метрики, тиры, начисление
-│   ├── progressIpc.ts       # IPC-обвязка вокруг прогресса профиля
-│   ├── capture.ts           # Скриншоты/запись геймплея, оверлей
-│   ├── backups.ts           # Резервные копии сохранений
-│   ├── steam.ts             # Поиск и метаданные Steam для мастера добавления игры
-│   └── preload.ts           # contextBridge: window.electronAPI (исходник TS)
+│   ├── electron.ts          # Electron main process (TS source)
+│   ├── content.ts           # Scans ./content, the content:// protocol, launching apps
+│   ├── profiles.ts          # Profiles: index, reading/writing encrypted files
+│   ├── profileCrypto.ts     # AES-256-GCM encryption of profile files
+│   ├── achievements.ts      # Achievements/XP: metrics, tiers, granting
+│   ├── progressIpc.ts       # IPC wrapper around a profile's progress
+│   ├── capture.ts           # Screenshots/gameplay recording, overlay
+│   ├── backups.ts           # Save-file backups
+│   ├── steam.ts             # Steam search/metadata for the add-game wizard
+│   └── preload.ts           # contextBridge: window.electronAPI (TS source)
 ├── public/
-│   ├── electron.js          # Генерируется `npm run build:electron` (в .gitignore)
-│   ├── content.js           # Генерируется `npm run build:electron` (в .gitignore)
-│   ├── preload.js           # Генерируется `npm run build:electron` (в .gitignore)
-│   └── index.html           # HTML-шаблон
+│   ├── electron.js          # Generated by `npm run build:electron` (gitignored)
+│   ├── content.js           # Generated by `npm run build:electron` (gitignored)
+│   ├── preload.js           # Generated by `npm run build:electron` (gitignored)
+│   └── index.html           # HTML template
 ├── src/
 │   ├── app/
 │   │   ├── assets/css/
-│   │   │   └── global.css   # Токены темы + глобальные стили (нормализация: modern-normalize)
+│   │   │   └── global.css   # Theme tokens + global styles (normalization: modern-normalize)
 │   │   ├── hooks/            # useFullscreenState, useGamepadNavigation, useProgressSync, …
-│   │   ├── i18n/             # Лексемы ru/en (messages.ts) + useTranslation()
-│   │   ├── lib/               # Группировка списка приложений, геометрия геймпад-фокуса, health-check
-│   │   └── store/             # Zustand-сторы: тема, язык, контент, избранное, профиль, …
+│   │   ├── i18n/             # ru/en lexemes (messages.ts) + useTranslation()
+│   │   ├── lib/               # App-list grouping, gamepad-focus geometry, library health check
+│   │   └── store/             # Zustand stores: theme, language, content, favorites, profile, …
 │   ├── features/
-│   │   ├── AddGame/           # Мастер добавления игры (Steam-автозаполнение)
-│   │   ├── ProfileManager/    # Создание/переключение/удаление профилей
-│   │   ├── LibraryHealth/     # Health-check библиотеки + анализ диска
-│   │   ├── ThemePicker/       # Пресеты тем + редактор своей темы
+│   │   ├── AddGame/           # Add-game wizard (Steam auto-fill)
+│   │   ├── ProfileManager/    # Create/switch/delete profiles
+│   │   ├── LibraryHealth/     # Library health check + disk usage analysis
+│   │   ├── ThemePicker/       # Theme presets + custom theme editor
 │   │   └── …                  # AboutSection, CardsSettings, LanguageToggle, …
-│   ├── shared/                # Modal, FormField, RatingBadge, Tabs, графики и т.д. — общие мелкие компоненты
+│   ├── shared/                # Modal, FormField, RatingBadge, Tabs, charts, etc. — small shared components
 │   ├── pages/
-│   │   ├── GalleryPage/       # маршрут "/" — Галерея / Последний запуск (вкладки, не роуты)
-│   │   ├── FavoritesPage/     # маршрут "/favorites" — только избранные приложения
-│   │   ├── AchievementsPage/  # маршрут "/achievements" — уровень, достижения, статистика
-│   │   ├── PreviewPage/       # маршрут "/app/:id" — обложка-шапка, играть / избранное / шестерёнка
-│   │   ├── ProfileSetupPage/  # экран создания первого профиля (без своего маршрута)
-│   │   └── SettingsPage/      # маршрут "/settings"
+│   │   ├── GalleryPage/       # route "/" — Gallery / Recently played (tabs, not routes)
+│   │   ├── FavoritesPage/     # route "/favorites" — favorites only
+│   │   ├── AchievementsPage/  # route "/achievements" — level, achievements, stats
+│   │   ├── PreviewPage/       # route "/app/:id" — cover header, play / favorite / gear menu
+│   │   ├── ProfileSetupPage/  # first-profile creation screen (no route of its own)
+│   │   └── SettingsPage/      # route "/settings"
 │   ├── widgets/
-│   │   ├── AppNavigation/     # Сайдбар с иконками (ссылки роутера + выход)
-│   │   ├── TitleBar/          # Полоска сверху в оконном режиме (drag + свернуть/развернуть/закрыть)
-│   │   ├── CaptureManager/    # Записывает геймплей (MediaRecorder) по команде главного процесса
-│   │   ├── GamepadNavigation/ # Монтирует геймпад-навигацию по `data-gamepad-focusable`, рендерит null
+│   │   ├── AppNavigation/     # Sidebar with icons (router links + quit)
+│   │   ├── TitleBar/          # Top bar in windowed mode (drag + minimize/maximize/close)
+│   │   ├── CaptureManager/    # Records gameplay (MediaRecorder) on the main process's command
+│   │   ├── GamepadNavigation/ # Mounts gamepad navigation over `data-gamepad-focusable`, renders null
 │   │   └── …                  # HomeTabs, AppCollection, GalleryControls, AppGrid, AchievementToasts, …
-│   ├── App.tsx              # HashRouter + разметка
+│   ├── App.tsx              # HashRouter + layout
 │   ├── App.css
-│   ├── index.tsx            # Точка входа React
-│   ├── electron.d.ts        # Типы для window.electronAPI
+│   ├── index.tsx            # React entry point
+│   ├── electron.d.ts        # Types for window.electronAPI
 │   └── react-app-env.d.ts
-├── craco.config.js          # Оверрайд CRA: алиас `@` -> `src` (webpack + jest), REACT_APP_* из package.json
-├── tsconfig.json            # Конфиг TS для рендерера (CRA)
-├── tsconfig.paths.json      # Маппинг `@/*`, подключается в tsconfig.json
-├── tsconfig.electron.json   # Конфиг TS для главного процесса Electron + preload
+├── craco.config.js          # CRA override: `@` -> `src` alias (webpack + jest), REACT_APP_* from package.json
+├── tsconfig.json            # TS config for the renderer (CRA)
+├── tsconfig.paths.json      # `@/*` mapping, pulled into tsconfig.json
+├── tsconfig.electron.json   # TS config for the Electron main process + preload
 ├── package.json
 └── .gitignore
 ```
 
-Главный процесс и preload лежат в `electron/*.ts` и компилируются в `public/*.js`
-(оттуда CRA копирует их в `build/`). После правок запускайте
-`npm run build:electron`; `npm run electron-dev` и `npm run build:exe` делают это
-сами. `npm run typecheck` проверяет типы рендерера и Electron-кода без эмита.
+The main process and preload live in `electron/*.ts` and compile to
+`public/*.js` (CRA then copies them into `build/`). Run `npm run
+build:electron` after editing them; `npm run electron-dev` and `npm run
+build:exe` do this for you. `npm run typecheck` checks both the renderer's
+and Electron's types without emitting output.
 
-## Окно
+## Window
 
-Приложение открывается **на весь экран, без рамки** (`fullscreen: true`,
-`frame: false`), без меню приложения и без кнопок окна ОС. В сайдбаре — переключатель
-полный экран / окно (`window:toggle-fullscreen`, состояние приходит событием
-`window:fullscreen-changed`, дебаунсится в главном процессе — на Windows
-`enter/leave-full-screen` может выстрелить несколько раз подряд во время анимации
-перехода) и выход (`window.electronAPI.quit()` / `app:quit`).
+The app opens **fullscreen, frameless** (`fullscreen: true`, `frame: false`),
+with no application menu and no OS window buttons. The sidebar has a
+fullscreen/windowed toggle (`window:toggle-fullscreen`; the state arrives via
+a `window:fullscreen-changed` event, debounced in the main process — on
+Windows, `enter/leave-full-screen` can fire more than once in a row while the
+transition animates) and a quit button (`window.electronAPI.quit()` /
+`app:quit`).
 
-В оконном режиме сверху появляется **`TitleBar`** — полоска-заголовок без
-собственного текста: пустая область перетаскивает окно (`-webkit-app-region: drag`),
-справа — свернуть / развернуть-восстановить / закрыть (`window:minimize`,
-`window:toggle-maximize` + событие `window:maximized-changed`, `window:close`).
-Сайдбар в перетаскивании не участвует.
+In windowed mode a **`TitleBar`** appears on top — a title-less strip: the
+empty area drags the window (`-webkit-app-region: drag`), and the right side
+has minimize / maximize-restore / close (`window:minimize`,
+`window:toggle-maximize` + a `window:maximized-changed` event, `window:close`).
+The sidebar doesn't participate in dragging.
 
-## Маршрутизация
+## Routing
 
-`HashRouter` (обязателен для сборки под `file://`). Пока в профиле нет ни одного
-профиля, вместо всего интерфейса показывается `ProfileSetupPage` (создание
-первого профиля, без своего маршрута). Дальше доступны маршруты: `/` →
+`HashRouter` (required for a `file://` build). While no profile exists yet,
+`ProfileSetupPage` is shown instead of the whole UI (creating the first
+profile, with no route of its own). After that, the routes are: `/` →
 `GalleryPage`, `/favorites` → `FavoritesPage`, `/achievements` →
 `AchievementsPage`, `/app/:id` → `PreviewPage`, `/settings` → `SettingsPage`.
-Сайдбар на `NavLink`, иконка активного маршрута подсвечивается через класс
-`.active`. Иконка **Избранное** появляется, только если есть хотя бы одно
-избранное приложение (`favoritesStore`).
+The sidebar uses `NavLink`, and the active route's icon is highlighted via
+the `.active` class. The **Favorites** icon only shows up once at least one
+app is favorited (`favoritesStore`).
 
-«Галерея» и «Последний запуск» — не отдельные роуты, а вкладки внутри
-`GalleryPage` (локальный стейт, переключает `widgets/HomeTabs`): изначально
-обе жили на разных URL (`/` и `/recent`), но тогда сайдбарная иконка «Главная»
-подсвечивалась (через `NavLink end`) только для `/`, а на `/recent` гасла —
-сделали вкладками именно чтобы избежать этого рассинхрона. По той же схеме
-«Мне повезёт» — вкладка на главном экране, а не отдельный маршрут.
+"Gallery" and "Recently played" aren't separate routes but tabs inside
+`GalleryPage` (local state, switched by `widgets/HomeTabs`): they originally
+lived on separate URLs (`/` and `/recent`), but then the sidebar's "Home"
+icon (highlighted via `NavLink end`) only lit up for `/` and went dark on
+`/recent` — they were turned into tabs specifically to avoid that mismatch.
+"Feeling Lucky" follows the same pattern — a tab on the home screen, not a
+separate route.
 
-## Стили и темы
+## Styles and themes
 
-`src/index.tsx` подключает
-[`modern-normalize`](https://github.com/sindresorhus/modern-normalize) для
-кроссбраузерной нормализации, затем `src/app/assets/css/global.css`.
+`src/index.tsx` imports
+[`modern-normalize`](https://github.com/sindresorhus/modern-normalize) for
+cross-browser normalization, then `src/app/assets/css/global.css`.
 
-`global.css` задаёт палитру как CSS-переменные: голый `:root` — **тёмная** тема
-(по умолчанию), `:root[data-theme="light"]` её переопределяет. Все компоненты
-(`App.css`, `AppNavigation.css`, …) используют только токены `var(--color-*)`,
-поэтому все темы остаются согласованными. Кроме тёмной/светлой есть набор
-готовых пресетов и редактор собственной темы (`features/ThemePicker`).
+`global.css` defines the palette as CSS variables: bare `:root` is the
+**dark** theme (the default), and `:root[data-theme="light"]` overrides it.
+Every component (`App.css`, `AppNavigation.css`, …) only uses
+`var(--color-*)` tokens, so all themes stay consistent. Besides dark/light
+there's a set of ready-made presets and a custom theme editor
+(`features/ThemePicker`).
 
-Активная тема хранится в **Zustand**-сторе (`src/app/store/themeStore.ts`) с
-middleware `persist`, который пишет в `localStorage`. Electron держит
-`localStorage` в каталоге пользовательских данных, поэтому выбор переживает
-перезапуск exe. Стор также зеркалит значение в `<html data-theme>`, а
-`src/index.tsx` импортирует его до первого рендера — мигания темы нет.
-Переключается на странице настроек.
+The active theme lives in a **Zustand** store (`src/app/store/themeStore.ts`)
+with the `persist` middleware, which writes to `localStorage`. Electron keeps
+`localStorage` in the user-data directory, so the choice survives an exe
+restart. The store also mirrors its value onto `<html data-theme>`, and
+`src/index.tsx` imports it before the first render — there's no theme flash.
+Switched on the settings page.
 
-## Локализация (i18n)
+## Localization (i18n)
 
-Строки интерфейса — лексемы в `src/app/i18n/messages.ts` (`ru` — источник истины
-для набора ключей; `en` типизирован как `Record<MessageKey, string>`, поэтому
-пропущенный ключ — ошибка типов). `useTranslation()` возвращает `t('nav.home')`
-для текущего языка; неизвестный ключ возвращается как есть — это позволяет
-использовать ключи из `config.json`. Язык — сохраняемый Zustand-стор
-(`src/app/store/localeStore.ts`, по умолчанию **ru**), зеркалится в `<html lang>`;
-переключается на странице настроек. Локализуемый текст в `config.json`
-(`description`, `instructions`, `facts[].label`/`facts[].value`) тоже следует за
-выбранным языком.
+Interface strings are lexemes in `src/app/i18n/messages.ts` (`ru` is the
+source of truth for the key set; `en` is typed as
+`Record<MessageKey, string>`, so a missing key is a type error).
+`useTranslation()` returns `t('nav.home')` for the current language; an
+unknown key is returned as-is — which lets keys coming from `config.json`
+work too. The language is a persisted Zustand store
+(`src/app/store/localeStore.ts`, defaulting to **ru**), mirrored onto
+`<html lang>`; switched on the settings page. Localizable text in
+`config.json` (`description`, `instructions`, `facts[].label`/
+`facts[].value`) follows the selected language too.
 
-## Библиотека контента
+## Content library
 
-При запуске приложение сканирует **каталог контента** — `dist/content/` в
-dev-режиме; в собранном приложении — папку `content` рядом с exe (для portable —
-рядом с портативным exe, для распакованной сборки — `../content`). Перекрывается
-переменной окружения `REACT_LAUNCHER_CONTENT_DIR`. Каждая вложенная папка — отдельное
-приложение, названное по имени папки:
+On launch the app scans the **content directory** — `dist/content/` in dev
+mode; in a packaged app, a `content` folder next to the exe (next to the
+portable exe for a portable build, `../content` for an unpacked build).
+Overridable with the `REACT_LAUNCHER_CONTENT_DIR` environment variable. Each
+subfolder is a separate app, named after its folder:
 
 ```
 content/
 └── Graveyard Keeper/
-    ├── config.json     # необязательный, см. ниже — обычно не нужен: мастер добавления игры пишет его сам
-    ├── data/           # файлы приложения (в т.ч. .exe)
-    ├── installer/      # необязательная — папка установщика
-    ├── screenshots/    # необязательная — скриншоты (галерея на странице игры)
-    ├── backups/        # создаётся сама — резервные копии сохранений
+    ├── config.json     # optional, see below — usually not needed: the add-game wizard writes it for you
+    ├── data/           # the app's files (including the .exe)
+    ├── installer/      # optional — an installer folder
+    ├── screenshots/    # optional — screenshots (gallery on the game's page)
+    ├── backups/        # created automatically — save-file backups
     └── assets/
-        ├── cover_horizontal.jpg  # горизонтальная обложка (шапка страницы приложения)
-        ├── cover_vertical.jpg    # вертикальная обложка (грид)
-        └── trailer.mp4           # необязательный трейлер (плеер на странице игры)
+        ├── cover_horizontal.jpg  # horizontal cover (the app page's header)
+        ├── cover_vertical.jpg    # vertical cover (the grid)
+        └── trailer.mp4           # optional trailer (player on the game's page)
 ```
 
-Проще всего добавить игру через мастер в приложении (кнопка добавления игры на
-главном экране) — он сам создаёт эту структуру и, если найдёт игру в Steam,
-сам заполнит `config.json`. Ручное редактирование ниже — для тонкой настройки
-или игр, которых в Steam нет.
+The easiest way to add a game is through the in-app wizard (the add-game
+button on the home screen) — it creates this structure itself and, if it
+finds the game on Steam, fills in `config.json` for you. Manual editing below
+is for fine-tuning, or for games Steam doesn't have.
 
-`config.json` (все ключи необязательны — по умолчанию действует раскладка выше). Редактируется
-либо вручную, либо прямо в приложении — см. **«Редактирование config.json»** ниже:
+`config.json` (every key is optional — the layout above is the default when
+omitted). Edited either by hand or right in the app — see **Editing
+config.json** below:
 
 ```json
 {
@@ -317,26 +332,30 @@ content/
 }
 ```
 
-`genre` и `series` — необязательные, для группировки/фильтрации на главной
-(`GalleryPage`). `genre` — **ключ лексемы** вида `genre.<name>` из `messages.ts`
-(сейчас определены `genre.action`, `genre.adventure`, `genre.rpg`, `genre.simulation`,
-`genre.strategy`, `genre.shooter`, `genre.horror`, `genre.puzzle`, `genre.platformer`,
-`genre.racing`, `genre.sports`, `genre.fighting`, `genre.survival`, `genre.sandbox`,
-`genre.arcade`, `genre.indie`, `genre.casual`, `genre.app`; новые категории добавляются
-туда же). `genre.app` — не жанр в привычном смысле, а отметка «это утилита, а не игра»:
-меняет подпись кнопки запуска на «Запустить» вместо «Играть» (`PreviewPage`, сравнение
+`genre` and `series` are optional, used for grouping/filtering on the home
+screen (`GalleryPage`). `genre` is a **lexeme key** of the form
+`genre.<name>` from `messages.ts` (currently defined: `genre.action`,
+`genre.adventure`, `genre.rpg`, `genre.simulation`, `genre.strategy`,
+`genre.shooter`, `genre.horror`, `genre.puzzle`, `genre.platformer`,
+`genre.racing`, `genre.sports`, `genre.fighting`, `genre.survival`,
+`genre.sandbox`, `genre.arcade`, `genre.indie`, `genre.casual`, `genre.app`;
+new categories go there too). `genre.app` isn't a genre in the usual sense —
+it marks "this is a utility, not a game": it changes the launch button's
+label to "Launch" instead of "Play" (`PreviewPage`, comparing
 `app.genre === 'genre.app'`).
-`series` — обычная строка (франшиза не переводится), показывается как есть; у игр без
-`series` (например, самостоятельных проектов) поле просто опускается — на главной такие
-попадают в группу «Другое» при виде «По сериям».
+`series` is a plain string (a franchise name isn't translated), shown as-is;
+games without a `series` (standalone projects, for example) simply omit the
+field — on the home screen they land in an "Other" group under the "By
+series" view.
 
-Все пути на диске (`exec`, `settings`, обложки) собраны в `paths` и указываются
-относительно папки приложения; отсутствующие ключи попадают на дефолты выше
-(`data/<имя папки>.exe`, `assets/cover_horizontal.jpg`, `assets/cover_vertical.jpg`) — `settings`
-дефолта не имеет, это опциональная внешняя утилита настроек (лаунчер/конфигуратор
-графики и т.п.), которую некоторые игры ставят отдельным exe.
+Every on-disk path (`exec`, `settings`, covers) is grouped under `paths` and
+given relative to the app's folder; missing keys fall back to the defaults
+above (`data/<folder name>.exe`, `assets/cover_horizontal.jpg`,
+`assets/cover_vertical.jpg`) — `settings` has no default, since it's an
+optional external settings tool (a launcher/graphics configurator etc.) that
+some games ship as a separate exe.
 
-Дополнительные необязательные поля `config.json`:
+Additional optional `config.json` fields:
 
 ```json
 {
@@ -349,88 +368,92 @@ content/
 }
 ```
 
-- `launch.args` — аргументы командной строки; задаются в форме «Редактировать данные».
-- `paths.screenshots` (по умолчанию `screenshots/`) и `paths.trailer` (по умолчанию `assets/trailer.mp4`) — медиа на странице игры; видео отдаётся через `content://` с поддержкой Range, поэтому перемотка работает.
-- `paths.saves` — папка (или файл) сохранений для резервных копий. Может быть абсолютным путём,
-  путём от папки игры (`data/saves`) или использовать `%DOCUMENTS%`, `%APPDATA%`,
-  `%LOCALAPPDATA%`, `%USERPROFILE%` — так конфиг переносится между компьютерами. Если поле
-  задано, в шестерёнке игры появляется «Резервные копии сохранений»: копии (zip) лежат в
-  `<игра>/backups/`, перед восстановлением текущие сохранения автоматически архивируются как
-  `before-restore_*.zip`.
+- `launch.args` — command-line arguments; set from the "Edit data" form.
+- `paths.screenshots` (default `screenshots/`) and `paths.trailer` (default
+  `assets/trailer.mp4`) — media on the game's page; video is served over
+  `content://` with Range support, so seeking works.
+- `paths.saves` — the save folder (or file) to back up. Can be an absolute
+  path, a path relative to the game's folder (`data/saves`), or use
+  `%DOCUMENTS%`, `%APPDATA%`, `%LOCALAPPDATA%`, `%USERPROFILE%` — so the
+  config carries over between computers. When set, a "Save backups" item
+  appears in the game's gear menu: zip copies live in `<game>/backups/`, and
+  the current saves are automatically archived as `before-restore_*.zip`
+  before a restore.
 
-Пока игра запущена (процесс отслеживается главным процессом), вместо «Играть» показывается
-«Остановить» (`taskkill /T`), а время сессии добавляется к «Времени в игре» — оно и «Последний
-запуск» хранятся в профиле и доступны для сортировки галереи, статистики и достижений. Если
-`exe` — лаунчер, который запускает игру и сразу закрывается, время считается по лаунчеру.
+While a game is running (tracked by the main process), "Play" is replaced by
+"Stop" (`taskkill /T`), and the session length is added to "Playtime" — both
+that and "last played" are stored in the profile and available for sorting
+the gallery, stats and achievements. If the `exe` is a launcher that starts
+the game and exits right away, time is counted against the launcher instead.
 
-`coverHorizontalPosition` — необязательный, задаёт `object-position` для обложки-шапки
-на странице приложения (`PreviewPage`): `"top"`, `"center"` (по умолчанию) или `"bottom"`.
-Нужен, когда широкая обложка обрезается по высоте под контейнер 16:6 и центр кадра
-обрезает важную часть картинки (например, голову персонажа) — так её можно прижать
-к нужному краю вместо обрезки с обеих сторон поровну. Любое другое значение читается
-как `"center"`.
+`coverHorizontalPosition` is optional and sets the `object-position` for the
+header cover on the app page (`PreviewPage`): `"top"`, `"center"` (default)
+or `"bottom"`. Needed when a wide cover gets cropped to fit the 16:6
+container and the center of the frame crops out an important part of the
+image (a character's head, say) — this lets it be pinned to the right edge
+instead of being cropped evenly on both sides. Any other value is read as
+`"center"`.
 
-Любой локализуемый текст (`description`,
-`facts[].value`, `facts[].label`, `instructions`) может быть простой строкой (без
-привязки к языку) или `{ ru, en }`; страница приложения берёт текущий язык, затем
-`en`, затем `ru`. `facts[].label` — такой же локализуемый текст, как и `value`
-(например `{ "ru": "Разработчик", "en": "Developer" }`), а не ключ лексемы — фактам
-можно давать произвольные названия, не ограничиваясь заготовками из `messages.ts`.
-Если есть `paths.settings`, рядом с «Играть» появляется отдельная кнопка
-**Настройки игры**, запускающая эту внешнюю утилиту. Отдельно от неё — шестерёнка
-(значок `Settings`) для действий с установкой/данными приложения (см. ниже).
+Any localizable text (`description`, `facts[].value`, `facts[].label`,
+`instructions`) can be a plain string (not tied to a language) or
+`{ ru, en }`; the app page takes the current language, then `en`, then `ru`.
+`facts[].label` is localizable text just like `value` (e.g.
+`{ "ru": "Разработчик", "en": "Developer" }`), not a lexeme key — facts can
+be given arbitrary names, not limited to the presets in `messages.ts`.
+If `paths.settings` is set, a separate **Game settings** button appears next
+to "Play", launching that external tool. Separate from it, the gear icon
+(`Settings`) holds actions for the app's install/data (see below).
 
-`instructions` — необязательный локализуемый текст (инструкция по установке/
-совместимости — патчи, DPI-скейлинг, смена языка и т.п.). Если он есть (для
-текущего языка, `en` или `ru`), рядом с «Играть»/«Настройками игры» появляется
-кнопка **Инструкция**, открывающая его попапом (моноширинный перенос строк как в
-исходном тексте).
+`instructions` is optional localizable text (install/compatibility
+instructions — patches, DPI scaling, changing the language, etc.). If present
+(for the current language, `en`, or `ru`), an **Instructions** button appears
+next to "Play"/"Game settings", opening it in a popup (with the original
+text's line breaks preserved, monospace).
 
-`previewNotes` — необязательный, показывает сообщение (`shared/Message`) под
-блоком кнопок на странице приложения (например, предупреждение о
-совместимости или примечание об установке). `text` — локализуемый текст (та же
-логика `ru`/`en`/строка, что и у `description`), пустой/отсутствующий текст —
-сообщение не показывается. `type` — необязательный, один из `"info"`
-(по умолчанию), `"success"`, `"warning"`, `"error"` — определяет иконку и цвет;
-неизвестное значение читается как `"info"`.
+`previewNotes` is optional and shows a message (`shared/Message`) under the
+button row on the app page (a compatibility warning or an install note, for
+example). `text` is localizable text (the same `ru`/`en`/plain-string logic
+as `description`); an empty/missing text means no message is shown. `type` is
+optional, one of `"info"` (default), `"success"`, `"warning"`, `"error"` —
+it drives the icon and color; an unknown value is read as `"info"`.
 
-`rating` — число 0–10 (например, оценка Metacritic, делённая на 10), округляется
-до одного знака и обрезается до диапазона. Отображается значком со звездой
-на карточке в гриде и на странице приложения рядом с названием. Список на
-главной сортируется по `rating` по убыванию, приложения без оценки — в конце,
-при равенстве — по имени.
+`rating` is a number from 0–10 (a Metacritic score divided by 10, for
+example), rounded to one decimal and clamped to range. Shown as a star badge
+on the grid card and on the app page next to the name. The home screen's list
+is sorted by `rating` descending, with unrated apps last, ties broken by
+name.
 
-Грид с фильтрами и группировкой — `widgets/AppCollection` — общий виджет,
-которым пользуются все списки приложений (Галерея, Избранное, Последний
-запуск), чтобы поведение везде было одинаковым:
-- Переключатель вида (`widgets/GalleryControls`) сверху: **Все** (плоский грид,
-  фильтруется по жанру и серии через `<select>`), **По жанру** и **По сериям**
-  (группируют грид в секции; для каждого вида фильтр по своей же оси
-  скрывается — группировка её и так задаёт, а фильтр по другой оси остаётся
-  доступным). Игры без `series` в виде «По сериям» попадают в группу
-  **Другое**.
-- Пока активен хотя бы один фильтр, рядом появляется кнопка **«Сбросить
-  фильтры»**, снимающая оба разом.
+The filterable/groupable grid — `widgets/AppCollection` — is a shared widget
+used by every app list (Gallery, Favorites, Recently played), so the
+behavior is the same everywhere:
+- A view switcher (`widgets/GalleryControls`) on top: **All** (a flat grid,
+  filtered by genre and series via `<select>`), **By genre** and **By
+  series** (group the grid into sections; each view hides the filter for its
+  own axis — grouping already sets it, while the filter for the other axis
+  stays available). Games without a `series` land in an **Other** group
+  under the "By series" view.
+- While at least one filter is active, a **"Clear filters"** button appears
+  next to it, clearing both at once.
 
-### Редактирование config.json
+### Editing config.json
 
-Вместо ручного редактирования JSON на диске `config.json` можно менять прямо в
-приложении: пункт **Редактировать данные** в шестерёнке на странице приложения
-открывает форму со всеми полями, которые понимает библиотека контента
-(название, жанр, серия, рейтинг, позиция обложки-шапки, все пути `paths.*`,
-`description`/`instructions`/заметка на странице на обоих языках, список `facts`).
+Instead of hand-editing `config.json` on disk, it can be changed right in the
+app: the **Edit data** item in the game page's gear menu opens a form with
+every field the content library understands (name, genre, series, rating,
+header-cover position, every `paths.*` path, `description`/`instructions`/
+the on-page note in both languages, the `facts` list).
 
-- У каждого пути (`exec`, `settings`, `installer`, обложки, папка доп. контента)
-  есть кнопка с иконкой папки — открывает нативный диалог выбора файла/папки
-  Windows и подставляет путь относительно папки приложения; для обложек диалог
-  фильтрует по изображениям, для `exec`/`settings`/`installer` — по `.exe`, для
-  доп. контента предлагает выбрать папку.
-- Факты (`facts`) редактируются построчно: у каждой строки — название на ru/en
-  и значение на ru/en, строки можно добавлять и удалять.
-- **Сохранить** перезаписывает `config.json` целиком (только непустые поля —
-  так же, как их обычно пишут руками) и обновляет список приложений, чтобы
-  правки сразу отразились на странице.
+- Every path (`exec`, `settings`, `installer`, covers, the extra-content
+  folder) has a folder-icon button that opens a native Windows file/folder
+  picker and fills in a path relative to the app's folder; for covers the
+  dialog filters by images, for `exec`/`settings`/`installer` by `.exe`, and
+  for extra content it asks for a folder.
+- Facts (`facts`) are edited row by row: each row has a name in ru/en and a
+  value in ru/en, and rows can be added or removed.
+- **Save** rewrites `config.json` entirely (only non-empty fields — the same
+  way it's usually written by hand) and refreshes the app list, so edits show
+  up on the page right away.
 
-## Лицензия
+## License
 
 [MIT](./LICENSE) © Alexander Anikin — [walkerz.ru](https://walkerz.ru)
