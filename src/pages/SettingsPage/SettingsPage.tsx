@@ -16,9 +16,9 @@ import { Tabs, type TabItem } from '@/shared/Tabs';
 
 import './SettingsPage.css';
 
-type SettingsTab = 'general' | 'profiles' | 'library';
+type SettingsTab = 'general' | 'profiles' | 'library' | 'about';
 
-const TAB_PARAMS: readonly SettingsTab[] = ['profiles', 'library'];
+const TAB_PARAMS: readonly SettingsTab[] = ['profiles', 'library', 'about'];
 
 export const SettingsPage: FC = () => {
   const t = useTranslation();
@@ -32,6 +32,7 @@ export const SettingsPage: FC = () => {
     { id: 'general', label: t('settings.tabGeneral') },
     { id: 'profiles', label: t('settings.profiles') },
     { id: 'library', label: t('settings.tabLibrary') },
+    { id: 'about', label: t('settings.tabAbout') },
   ];
 
   return (
@@ -44,6 +45,8 @@ export const SettingsPage: FC = () => {
         <ProfileManager />
       ) : tab === 'library' ? (
         <LibraryHealth />
+      ) : tab === 'about' ? (
+        <AboutSection />
       ) : (
         <>
           <section className="settings-section">
@@ -75,11 +78,6 @@ export const SettingsPage: FC = () => {
           <section className="settings-section">
             <h2 className="settings-section__title">{t('settings.notifications')}</h2>
             <AchievementSoundToggle />
-          </section>
-
-          <section className="settings-section">
-            <h2 className="settings-section__title">{t('settings.about')}</h2>
-            <AboutSection />
           </section>
         </>
       )}

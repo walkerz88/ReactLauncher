@@ -113,8 +113,56 @@ export const THEME_XP = 20;
 
 /** Typed secrets the renderer may report; each may also grant a special (see `SECRET_SPECIALS`). */
 export const CHEAT_CODES = ['iddqd', 'idkfa', 'idclip', 'hesoyam', 'aezakmi', 'baguvix', 'rosebud', 'motherlode', 'xyzzy', 'noclip'] as const;
-export const SECRET_IDS: readonly string[] = ['hello-world', 'konami', ...CHEAT_CODES.map((code) => `cheat-${code}`)];
-export const SECRET_SPECIALS: Record<string, string> = { 'hello-world': 'helloWorld', konami: 'konami' };
+export const SECRET_IDS: readonly string[] = [
+  'hello-world',
+  'konami',
+  'cheburashka',
+  'vzhukh',
+  'skibidi',
+  'sila-v-pravde',
+  'nu-pogodi',
+  'tetris',
+  'vodka',
+  'medved',
+  'balalaika',
+  'no-spoon',
+  'wingardium',
+  'hakuna-matata',
+  'elementary',
+  'to-infinity',
+  ...CHEAT_CODES.map((code) => `cheat-${code}`),
+];
+export const SECRET_SPECIALS: Record<string, string> = {
+  'hello-world': 'helloWorld',
+  konami: 'konami',
+  cheburashka: 'cheburashka',
+  vzhukh: 'vzhukh',
+  skibidi: 'skibidi',
+  'sila-v-pravde': 'silaVPravde',
+  'nu-pogodi': 'nuPogodi',
+  tetris: 'tetrisOrigin',
+  vodka: 'vodka',
+  medved: 'bear',
+  balalaika: 'balalaika',
+  'no-spoon': 'noSpoon',
+  wingardium: 'wingardium',
+  'hakuna-matata': 'hakunaMatata',
+  elementary: 'elementary',
+  'to-infinity': 'toInfinity',
+  // Every classic cheat code grants its own achievement immediately (on top of the `cheatCodes`
+  // family's 1/3/5/8-distinct-codes collector tiers below) — typing any of them used to silently
+  // do nothing between those thresholds, which read as broken rather than "keep going".
+  'cheat-iddqd': 'cheatIddqd',
+  'cheat-idkfa': 'cheatIdkfa',
+  'cheat-idclip': 'cheatIdclip',
+  'cheat-hesoyam': 'cheatHesoyam',
+  'cheat-aezakmi': 'cheatAezakmi',
+  'cheat-baguvix': 'cheatBaguvix',
+  'cheat-rosebud': 'cheatRosebud',
+  'cheat-motherlode': 'cheatMotherlode',
+  'cheat-xyzzy': 'cheatXyzzy',
+  'cheat-noclip': 'cheatNoclip',
+};
 
 /** Feature-use facts the renderer may report; each grants the special of that name (`light-at-night` is checked against the clock here). */
 export const FEATURE_SPECIALS: Record<string, string> = {
@@ -123,6 +171,11 @@ export const FEATURE_SPECIALS: Record<string, string> = {
   'low-rated': 'lowRated',
   'high-rated': 'highRated',
   retro: 'retro',
+  'no-cover': 'mysteryBox',
+  'library-25': 'libraryQuarter',
+  'library-50': 'libraryHalf',
+  'library-75': 'libraryMost',
+  'library-100': 'libraryComplete',
 };
 
 export const PRESET_THEME_IDS: readonly string[] = ['dark', 'light', 'amoled', 'midnight', 'dracula', 'nord', 'forest', 'crimson', 'cyberpunk', 'sepia'];
@@ -141,6 +194,8 @@ const FAMILIES: Array<{ metric: Metric; steps: Array<[target: number, tier: Tier
   { metric: 'nightLaunches', steps: [[2, 'bronze'], [5, 'bronze'], [15, 'silver'], [30, 'silver'], [75, 'gold'], [150, 'gold']] },
   { metric: 'morningLaunches', steps: [[2, 'bronze'], [5, 'bronze'], [15, 'silver'], [30, 'silver'], [75, 'gold']] },
   { metric: 'weekendLaunches', steps: [[2, 'bronze'], [5, 'bronze'], [15, 'silver'], [40, 'silver'], [100, 'gold']] },
+  { metric: 'eveningLaunches', steps: [[2, 'bronze'], [5, 'bronze'], [15, 'silver'], [30, 'silver'], [75, 'gold']] },
+  { metric: 'weekdayLaunches', steps: [[2, 'bronze'], [5, 'bronze'], [15, 'silver'], [40, 'silver'], [100, 'gold']] },
   { metric: 'daysPlayed', steps: [[1, 'bronze', 10], [3, 'bronze'], [7, 'bronze'], [14, 'silver'], [30, 'silver'], [60, 'silver'], [100, 'gold'], [200, 'gold'], [365, 'gold']] },
   { metric: 'bestStreak', steps: [[2, 'bronze'], [3, 'bronze'], [5, 'silver'], [7, 'silver'], [14, 'silver'], [30, 'gold'], [60, 'gold']] },
   { metric: 'maxGameHours', steps: [[1, 'bronze'], [5, 'bronze'], [10, 'silver'], [25, 'silver'], [50, 'gold'], [100, 'gold']] },
@@ -156,7 +211,7 @@ const FAMILIES: Array<{ metric: Metric; steps: Array<[target: number, tier: Tier
   { metric: 'screenshotsTaken', steps: [[1, 'bronze'], [5, 'bronze'], [15, 'silver'], [40, 'silver'], [100, 'gold']] },
   { metric: 'recordingsMade', steps: [[1, 'bronze'], [5, 'bronze'], [15, 'silver'], [40, 'silver'], [100, 'gold']] },
   { metric: 'level', steps: [[2, 'bronze'], [3, 'bronze'], [5, 'bronze'], [8, 'silver'], [10, 'silver'], [15, 'silver'], [20, 'gold'], [25, 'gold'], [30, 'gold']] },
-  { metric: 'achievements', steps: [[5, 'bronze'], [10, 'bronze'], [20, 'silver'], [35, 'silver'], [50, 'gold'], [75, 'gold'], [100, 'gold'], [125, 'gold']] },
+  { metric: 'achievements', steps: [[5, 'bronze'], [10, 'bronze'], [20, 'silver'], [35, 'silver'], [50, 'gold'], [75, 'gold'], [100, 'gold'], [125, 'gold'], [150, 'gold'], [160, 'gold'], [180, 'gold'], [195, 'gold']] },
 ];
 
 /** One-off achievements, granted directly by `progress.ts` when their event happens. */
@@ -167,6 +222,45 @@ export const SPECIALS = [
   { key: 'answer42', tier: 'silver', group: 'secrets', hidden: true },
   { key: 'witchingHour', tier: 'silver', group: 'secrets', hidden: true },
   { key: 'makeAWish', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'leetSpeak', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'bondTime', tier: 'bronze', group: 'secrets', hidden: true },
+  // Same "deep night" difficulty class as witchingHour (03:33) — silver, not bronze like the
+  // daytime-hours clock secrets (leetSpeak 13:37, bondTime 00:07 is borderline but stays bronze).
+  { key: 'fourTwenty', tier: 'silver', group: 'secrets', hidden: true },
+  // Landing on launch #666 is guaranteed for anyone who reaches that count (the counter can't skip
+  // past it) — same dedication tier as the `launches` family's own 500/1000 gold steps.
+  { key: 'numberOfTheBeast', tier: 'gold', group: 'secrets', hidden: true },
+  // 67 launches sits in the `launches` family's silver range (50-100), not its bronze range (1-25).
+  { key: 'sixSeven', tier: 'silver', group: 'secrets', hidden: true },
+  { key: 'cheburashka', tier: 'silver', group: 'secrets', hidden: true },
+  { key: 'vzhukh', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'skibidi', tier: 'bronze', group: 'secrets', hidden: true },
+  // Flagship Russian-culture typed phrases get silver like cheburashka, not konami's gold (that's
+  // reserved for its unique arrow-sequence mechanic) or the generic-phrase bronze below.
+  { key: 'silaVPravde', tier: 'silver', group: 'secrets', hidden: true },
+  { key: 'nuPogodi', tier: 'silver', group: 'secrets', hidden: true },
+  { key: 'tetrisOrigin', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'vodka', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'bear', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'balalaika', tier: 'bronze', group: 'secrets', hidden: true },
+  // Bonus for finding all three "klyukva" stereotype secrets above — granted automatically by
+  // `progress.ts` the moment the third one lands, never typed directly.
+  { key: 'klyukva', tier: 'silver', group: 'secrets', hidden: true },
+  { key: 'noSpoon', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'wingardium', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'hakunaMatata', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'elementary', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'toInfinity', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'cheatIddqd', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'cheatIdkfa', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'cheatIdclip', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'cheatHesoyam', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'cheatAezakmi', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'cheatBaguvix', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'cheatRosebud', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'cheatMotherlode', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'cheatXyzzy', tier: 'bronze', group: 'secrets', hidden: true },
+  { key: 'cheatNoclip', tier: 'bronze', group: 'secrets', hidden: true },
   // calendar
   { key: 'newYear', tier: 'bronze', group: 'calendar' },
   { key: 'halloween', tier: 'bronze', group: 'calendar' },
@@ -174,6 +268,16 @@ export const SPECIALS = [
   { key: 'leapDay', tier: 'gold', group: 'calendar' },
   { key: 'programmersDay', tier: 'silver', group: 'calendar' },
   { key: 'profileBirthday', tier: 'gold', group: 'calendar' },
+  { key: 'cosmonauticsDay', tier: 'bronze', group: 'calendar' },
+  { key: 'oldNewYear', tier: 'bronze', group: 'calendar' },
+  { key: 'piDay', tier: 'bronze', group: 'calendar' },
+  { key: 'starWarsDay', tier: 'bronze', group: 'calendar' },
+  // Same mechanical difficulty as every other fixed-date calendar special (newYear, halloween, …) —
+  // no reason for this one alone to be silver.
+  { key: 'towelDay', tier: 'bronze', group: 'calendar' },
+  { key: 'defenderDay', tier: 'bronze', group: 'calendar' },
+  { key: 'womensDay', tier: 'bronze', group: 'calendar' },
+  { key: 'belkaAndStrelka', tier: 'bronze', group: 'calendar' },
   // habits
   { key: 'falseAlarm', tier: 'bronze', group: 'habits' },
   { key: 'noBreak', tier: 'bronze', group: 'habits' },
@@ -184,6 +288,8 @@ export const SPECIALS = [
   { key: 'multitasker', tier: 'bronze', group: 'habits' },
   { key: 'taster', tier: 'silver', group: 'habits' },
   { key: 'workingHours', tier: 'bronze', group: 'habits' },
+  { key: 'marathoner', tier: 'silver', group: 'habits' },
+  { key: 'allHours', tier: 'gold', group: 'habits' },
   // launcher
   { key: 'backup', tier: 'bronze', group: 'launcher' },
   { key: 'restore', tier: 'silver', group: 'launcher' },
@@ -199,10 +305,16 @@ export const SPECIALS = [
   { key: 'lowRated', tier: 'bronze', group: 'library' },
   { key: 'highRated', tier: 'bronze', group: 'library' },
   { key: 'retro', tier: 'silver', group: 'library' },
+  { key: 'mysteryBox', tier: 'bronze', group: 'library' },
+  // Re-evaluated against today's library size on every launch — see progressEvents.ts.
+  { key: 'libraryQuarter', tier: 'bronze', group: 'library' },
+  { key: 'libraryHalf', tier: 'bronze', group: 'library' },
+  { key: 'libraryMost', tier: 'silver', group: 'library' },
+  { key: 'libraryComplete', tier: 'gold', group: 'library' },
 ] as const satisfies ReadonlyArray<{ key: string; tier: Tier; group: Group; hidden?: boolean }>;
 
 /** Tracked and shown on the stats page (the "when you play" chart), but with no achievement family of their own. */
-export const STATS_ONLY_METRICS: Metric[] = ['dayLaunches', 'weekdayLaunches', 'eveningLaunches', 'avgSessionMinutes'];
+export const STATS_ONLY_METRICS: Metric[] = ['dayLaunches', 'avgSessionMinutes'];
 
 export type SpecialKey = (typeof SPECIALS)[number]['key'];
 

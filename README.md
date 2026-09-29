@@ -45,7 +45,7 @@ React Launcher solves exactly that:
 - **Profiles** — several local profiles on one PC; each profile's data
   (stats, favorites, theme, achievements, screenshots) is encrypted
   (AES-256-GCM) and unreadable outside the app.
-- **Gamification** — levels and XP, around 160 achievements (bronze / silver
+- **Gamification** — levels and XP, 160+ achievements (bronze / silver
   / gold for play habits, plus one-off secrets) — computed only from real
   activity, so editing a file can't fake it.
 - **Screenshot and gameplay recording** — `Ctrl+Shift+F9` for a screenshot,
@@ -138,8 +138,10 @@ renderer build — it adds the alias for webpack and jest, while
 `tsconfig.paths.json` (pulled into `tsconfig.json` via `extends`) mirrors it
 for TypeScript. `paths` lives in its own file so `react-scripts` doesn't
 strip it on every run/build. The same `craco.config.js` is also the single
-source of truth for app identity (name, version, author) — it forwards those
-from `package.json` into `process.env.REACT_APP_*` for the renderer.
+source of truth for app/build identity (name, version, author, project site,
+repository) — it forwards those from `package.json` into
+`process.env.REACT_APP_*` for the renderer, shown on the Settings → About tab
+(`features/AboutSection`) next to the fixed upstream-project credit.
 
 ## Project structure
 

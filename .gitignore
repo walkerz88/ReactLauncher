@@ -23,3 +23,9 @@ yarn-error.log*
 
 # Local Claude Code state (personal permissions, lock files) — not meant to be shared
 .claude/
+
+# Presentation website (rl.walkerz.ru) + its SFTP deploy script/credentials — not part of the app repo
+/site/
+
+# Spoils every hidden achievement's exact trigger — personal reference only, never for the public repo
+/SECRETS-SPOILERS.md

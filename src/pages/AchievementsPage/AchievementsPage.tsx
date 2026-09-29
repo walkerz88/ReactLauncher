@@ -1,4 +1,5 @@
-import { useState, type FC } from 'react';
+import { useEffect, useState, type FC } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Flame, Gauge, Heart, LibraryBig, Timer, TrendingDown, TrendingUp } from 'lucide-react';
 
 import { useTranslation } from '@/app/i18n';
@@ -58,6 +59,28 @@ export const AchievementsPage: FC = () => {
   const activeProfile = profiles.find((profile) => profile.id === activeProfileId);
 
   const [tab, setTab] = useState<ProfileTab>('achievements');
+  const [searchParams] = useSearchParams();
+  const [highlightId, setHighlightId] = useState<string | null>(null);
+
+  // Synced via an effect, not a lazy initial state, so clicking a second achievement toast while
+  // already on this page re-triggers the highlight even though the route component doesn't remount.
+  useEffect(() => {
+    const next = searchParams.get('highlight');
+
+    if (next) {
+      setHighlightId(next);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (!highlightId) {
+      return undefined;
+    }
+
+    const timer = window.setTimeout(() => setHighlightId(null), 2400);
+
+    return () => window.clearTimeout(timer);
+  }, [highlightId]);
 
   const header = <h1 className="home-section__title">{t('profile.title')}</h1>;
 
@@ -208,6 +231,7 @@ export const AchievementsPage: FC = () => {
                       achievement={achievement}
                       value={view.values[metric]}
                       unlockedAt={view.unlocked[achievement.id]}
+                      highlighted={achievement.id === highlightId}
                     />
                   ))}
               </ul>
@@ -227,6 +251,7 @@ export const AchievementsPage: FC = () => {
                       achievement={achievement}
                       value={view.values[achievement.metric]}
                       unlockedAt={view.unlocked[achievement.id]}
+                      highlighted={achievement.id === highlightId}
                     />
                   ))}
               </ul>

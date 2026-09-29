@@ -183,6 +183,21 @@
   background-color: var(--color-accent-subtle);
 }
 
+.achievement-card--highlighted {
+  animation: achievement-card-highlight 2.4s ease-out;
+}
+
+@keyframes achievement-card-highlight {
+  0%,
+  40% {
+    box-shadow: 0 0 0 3px var(--color-accent);
+  }
+
+  100% {
+    box-shadow: 0 0 0 3px transparent;
+  }
+}
+
 .achievement-card__body {
   display: flex;
   flex: 1;

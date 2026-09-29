@@ -26,7 +26,7 @@ export const useTypedSecrets = (): void => {
         return;
       }
 
-      const found = detector.feed(event.code);
+      const found = detector.feed(event.code, event.key);
 
       if (found) {
         void report(found);

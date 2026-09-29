@@ -9,6 +9,10 @@ process.env.REACT_APP_STORAGE_PREFIX = pkg.name;
 process.env.REACT_APP_VERSION = pkg.version;
 process.env.REACT_APP_AUTHOR_NAME = pkg.author.name;
 process.env.REACT_APP_AUTHOR_URL = pkg.author.url;
+process.env.REACT_APP_PROJECT_SITE = pkg.projectSite || '';
+process.env.REACT_APP_REPOSITORY_URL = (typeof pkg.repository === 'string' ? pkg.repository : pkg.repository?.url || '')
+  .replace(/^git\+/, '')
+  .replace(/\.git$/, '');
 
 /**
  * CRA (react-scripts 5) has no support for path aliases, so we override its

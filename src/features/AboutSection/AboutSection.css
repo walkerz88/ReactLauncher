@@ -1,26 +1,74 @@
+.about-section__page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 760px;
+}
+
+.about-section__hero {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.about-section__logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+
+.about-section__app-name {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.about-section__app-version {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
 .about-section {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  max-width: 78ch;
+  gap: 11px;
   font-size: 13px;
   color: var(--color-text-muted);
 }
 
 .about-section__row {
   display: flex;
+  align-items: center;
   gap: 10px;
+}
+
+.about-section__row-icon {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
 }
 
 .about-section__row dt {
   flex-shrink: 0;
-  min-width: 132px;
+  width: 120px;
   font-weight: 600;
+  color: var(--color-text);
 }
 
 .about-section__row dd {
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.about-section__hint {
+  margin: -6px 0 14px;
+  max-width: 60ch;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
 }
 
 .about-section__link {

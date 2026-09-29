@@ -42,6 +42,35 @@ export const launchFactEvents = (
     events.push(['feature', 'retro']);
   }
 
+  if (!app.coverHorizontal && !app.coverVertical) {
+    events.push(['feature', 'no-cover']);
+  }
+
+  // % of the current library ever launched — re-evaluated against today's library size on every
+  // launch, so it tracks what you've actually covered right now rather than a snapshot from when
+  // you first crossed a threshold. Once granted, an achievement stays granted even if the library
+  // grows afterwards and the percentage dips back below the threshold.
+  if (library.length > 0) {
+    const launchedCount = launchedIds.has(app.id) ? launchedIds.size : launchedIds.size + 1;
+    const percent = (launchedCount / library.length) * 100;
+
+    if (percent >= 25) {
+      events.push(['feature', 'library-25']);
+    }
+
+    if (percent >= 50) {
+      events.push(['feature', 'library-50']);
+    }
+
+    if (percent >= 75) {
+      events.push(['feature', 'library-75']);
+    }
+
+    if (percent >= 100) {
+      events.push(['feature', 'library-100']);
+    }
+  }
+
   if (app.series) {
     const members = library.filter((entry) => entry.series === app.series);
 

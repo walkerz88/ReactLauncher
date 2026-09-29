@@ -1,4 +1,5 @@
 import { useEffect, type FC } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { TrendingUp } from 'lucide-react';
 
 import { useTranslation } from '@/app/i18n';
@@ -9,7 +10,7 @@ import { AchievementBadge } from '@/shared/AchievementBadge';
 
 import './AchievementToasts.css';
 
-const TOAST_LIFETIME_MS = 6000;
+const TOAST_LIFETIME_MS = 12000;
 
 interface ToastCardProps {
   toast: Toast;
@@ -17,6 +18,7 @@ interface ToastCardProps {
 
 const ToastCard: FC<ToastCardProps> = ({ toast }) => {
   const t = useTranslation();
+  const navigate = useNavigate();
   const locale = useLocaleStore((state) => state.locale);
   const achievements = useProgressStore((state) => state.view?.achievements);
   const dismissToast = useProgressStore((state) => state.dismissToast);
@@ -36,8 +38,16 @@ const ToastCard: FC<ToastCardProps> = ({ toast }) => {
     return null;
   }
 
+  const handleClick = () => {
+    dismissToast(toast.key);
+
+    if (achievement) {
+      navigate(`/achievements?highlight=${achievement.id}`);
+    }
+  };
+
   return (
-    <button type="button" className="achievement-toast" onClick={() => dismissToast(toast.key)} data-id="AchievementToast">
+    <button type="button" className="achievement-toast" onClick={handleClick} data-id="AchievementToast">
       {achievement ? (
         <AchievementBadge
           icon={achievementIcon(achievement)}

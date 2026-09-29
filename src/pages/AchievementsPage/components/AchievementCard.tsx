@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { useEffect, useRef, type FC } from 'react';
 import { HelpCircle } from 'lucide-react';
 
 import {
@@ -20,20 +20,35 @@ export interface AchievementCardProps {
   value?: number;
   /** When it was unlocked, ms since epoch; `undefined` while locked. */
   unlockedAt?: number;
+  /** Scrolls into view and gets a brief highlight — used when arriving from an achievement toast. */
+  highlighted?: boolean;
 }
 
-export const AchievementCard: FC<AchievementCardProps> = ({ achievement, value = 0, unlockedAt }) => {
+export const AchievementCard: FC<AchievementCardProps> = ({ achievement, value = 0, unlockedAt, highlighted = false }) => {
   const t = useTranslation();
   const locale = useLocaleStore((state) => state.locale);
+  const elementRef = useRef<HTMLLIElement>(null);
 
   const isUnlocked = unlockedAt !== undefined;
   const isSecret = achievement.hidden === true && !isUnlocked;
   const hasProgress = achievement.metric !== 'special';
   const percent = Math.min(100, (value / achievement.target) * 100);
-  const className = ['achievement-card', isUnlocked ? 'achievement-card--unlocked' : ''].filter(Boolean).join(' ');
+  const className = [
+    'achievement-card',
+    isUnlocked ? 'achievement-card--unlocked' : '',
+    highlighted ? 'achievement-card--highlighted' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  useEffect(() => {
+    if (highlighted) {
+      elementRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [highlighted]);
 
   return (
-    <li className={className} data-id="AchievementCard">
+    <li ref={elementRef} id={`achievement-${achievement.id}`} className={className} data-id="AchievementCard">
       <AchievementBadge
         icon={isSecret ? HelpCircle : achievementIcon(achievement)}
         tier={achievement.tier}

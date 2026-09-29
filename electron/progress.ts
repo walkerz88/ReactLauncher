@@ -111,6 +111,9 @@ const SPECIALS_BY_KEY = new Map(
   ]),
 );
 
+/** Collecting all three "klyukva" stereotype secrets (vodka, bear, balalaika) grants a bonus special. */
+const KLYUKVA_SPECIALS = ['vodka', 'bear', 'balalaika'];
+
 const ACTION_SPECIALS: Record<LauncherAction, string> = {
   'backup-created': 'backup',
   'backup-restored': 'restore',
@@ -388,6 +391,11 @@ export const createProgress = (
 
       stats.hourWeekdayLaunches[weekday * 24 + hour] += 1;
 
+      // Every hour of the day covered by at least one launch, any weekday — the full "active hours" heatmap.
+      if (Array.from({ length: 24 }, (_, h) => h).every((h) => [0, 1, 2, 3, 4, 5, 6].some((d) => stats.hourWeekdayLaunches[d * 24 + h] > 0))) {
+        grant('allHours');
+      }
+
       if (stats.secondsById[gameId] === undefined && Object.keys(stats.secondsById).length < MAX_GAMES) {
         stats.secondsById[gameId] = 0;
       }
@@ -421,6 +429,26 @@ export const createProgress = (
         grant('makeAWish');
       }
 
+      if (hour === 13 && minute === 37) {
+        grant('leetSpeak');
+      }
+
+      if (hour === 0 && minute === 7) {
+        grant('bondTime');
+      }
+
+      if (hour === 4 && minute === 20) {
+        grant('fourTwenty');
+      }
+
+      if (stats.launches === 666) {
+        grant('numberOfTheBeast');
+      }
+
+      if (stats.launches === 67) {
+        grant('sixSeven');
+      }
+
       if (weekday >= 1 && weekday <= 5 && hour >= 10 && hour < 16) {
         grant('workingHours');
       }
@@ -444,6 +472,38 @@ export const createProgress = (
 
       if (dayOfYear(time) === 256) {
         grant('programmersDay');
+      }
+
+      if (month === 4 && date === 12) {
+        grant('cosmonauticsDay');
+      }
+
+      if (month === 1 && date === 14) {
+        grant('oldNewYear');
+      }
+
+      if (month === 3 && date === 14) {
+        grant('piDay');
+      }
+
+      if (month === 5 && date === 4) {
+        grant('starWarsDay');
+      }
+
+      if (month === 5 && date === 25) {
+        grant('towelDay');
+      }
+
+      if (month === 2 && date === 23) {
+        grant('defenderDay');
+      }
+
+      if (month === 3 && date === 8) {
+        grant('womensDay');
+      }
+
+      if (month === 8 && date === 19) {
+        grant('belkaAndStrelka');
       }
 
       const createdAt = storage.getProfileCreatedAt(profileId);
@@ -534,6 +594,10 @@ export const createProgress = (
       if (Math.abs(length - ANSWER_SESSION_SECONDS) <= 60) {
         grant('answer42');
       }
+
+      if (length >= 6 * 3600) {
+        grant('marathoner');
+      }
     });
   };
 
@@ -574,8 +638,17 @@ export const createProgress = (
             if (addOnce(data.stats.secrets, id, SECRET_IDS.length)) {
               data.xp += SECRET_XP;
 
-              if (SECRET_SPECIALS[id]) {
-                grant(SECRET_SPECIALS[id]);
+              const specialKey = SECRET_SPECIALS[id];
+
+              if (specialKey) {
+                grant(specialKey);
+
+                if (
+                  KLYUKVA_SPECIALS.includes(specialKey) &&
+                  KLYUKVA_SPECIALS.every((key) => data.unlocked[`${SPECIAL_ID_PREFIX}${key}`])
+                ) {
+                  grant('klyukva');
+                }
               }
             }
           });
