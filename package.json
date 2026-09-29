@@ -1,13 +1,18 @@
 {
   "name": "react-launcher",
   "version": "1.0.0",
-  "description": "React Launcher - Desktop app with React and Electron",
+  "description": "React Launcher - Windows desktop game launcher (Electron + React + TypeScript) with a library, Steam auto-fill, profiles, achievements and save backups",
   "main": "public/electron.js",
   "homepage": "./",
   "author": {
     "name": "Alexander Anikin",
     "email": "mailwalkerz@yandex.ru",
     "url": "https://walkerz.ru"
+  },
+  "projectSite": "https://rl.walkerz.ru",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/walkerz88/ReactLauncher"
   },
   "license": "MIT",
   "scripts": {
