@@ -29,3 +29,7 @@ yarn-error.log*
 
 # Spoils every hidden achievement's exact trigger — personal reference only, never for the public repo
 /SECRETS-SPOILERS.md
+
+# sh
+deploy_html.sh
+deploy_exe.sh
