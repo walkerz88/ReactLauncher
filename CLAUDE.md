@@ -119,7 +119,7 @@ const compare = (value: number) => {
 
 ### 5. Imports
 
-- Use absolute paths unless it creates a circular dependency (e.g. `components/AiChat`).
+- Use absolute paths unless it creates a circular dependency (e.g. `@/features/AboutSection`).
 - Import order is not enforced by a linter: follow the existing files (external packages, then `@/` absolute imports, then relative imports, then the stylesheet).
 - ESLint is configured in the `eslintConfig` field of `package.json` (`react-app` preset plus a rule requiring a blank line before `return`); there is no `eslint.config` file. Run `npx eslint src electron --ext .ts,.tsx`.
 
@@ -160,3 +160,8 @@ const compare = (value: number) => {
 
 - Never use `dangerouslySetInnerHTML`.
 - Validate incoming data.
+
+## Versions
+
+- Fix version in package.json if you think it should be done.
+- Add changes to changelog.json if you think it should be done.

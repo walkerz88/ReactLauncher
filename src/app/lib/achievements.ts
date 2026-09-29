@@ -453,7 +453,7 @@ const SPECIALS: Record<string, SpecialInfo> = {
   piDay: info(Gauge, ['Число Пи', 'Pi Day'], ['Запустите игру 14 марта', 'Launch a game on 14 March']),
   starWarsDay: info(Sparkles, ['Да пребудет с тобой сила', 'May the Fourth Be With You'], ['Запустите игру 4 мая', 'Launch a game on 4 May']),
   towelDay: info(ShieldCheck, ['Где моё полотенце?', "Where's My Towel?"], ['Запустите игру 25 мая', 'Launch a game on 25 May']),
-  defenderDay: info(ShieldCheck, ['С праздником!', "Happy Defender's Day"], ['Запустите игру 23 февраля', 'Launch a game on 23 February']),
+  defenderDay: info(ShieldCheck, ['С Днём Победы!', "Happy Defender's Day"], ['Запустите игру 23 февраля', 'Launch a game on 23 February']),
   womensDay: info(Sparkles, ['Цветы подарили — можно и поиграть', "Flowers Delivered, Now Let's Play"], ['Запустите игру 8 марта', 'Launch a game on 8 March']),
   belkaAndStrelka: info(Rocket, ['Белка и Стрелка', 'Belka and Strelka'], ['Запустите игру 19 августа', 'Launch a game on 19 August']),
   // habits

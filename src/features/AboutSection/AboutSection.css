@@ -83,3 +83,58 @@
 .about-section__link:hover {
   text-decoration: underline;
 }
+
+.about-section__changelog {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.about-section__changelog-entry {
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.about-section__changelog-entry:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.about-section__changelog-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.about-section__changelog-version {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.about-section__changelog-date {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.about-section__changelog-entry-title {
+  margin: 2px 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.about-section__changelog-list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.about-section__changelog-more {
+  align-self: flex-start;
+  margin-top: 16px;
+}

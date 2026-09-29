@@ -1,0 +1,247 @@
+[
+  {
+    "version": "0.1.0",
+    "title": {
+      "ru": "Библиотека и запуск игр",
+      "en": "Library and launching games"
+    },
+    "changes": [
+      {
+        "ru": "Папка внутри content/ превращается в карточку игры: обложка, трейлер, описание, жанр/серия",
+        "en": "A folder under content/ becomes a game card: cover, trailer, description, genre/series"
+      },
+      {
+        "ru": "Запуск и остановка игры одной кнопкой, подсчёт времени в игре",
+        "en": "One-button launch/stop, playtime tracking"
+      },
+      {
+        "ru": "Полноэкранный безрамочный режим, навигация с геймпада",
+        "en": "Fullscreen frameless window, gamepad navigation"
+      }
+    ]
+  },
+  {
+    "version": "0.2.0",
+    "title": { "ru": "Мастер добавления игры", "en": "Add-game wizard" },
+    "changes": [
+      {
+        "ru": "Поиск игры в Steam с автозаполнением названия, жанра, рейтинга и описания",
+        "en": "Steam search that auto-fills name, genre, rating and description"
+      },
+      {
+        "ru": "Автоматическая загрузка обложек, скриншотов и трейлера — без ручного редактирования config.json",
+        "en": "Automatic download of covers, screenshots and the trailer — no manual config.json editing"
+      }
+    ]
+  },
+  {
+    "version": "0.3.0",
+    "title": { "ru": "Профили", "en": "Profiles" },
+    "changes": [
+      {
+        "ru": "Несколько локальных профилей на одном ПК, данные каждого зашифрованы (AES-256-GCM)",
+        "en": "Several local profiles on one PC, each one's data encrypted (AES-256-GCM)"
+      }
+    ]
+  },
+  {
+    "version": "0.3.1",
+    "title": { "ru": "Локализация", "en": "Localization" },
+    "changes": [
+      {
+        "ru": "Русский и английский интерфейс с переключением на лету",
+        "en": "Russian and English interface, switchable on the fly"
+      }
+    ]
+  },
+  {
+    "version": "0.4.0",
+    "title": { "ru": "Темы", "en": "Themes" },
+    "changes": [
+      {
+        "ru": "Тёмная и светлая темы, набор готовых пресетов и собственный редактор темы",
+        "en": "Dark and light themes, a set of ready-made presets and a custom theme editor"
+      }
+    ]
+  },
+  {
+    "version": "0.4.1",
+    "title": { "ru": "Избранное и «Мне повезёт»", "en": "Favorites and Feeling Lucky" },
+    "changes": [
+      { "ru": "Избранное на любой игре", "en": "Favorites on any game" },
+      {
+        "ru": "«Мне повезёт» — барабан, случайно выбирающий игру из библиотеки",
+        "en": "\"Feeling Lucky\" — a reel that randomly picks a game from the library"
+      }
+    ]
+  },
+  {
+    "version": "0.5.0",
+    "title": { "ru": "Проверка библиотеки", "en": "Library health check" },
+    "changes": [
+      {
+        "ru": "Таблица игр без обложки/трейлера/описания с массовой дозагрузкой из Steam",
+        "en": "A table of games missing a cover/trailer/description, with bulk re-fetch from Steam"
+      },
+      {
+        "ru": "Разбивка занятого места по каждой игре (установщик/данные/трейлер/обложки) и сводка по диску",
+        "en": "Per-game disk usage breakdown (installer/data/trailer/covers) and a whole-drive summary"
+      }
+    ]
+  },
+  {
+    "version": "0.5.1",
+    "title": { "ru": "Исправление", "en": "Fix" },
+    "changes": [
+      {
+        "ru": "Исправлен неверный подсчёт свободного места на некоторых внешних дисках",
+        "en": "Fixed incorrect free-space calculation on some external drives"
+      }
+    ]
+  },
+  {
+    "version": "0.6.0",
+    "title": { "ru": "Резервные копии сохранений", "en": "Save backups" },
+    "changes": [
+      {
+        "ru": "Backup и восстановление сохранений одной кнопкой",
+        "en": "One-click save backup and restore"
+      },
+      {
+        "ru": "Текущие сохранения автоматически архивируются перед восстановлением",
+        "en": "Current saves are automatically archived before a restore"
+      }
+    ]
+  },
+  {
+    "version": "0.7.0",
+    "title": {
+      "ru": "Уровни, опыт и достижения",
+      "en": "Levels, XP and achievements"
+    },
+    "changes": [
+      {
+        "ru": "Система уровней и опыта на основе реальной активности в профиле",
+        "en": "A level/XP system driven by real activity in the profile"
+      },
+      {
+        "ru": "Первые ачивки бронза/серебро/золото за игровые привычки, страница «Достижения»",
+        "en": "First bronze/silver/gold achievements for play habits, an Achievements page"
+      }
+    ]
+  },
+  {
+    "version": "0.7.1",
+    "title": { "ru": "Уведомления о достижениях", "en": "Achievement notifications" },
+    "changes": [
+      {
+        "ru": "Всплывающие уведомления и звук при получении достижения",
+        "en": "Toast notifications and a sound when an achievement unlocks"
+      }
+    ]
+  },
+  {
+    "version": "0.8.0",
+    "date": "2026-09-24",
+    "title": {
+      "ru": "Скриншоты и запись геймплея",
+      "en": "Screenshots and gameplay recording"
+    },
+    "changes": [
+      {
+        "ru": "Ctrl+Shift+F9 — скриншот, Ctrl+Shift+F10 — запись до 20 секунд прямо во время игры",
+        "en": "Ctrl+Shift+F9 for a screenshot, Ctrl+Shift+F10 for up to 20 seconds of recording, right during a game"
+      },
+      {
+        "ru": "Галерея скриншотов и записей на странице каждой игры",
+        "en": "A screenshot/recording gallery on each game's page"
+      },
+      {
+        "ru": "Новые ачивки за количество скриншотов и записей",
+        "en": "New achievements for the number of screenshots and recordings taken"
+      }
+    ]
+  },
+  {
+    "version": "0.8.1",
+    "date": "2026-09-24",
+    "title": { "ru": "Анимация обложек", "en": "Animated covers" },
+    "changes": [
+      {
+        "ru": "Наклон и блик карточки при наведении, трейлер автоматически проигрывается при наведении",
+        "en": "Tilt-and-glare on card hover, trailer auto-plays on hover"
+      },
+      {
+        "ru": "Оба эффекта включаются отдельными переключателями в настройках",
+        "en": "Both effects are separate toggles in Settings"
+      }
+    ]
+  },
+  {
+    "version": "1.0.0",
+    "date": "2026-09-27",
+    "title": { "ru": "Первый публичный релиз", "en": "Initial public release" },
+    "changes": [
+      {
+        "ru": "Проект опубликован в открытом доступе под лицензией MIT",
+        "en": "Published in the open under the MIT license"
+      },
+      {
+        "ru": "README на английском как основной, русская версия — в README.ru.md",
+        "en": "English README as primary, Russian version moved to README.ru.md"
+      }
+    ]
+  },
+  {
+    "version": "1.1.0",
+    "date": "2026-09-29",
+    "title": {
+      "ru": "Вкладка «О программе» и новые секретные ачивки",
+      "en": "About tab and new secret achievements"
+    },
+    "changes": [
+      {
+        "ru": "«О программе» вынесена в отдельную вкладку настроек: создатель проекта отдельно от данных конкретной сборки",
+        "en": "About moved into its own settings tab: the project's creator is shown separately from this particular build's info"
+      },
+      {
+        "ru": "Около 15 новых пасхалок-достижений за ввод фраз (в том числе кириллицей), плюс отдельная ачивка за каждый классический чит-код",
+        "en": "About 15 new Easter-egg achievements for typed phrases (Cyrillic spellings included too), plus a separate achievement for every classic cheat code"
+      },
+      {
+        "ru": "Новые ачивки за покрытие библиотеки обложками/описаниями",
+        "en": "New achievements for how much of the library has covers/descriptions filled in"
+      }
+    ]
+  },
+  {
+    "version": "1.1.1",
+    "date": "2026-09-29",
+    "title": { "ru": "Мелкие правки", "en": "Small fixes" },
+    "changes": [
+      {
+        "ru": "Поиск по названию в таблице занятости диска",
+        "en": "Search by name in the disk usage table"
+      },
+      {
+        "ru": "Уточнено название праздничной ачивки за запуск игры 23 февраля",
+        "en": "Renamed the holiday achievement for launching a game on 23 February"
+      }
+    ]
+  },
+  {
+    "version": "1.2.0",
+    "date": "2026-09-29",
+    "title": { "ru": "История версий в «О программе»", "en": "Version history in About" },
+    "changes": [
+      {
+        "ru": "На вкладке «О программе» появилась история версий — этот самый список",
+        "en": "The About tab now shows a version history — this very list"
+      },
+      {
+        "ru": "Записи подгружаются страницами по кнопке «Показать ещё», чтобы старые версии не грузили экран сразу",
+        "en": "Entries load a page at a time via a \"Show more\" button, so old versions don't all render at once"
+      }
+    ]
+  }
+]

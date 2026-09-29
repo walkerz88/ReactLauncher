@@ -235,6 +235,8 @@ const ru = {
   'settings.about.aboutAuthor': 'Об авторе',
   'settings.about.projectSite': 'Сайт проекта',
   'settings.about.repository': 'Исходный код',
+  'settings.about.changelogTitle': 'История версий',
+  'settings.about.changelogMore': 'Показать ещё',
 
   'welcomeAnimation.styleGroupLabel': 'Стиль анимации приветствия',
   'welcomeAnimation.style.reveal': 'Появление',
@@ -682,6 +684,8 @@ const en: Record<MessageKey, string> = {
   'settings.about.aboutAuthor': 'About the author',
   'settings.about.projectSite': 'Project site',
   'settings.about.repository': 'Source code',
+  'settings.about.changelogTitle': 'Version history',
+  'settings.about.changelogMore': 'Show more',
 
   'welcomeAnimation.styleGroupLabel': 'Welcome animation style',
   'welcomeAnimation.style.reveal': 'Reveal',

@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp, Loader2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, Loader2, Search, X } from 'lucide-react';
 import { useEffect, useMemo, useState, type FC } from 'react';
 
 import { useTranslation } from '@/app/i18n';
@@ -42,6 +42,7 @@ export const LibrarySizes: FC<LibrarySizesProps> = ({ apps }) => {
   const rescan = useLibrarySizesStore((state) => state.rescan);
   const [sort, setSort] = useState<Sort>({ column: 'data', direction: 'desc' });
   const [diskReloadKey, setDiskReloadKey] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     useLibrarySizesStore.getState().ensureLoaded(apps);
@@ -86,8 +87,11 @@ export const LibrarySizes: FC<LibrarySizesProps> = ({ apps }) => {
   };
 
   const sortedApps = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    const filtered = query ? apps.filter((app) => app.name.toLowerCase().includes(query)) : apps;
+
     if (sort.column === 'name') {
-      return [...apps].sort((a, b) => (sort.direction === 'desc' ? b.name.localeCompare(a.name) : a.name.localeCompare(b.name)));
+      return [...filtered].sort((a, b) => (sort.direction === 'desc' ? b.name.localeCompare(a.name) : a.name.localeCompare(b.name)));
     }
 
     // Unmeasured (not yet in `sizes`) sorts alongside confirmed-absent — both settle at the light end,
@@ -108,9 +112,9 @@ export const LibrarySizes: FC<LibrarySizesProps> = ({ apps }) => {
       return sizes[app.id]?.[column] ?? -1;
     };
 
-    return [...apps].sort((a, b) => (sort.direction === 'desc' ? value(b) - value(a) : value(a) - value(b)));
+    return [...filtered].sort((a, b) => (sort.direction === 'desc' ? value(b) - value(a) : value(a) - value(b)));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apps, sizes, sort]);
+  }, [apps, sizes, sort, searchQuery]);
 
   const renderCell = (app: ContentApp, column: keyof AppSizes) => {
     const measured = sizes[app.id];
@@ -187,6 +191,28 @@ export const LibrarySizes: FC<LibrarySizesProps> = ({ apps }) => {
             </button>
           </div>
         </div>
+      </div>
+
+      <div className="library-health__search">
+        <Search size={14} className="library-health__search-icon" aria-hidden="true" />
+        <input
+          type="text"
+          className="library-health__search-input"
+          value={searchQuery}
+          placeholder={t('gallery.filter.search')}
+          aria-label={t('gallery.filter.search')}
+          onChange={(event) => setSearchQuery(event.target.value)}
+        />
+        {searchQuery ? (
+          <button
+            type="button"
+            className="library-health__search-clear"
+            onClick={() => setSearchQuery('')}
+            aria-label={t('gallery.filter.searchClear')}
+          >
+            <X size={12} />
+          </button>
+        ) : null}
       </div>
 
       <table className="library-health__table">

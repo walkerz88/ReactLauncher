@@ -3,6 +3,7 @@ import { Globe, Link2, Tag, User } from 'lucide-react';
 
 import { useTranslation } from '@/app/i18n';
 
+import { AboutChangelog } from './components/AboutChangelog';
 import { AboutFactRow } from './components/AboutFactRow';
 
 import './AboutSection.css';
@@ -100,6 +101,8 @@ export const AboutSection: FC = () => {
             />
           </dl>
         </section>
+
+        <AboutChangelog />
       </div>
     </div>
   );
