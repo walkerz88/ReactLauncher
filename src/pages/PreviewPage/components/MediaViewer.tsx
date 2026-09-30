@@ -1,10 +1,19 @@
 import { useCallback, useEffect, useRef, useState, type FC, type PointerEvent, type WheelEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronLeft, ChevronRight, FolderOpen, Play, Trash2, X } from 'lucide-react';
+import { Plyr, type PlyrOptions } from 'plyr-react';
 
 import { useTranslation } from '@/app/i18n';
 
+import 'plyr-react/plyr.css';
 import './MediaViewer.css';
+
+const PLYR_OPTIONS: PlyrOptions = {
+  autoplay: true,
+  clickToPlay: true,
+  keyboard: { focused: true, global: false },
+  controls: ['play-large', 'play', 'progress', 'current-time', 'duration', 'mute', 'volume', 'fullscreen'],
+};
 
 const SWIPE_DISTANCE_PX = 60;
 const WHEEL_COOLDOWN_MS = 220;
@@ -209,14 +218,9 @@ export const MediaViewer: FC<MediaViewerProps> = ({
         ) : null}
 
         {active.type === 'video' ? (
-          <video
-            key={active.src}
-            className="media-viewer__media"
-            src={active.src}
-            controls
-            autoPlay
-            onClick={stop}
-          />
+          <div key={active.src} className="media-viewer__player" onClick={stop}>
+            <Plyr source={{ type: 'video', sources: [{ src: active.src }] }} options={PLYR_OPTIONS} />
+          </div>
         ) : (
           <img
             key={active.src}

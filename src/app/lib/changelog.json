@@ -280,5 +280,20 @@
         "en": "Custom buttons now come right after \"Play\"/\"Install\""
       }
     ]
+  },
+  {
+    "version": "1.4.0",
+    "date": "2026-09-30",
+    "title": { "ru": "Звук в записях и новый плеер", "en": "Recording audio and a new player" },
+    "changes": [
+      {
+        "ru": "Записи экрана теперь сохраняются со звуком системы",
+        "en": "Screen recordings are now saved with system audio"
+      },
+      {
+        "ru": "Видео в галерее воспроизводится в новом плеере (Plyr) с удобными элементами управления",
+        "en": "Videos in the gallery play in a new Plyr-based player with better controls"
+      }
+    ]
   }
 ]

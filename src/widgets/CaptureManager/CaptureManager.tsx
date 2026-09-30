@@ -7,6 +7,7 @@ import { useSoundStore } from '@/app/store/soundStore';
 // electron.ts), so playback in the in-app gallery decodes VP9 entirely in software — 1080p/30fps
 // stuttered badly there even though it played fine in Explorer's hardware-accelerated preview.
 const VIDEO_BITS_PER_SECOND = 2_500_000;
+const AUDIO_BITS_PER_SECOND = 128_000;
 const RECORDING_CONSTRAINTS = { maxWidth: 1280, maxHeight: 720, maxFrameRate: 30 };
 
 interface ActiveRecording {
@@ -70,7 +71,7 @@ export const CaptureManager: FC = () => {
       const startCapture = async () => {
         try {
           const constraints = {
-            audio: false,
+            audio: { mandatory: { chromeMediaSource: 'desktop' } },
             video: {
               mandatory: {
                 chromeMediaSource: 'desktop',
@@ -83,8 +84,9 @@ export const CaptureManager: FC = () => {
           const stream = await navigator.mediaDevices.getUserMedia(constraints);
 
           const recorder = new MediaRecorder(stream, {
-            mimeType: MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm',
+            mimeType: MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus') ? 'video/webm;codecs=vp9,opus' : 'video/webm',
             videoBitsPerSecond: VIDEO_BITS_PER_SECOND,
+            audioBitsPerSecond: AUDIO_BITS_PER_SECOND,
           });
           const chunks: BlobPart[] = [];
 

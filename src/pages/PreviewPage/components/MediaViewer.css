@@ -84,6 +84,23 @@
   animation: media-viewer-media-in 0.2s ease both;
 }
 
+.media-viewer__player {
+  width: 100%;
+  height: 100%;
+  animation: media-viewer-media-in 0.2s ease both;
+}
+
+.media-viewer__player .plyr,
+.media-viewer__player .plyr__video-wrapper {
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.media-viewer__player .plyr video {
+  object-fit: contain;
+}
+
 .media-viewer__arrow {
   position: absolute;
   top: 50%;
