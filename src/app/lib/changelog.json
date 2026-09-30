@@ -243,5 +243,31 @@
         "en": "Entries load a page at a time via a \"Show more\" button, so old versions don't all render at once"
       }
     ]
+  },
+  {
+    "version": "1.3.0",
+    "date": "2026-09-30",
+    "title": { "ru": "Свои кнопки на странице игры", "en": "Custom buttons on a game's page" },
+    "changes": [
+      {
+        "ru": "В «Редактировать данные» можно добавить свои кнопки: название на русском/английском и путь к файлу или папке",
+        "en": "\"Edit data\" now lets you add custom buttons: a name in Russian/English and a path to a file or folder"
+      },
+      {
+        "ru": "Такая кнопка появляется рядом с «Играть»/«Установить», если указанный путь реально существует",
+        "en": "The button shows up next to \"Play\"/\"Install\" once its path actually resolves to something"
+      }
+    ]
+  },
+  {
+    "version": "1.3.1",
+    "date": "2026-09-30",
+    "title": { "ru": "Email в контактах", "en": "Email in contacts" },
+    "changes": [
+      {
+        "ru": "Почта автора добавлена в «О программе» и в контакты на сайте",
+        "en": "The author's email is now shown in About and in the site's contacts"
+      }
+    ]
   }
 ]

@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Globe, Link2, Tag, User } from 'lucide-react';
+import { Globe, Link2, Mail, Tag, User } from 'lucide-react';
 
 import { useTranslation } from '@/app/i18n';
 
@@ -10,6 +10,7 @@ import './AboutSection.css';
 
 const ORIGINAL_AUTHOR = 'Alexander Anikin';
 const ORIGINAL_AUTHOR_URL = 'https://walkerz.ru';
+const ORIGINAL_AUTHOR_EMAIL = 'mailwalkerz@yandex.ru';
 const ORIGINAL_PROJECT_SITE = 'https://rl.walkerz.ru';
 const ORIGINAL_REPOSITORY_URL = 'https://github.com/walkerz88/ReactLauncher';
 
@@ -17,6 +18,7 @@ const APP_NAME = process.env.REACT_APP_PRODUCT_NAME ?? '';
 const BUILD_VERSION = process.env.REACT_APP_VERSION ?? '';
 const BUILD_AUTHOR = process.env.REACT_APP_AUTHOR_NAME ?? '';
 const BUILD_AUTHOR_URL = process.env.REACT_APP_AUTHOR_URL ?? '';
+const BUILD_AUTHOR_EMAIL = process.env.REACT_APP_AUTHOR_EMAIL ?? '';
 const BUILD_PROJECT_SITE = process.env.REACT_APP_PROJECT_SITE ?? '';
 const BUILD_REPOSITORY_URL = process.env.REACT_APP_REPOSITORY_URL ?? '';
 
@@ -56,6 +58,13 @@ export const AboutSection: FC = () => {
               onOpen={handleOpen}
             />
             <AboutFactRow
+              icon={Mail}
+              label={t('settings.about.email')}
+              value={ORIGINAL_AUTHOR_EMAIL}
+              href={`mailto:${ORIGINAL_AUTHOR_EMAIL}`}
+              onOpen={handleOpen}
+            />
+            <AboutFactRow
               icon={Globe}
               label={t('settings.about.projectSite')}
               value={stripProtocol(ORIGINAL_PROJECT_SITE)}
@@ -83,6 +92,13 @@ export const AboutSection: FC = () => {
               label={t('settings.about.aboutAuthor')}
               value={stripProtocol(BUILD_AUTHOR_URL)}
               href={BUILD_AUTHOR_URL}
+              onOpen={handleOpen}
+            />
+            <AboutFactRow
+              icon={Mail}
+              label={t('settings.about.email')}
+              value={BUILD_AUTHOR_EMAIL}
+              href={BUILD_AUTHOR_EMAIL ? `mailto:${BUILD_AUTHOR_EMAIL}` : undefined}
               onOpen={handleOpen}
             />
             <AboutFactRow

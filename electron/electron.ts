@@ -117,9 +117,9 @@ ipcMain.handle('app:quit', () => {
   app.quit();
 });
 
-// Only http(s) links are allowed through — this opens in the OS browser, not the app window.
+// Only http(s)/mailto links are allowed through — this opens the OS browser or mail client, not the app window.
 ipcMain.handle('app:open-external', (_event, url: string) => {
-  if (!/^https?:\/\//i.test(url)) {
+  if (!/^(https?:\/\/|mailto:)/i.test(url)) {
     return;
   }
   shell.openExternal(url);

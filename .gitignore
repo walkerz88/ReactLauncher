@@ -31,5 +31,4 @@ yarn-error.log*
 /SECRETS-SPOILERS.md
 
 # sh
-deploy_html.sh
-deploy_exe.sh
+*.sh

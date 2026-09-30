@@ -160,8 +160,3 @@ const compare = (value: number) => {
 
 - Never use `dangerouslySetInnerHTML`.
 - Validate incoming data.
-
-## Versions
-
-- Fix version in package.json if you think it should be done.
-- Add changes to changelog.json if you think it should be done.

@@ -551,6 +551,10 @@
   gap: 8px;
 }
 
+.edit-config-modal__custom-button-path {
+  grid-column: 1 / -1;
+}
+
 .edit-config-modal__notes {
   display: flex;
   flex-direction: column;

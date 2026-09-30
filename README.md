@@ -96,11 +96,12 @@ the app is built from source. This takes about five minutes.
    Alternatively, lay the game out under `content/` by hand — see
    [Content library](#content-library) below.
 6. To build an actual `.exe` (portable and an NSIS installer), run `npm run
-   build:exe` — see [Build](#build) below.
+build:exe` — see [Build](#build) below.
 
 ## Setup
 
 ### Requirements
+
 - Node.js 16 or newer
 - npm
 
@@ -325,7 +326,10 @@ config.json** below:
   "rating": 6.9,
   "facts": [
     { "label": { "ru": "Год выхода", "en": "Release year" }, "value": "2018" },
-    { "label": { "ru": "Жанр", "en": "Genre" }, "value": { "ru": "…", "en": "…" } }
+    {
+      "label": { "ru": "Жанр", "en": "Genre" },
+      "value": { "ru": "…", "en": "…" }
+    }
   ],
   "previewNotes": {
     "text": { "ru": "…", "en": "…" },
@@ -366,7 +370,13 @@ Additional optional `config.json` fields:
     "screenshots": "screenshots",
     "trailer": "assets/trailer.mp4",
     "saves": "%DOCUMENTS%/My Games/Fallout4/Saves"
-  }
+  },
+  "customButtons": [
+    {
+      "label": { "ru": "Мод-менеджер", "en": "Mod manager" },
+      "path": "data/ModManager.exe"
+    }
+  ]
 }
 ```
 
@@ -381,6 +391,12 @@ Additional optional `config.json` fields:
   appears in the game's gear menu: zip copies live in `<game>/backups/`, and
   the current saves are automatically archived as `before-restore_*.zip`
   before a restore.
+- `customButtons` — extra shortcut buttons next to "Play"/"Install", each with
+  a localized label and a `path` relative to the game's folder, pointing at a
+  file (launched) or a folder (opened in the file manager). A button is only
+  shown once its path actually resolves to something on disk. Edited the same
+  way as facts — a reorderable list in the "Edit data" form, with a
+  file/folder picker for the path.
 
 While a game is running (tracked by the main process), "Play" is replaced by
 "Stop" (`taskkill /T`), and the session length is added to "Playtime" — both
@@ -428,6 +444,7 @@ name.
 The filterable/groupable grid — `widgets/AppCollection` — is a shared widget
 used by every app list (Gallery, Favorites, Recently played), so the
 behavior is the same everywhere:
+
 - A view switcher (`widgets/GalleryControls`) on top: **All** (a flat grid,
   filtered by genre and series via `<select>`), **By genre** and **By
   series** (group the grid into sections; each view hides the filter for its

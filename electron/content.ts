@@ -60,6 +60,12 @@ interface AppFact {
   value: LocalizedText;
 }
 
+/** A user-defined shortcut button — a localized label and a path relative to the game's folder. */
+interface CustomButtonConfig {
+  label: LocalizedText;
+  path: string;
+}
+
 /** Severity of a `previewNotes` message; drives the icon/color in the renderer's `Message` component. */
 type PreviewNoteType = 'info' | 'success' | 'warning' | 'error';
 
@@ -79,6 +85,8 @@ interface AppConfig {
   /** CSS `object-position` keyword for the hero image; defaults to `center`. */
   coverHorizontalPosition?: string;
   facts?: Array<{ label?: unknown; value?: unknown }>;
+  /** User-defined shortcut buttons, shown next to Play/Install on the app page. */
+  customButtons?: Array<{ label?: unknown; path?: unknown }>;
   /**
    * Notes shown under the actions row on the app page (e.g. a compatibility
    * warning), stacked in array order. A bare object (pre-array config format)
@@ -128,6 +136,8 @@ interface ScannedApp {
   series: string | null;
   coverHorizontalPosition: CoverPosition;
   facts: AppFact[];
+  /** User-defined shortcut buttons, each resolved to an absolute path (or `null` if it doesn't exist). */
+  customButtons: Array<{ label: LocalizedText; abs: string | null }>;
   previewNotes: PreviewNote[];
   dir: string;
   execAbs: string | null;
@@ -161,6 +171,8 @@ interface ContentAppMeta {
   series: string | null;
   coverHorizontalPosition: CoverPosition;
   facts: AppFact[];
+  /** User-defined shortcut buttons, in configured order; `[]` if none. */
+  customButtons: Array<{ label: LocalizedText; exists: boolean }>;
   previewNotes: PreviewNote[];
   coverHorizontal: string | null;
   coverVertical: string | null;
@@ -237,6 +249,19 @@ function readFacts(value: AppConfig['facts']): AppFact[] {
     const factValue = readLocalizedText(entry?.value);
 
     return label && factValue ? [{ label, value: factValue }] : [];
+  });
+}
+
+function readCustomButtons(value: AppConfig['customButtons']): CustomButtonConfig[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.flatMap((entry) => {
+    const label = readLocalizedText(entry?.label);
+    const buttonPath = readPlainString(entry?.path);
+
+    return label && buttonPath ? [{ label, path: buttonPath }] : [];
   });
 }
 
@@ -352,7 +377,8 @@ type PathField =
   | 'bonus'
   | 'screenshots'
   | 'trailer'
-  | 'saves';
+  | 'saves'
+  | 'customButton';
 
 interface PickPathResult {
   ok: boolean;
@@ -583,6 +609,10 @@ async function scanContent(): Promise<ScannedApp[]> {
       series: readPlainString(config.series),
       coverHorizontalPosition: readCoverPosition(config.coverHorizontalPosition),
       facts: readFacts(config.facts),
+      customButtons: readCustomButtons(config.customButtons).map((button) => ({
+        label: button.label,
+        abs: resolveInside(dir, button.path),
+      })),
       previewNotes: readPreviewNotes(config.previewNotes),
       dir,
       execAbs: resolveInside(dir, config.paths?.exec ?? `data/${id}.exe`),
@@ -771,6 +801,7 @@ function registerIpc(): void {
         series: appEntry.series,
         coverHorizontalPosition: appEntry.coverHorizontalPosition,
         facts: appEntry.facts,
+        customButtons: appEntry.customButtons.map((button) => ({ label: button.label, exists: button.abs != null })),
         previewNotes: appEntry.previewNotes,
         coverHorizontal: appEntry.coverHorizontalAbs
           ? toContentUrl(appEntry.coverHorizontalAbs)
@@ -1043,11 +1074,11 @@ function registerIpc(): void {
   );
 
   const IMAGE_FIELDS = new Set<PathField>(['coverHorizontal', 'coverVertical']);
-  const EXECUTABLE_FIELDS = new Set<PathField>(['exec', 'settings', 'installer']);
+  const EXECUTABLE_FIELDS = new Set<PathField>(['exec', 'settings', 'installer', 'customButton']);
   // Windows can't show one dialog offering both files and folders (it silently
   // degrades to a folder-only, icon-less picker), so these fields get separate
   // "browse file" / "browse folder" dialogs instead, picked via `mode`.
-  const DUAL_MODE_FIELDS = new Set<PathField>(['exec', 'settings', 'installer', 'bonus', 'saves']);
+  const DUAL_MODE_FIELDS = new Set<PathField>(['exec', 'settings', 'installer', 'bonus', 'saves', 'customButton']);
   const FOLDER_ONLY_FIELDS = new Set<PathField>(['screenshots']);
   const VIDEO_FIELDS = new Set<PathField>(['trailer']);
 
@@ -1232,6 +1263,23 @@ function registerIpc(): void {
 
     return announceIfOk('settings-opened', launchPath(target.settingsAbs));
   });
+
+  ipcMain.handle(
+    'content:open-custom-button',
+    async (_event, appId: unknown, index: unknown): Promise<LaunchResult> => {
+      if (typeof appId !== 'string' || typeof index !== 'number') {
+        return { ok: false, error: 'Некорректные параметры' };
+      }
+
+      const target = (await scanContent()).find((appEntry) => appEntry.id === appId);
+      const button = target?.customButtons[index];
+      if (!button?.abs) {
+        return { ok: false, error: 'Файл или папка не найдены' };
+      }
+
+      return launchPath(button.abs);
+    },
+  );
 }
 
 /** Call once, after `app` is ready. */

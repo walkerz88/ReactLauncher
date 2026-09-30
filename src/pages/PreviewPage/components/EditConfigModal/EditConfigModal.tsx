@@ -15,6 +15,7 @@ import { SteamPickerModal } from '@/shared/SteamPickerModal';
 import { Tooltip } from '@/shared/Tooltip';
 import type { PathField as PathFieldName, RawAppConfig, SteamSearchResult } from '@/electron';
 
+import { CustomButtonRow, type CustomButtonRowValue } from './components/CustomButtonRow';
 import { FactRow, type FactRowValue } from './components/FactRow';
 import { NoteRow, type NoteRowValue } from './components/NoteRow';
 
@@ -49,6 +50,7 @@ interface FormState {
   pathSaves: string;
   launchArgs: string;
   facts: FactRowValue[];
+  customButtons: CustomButtonRowValue[];
 }
 
 /** Path-form fields, paired with the `PathField` on `config.json`'s `paths` object they edit. */
@@ -63,7 +65,7 @@ const PATH_FIELDS: Array<{
     | 'pathScreenshots'
     | 'pathTrailer'
     | 'pathSaves';
-  configField: PathFieldName;
+  configField: keyof NonNullable<RawAppConfig['paths']>;
   labelKey: string;
   placeholder: string;
   /** Whether this field also gets a "browse folder" button. */
@@ -193,6 +195,11 @@ function configToForm(config: RawAppConfig): FormState {
 
       return { id: makeRowId(), labelRu: label.ru, labelEn: label.en, valueRu: value.ru, valueEn: value.en };
     }),
+    customButtons: (config.customButtons ?? []).map((button) => {
+      const label = splitLocalized(button.label);
+
+      return { id: makeRowId(), labelRu: label.ru, labelEn: label.en, path: button.path ?? '' };
+    }),
   };
 }
 
@@ -269,6 +276,16 @@ function formToConfig(form: FormState): RawAppConfig {
     }));
   if (facts.length > 0) {
     config.facts = facts;
+  }
+
+  const customButtons = form.customButtons
+    .filter((button) => (button.labelRu.trim() || button.labelEn.trim()) && button.path.trim())
+    .map((button) => ({
+      label: { ru: button.labelRu.trim() || null, en: button.labelEn.trim() || null },
+      path: button.path.trim(),
+    }));
+  if (customButtons.length > 0) {
+    config.customButtons = customButtons;
   }
 
   return config;
@@ -363,6 +380,44 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
 
   const reorderFacts = (facts: FactRowValue[]) => {
     setForm((prev) => (prev ? { ...prev, facts } : prev));
+  };
+
+  const updateCustomButton = (id: string, patch: Partial<CustomButtonRowValue>) => {
+    setForm((prev) => {
+      if (!prev) {
+        return prev;
+      }
+      const customButtons = prev.customButtons.map((button) => (button.id === id ? { ...button, ...patch } : button));
+
+      return { ...prev, customButtons };
+    });
+  };
+
+  const removeCustomButton = (id: string) => {
+    setForm((prev) => (prev ? { ...prev, customButtons: prev.customButtons.filter((button) => button.id !== id) } : prev));
+  };
+
+  const addCustomButton = () => {
+    setForm((prev) =>
+      prev
+        ? { ...prev, customButtons: [...prev.customButtons, { id: makeRowId(), labelRu: '', labelEn: '', path: '' }] }
+        : prev,
+    );
+  };
+
+  const reorderCustomButtons = (customButtons: CustomButtonRowValue[]) => {
+    setForm((prev) => (prev ? { ...prev, customButtons } : prev));
+  };
+
+  const browseCustomButtonPath = async (id: string, mode: 'file' | 'folder') => {
+    try {
+      const result = await window.electronAPI?.content?.pickPath(appId, 'customButton', mode);
+      if (result?.ok && result.path) {
+        updateCustomButton(id, { path: result.path });
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const updateNote = (id: string, patch: Partial<NoteRowValue>) => {
@@ -696,6 +751,33 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
                   onBrowseFolder={supportsFolder ? () => browsePath(configField, formKey, 'folder') : undefined}
                 />
               ))}
+            </section>
+
+            <section className="edit-config-modal__section">
+              <h3>{t('editConfig.sectionCustomButtons')}</h3>
+
+              <Reorder.Group
+                as="div"
+                axis="y"
+                values={form.customButtons}
+                onReorder={reorderCustomButtons}
+                className="edit-config-modal__facts"
+              >
+                {form.customButtons.map((button) => (
+                  <CustomButtonRow
+                    key={button.id}
+                    button={button}
+                    onChange={(patch) => updateCustomButton(button.id, patch)}
+                    onRemove={() => removeCustomButton(button.id)}
+                    onBrowse={(mode) => browseCustomButtonPath(button.id, mode)}
+                  />
+                ))}
+              </Reorder.Group>
+
+              <button type="button" className="btn" onClick={addCustomButton} data-gamepad-focusable>
+                <Plus size={16} />
+                {t('editConfig.customButtonAdd')}
+              </button>
             </section>
 
             <section className="edit-config-modal__section">

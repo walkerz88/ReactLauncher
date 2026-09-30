@@ -99,6 +99,8 @@ const electronAPI = {
       ipcRenderer.invoke('content:write-config', id, config),
     pickPath: (id: string, field: string, mode?: string) =>
       ipcRenderer.invoke('content:pick-path', id, field, mode),
+    openCustomButton: (id: string, index: number) =>
+      ipcRenderer.invoke('content:open-custom-button', id, index),
   },
   capture: {
     list: (gameId: string) => ipcRenderer.invoke('capture:list', gameId),

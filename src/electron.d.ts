@@ -15,6 +15,13 @@ export interface AppFact {
   value: LocalizedText;
 }
 
+/** A user-defined shortcut button (`config.json`'s `customButtons`), shown next to Play/Install. */
+export interface CustomButton {
+  label: LocalizedText;
+  /** Whether the configured path currently resolves to a real file/folder. */
+  exists: boolean;
+}
+
 /** Severity of a `previewNotes` message; drives the icon/color of the `Message` component. */
 export type PreviewNoteType = 'info' | 'success' | 'warning' | 'error';
 
@@ -46,6 +53,8 @@ export interface ContentApp {
   coverHorizontalPosition: 'top' | 'center' | 'bottom';
   /** Extra facts (year, developer, …) from `config.json`; `[]` if none. */
   facts: AppFact[];
+  /** User-defined shortcut buttons from `config.json`'s `customButtons`; `[]` if none. */
+  customButtons: CustomButton[];
   /** Notes shown under the actions row on the app page (e.g. a compatibility warning), stacked in order; `[]` if none. */
   previewNotes: PreviewNote[];
   /** `content://` URL of the horizontal cover, or `null` if absent. */
@@ -115,6 +124,8 @@ export interface RawAppConfig {
   series?: string;
   coverHorizontalPosition?: string;
   facts?: Array<{ label: Partial<LocalizedText> | string; value: Partial<LocalizedText> | string }>;
+  /** User-defined shortcut buttons, shown next to Play/Install on the app page. */
+  customButtons?: Array<{ label: Partial<LocalizedText> | string; path?: string }>;
   previewNotes?: Array<{
     text: Partial<LocalizedText> | string;
     type?: PreviewNoteType;
@@ -161,7 +172,8 @@ export type PathField =
   | 'bonus'
   | 'screenshots'
   | 'trailer'
-  | 'saves';
+  | 'saves'
+  | 'customButton';
 
 /** Sent by the main process whenever a tracked game starts or exits. */
 export interface RunningEvent {
@@ -365,7 +377,7 @@ export interface CaptureAPI {
 export interface ElectronAPI {
   /** Quit the whole application. */
   quit: () => Promise<void>;
-  /** Open a link in the OS default browser (rejected unless it's http/https). */
+  /** Open a link in the OS default browser or mail client (rejected unless it's http/https/mailto). */
   openExternal: (url: string) => Promise<void>;
   window: {
     isFullscreen: () => Promise<boolean>;
@@ -440,6 +452,8 @@ export interface ElectronAPI {
     writeConfig: (id: string, config: RawAppConfig) => Promise<LaunchResult>;
     /** Open a native file ('file', default) or folder ('folder') picker for one `paths.*` field; resolves to a path relative to the app's folder. */
     pickPath: (id: string, field: PathField, mode?: 'file' | 'folder') => Promise<PickPathResult>;
+    /** Launch one of the app's custom buttons (`config.json`'s `customButtons[index]`) — a file gets executed, a folder opens in the OS file manager. */
+    openCustomButton: (id: string, index: number) => Promise<LaunchResult>;
   };
   capture: CaptureAPI;
 }
