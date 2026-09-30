@@ -254,6 +254,20 @@ export const PreviewPage: FC = () => {
           </button>
         )}
 
+        {app.customButtons.map((button, index) =>
+          button.exists ? (
+            <button
+              key={index}
+              type="button"
+              className="btn"
+              onClick={() => void window.electronAPI?.content?.openCustomButton(app.id, index)}
+              data-gamepad-focusable
+            >
+              {button.label[locale] ?? button.label.en ?? button.label.ru}
+            </button>
+          ) : null,
+        )}
+
         {instructions ? (
           <button
             type="button"
@@ -288,20 +302,6 @@ export const PreviewPage: FC = () => {
             {t('app.bonusContent')}
           </button>
         ) : null}
-
-        {app.customButtons.map((button, index) =>
-          button.exists ? (
-            <button
-              key={index}
-              type="button"
-              className="btn"
-              onClick={() => void window.electronAPI?.content?.openCustomButton(app.id, index)}
-              data-gamepad-focusable
-            >
-              {button.label[locale] ?? button.label.en ?? button.label.ru}
-            </button>
-          ) : null,
-        )}
 
         <GameSettingsMenu
           appId={app.id}
