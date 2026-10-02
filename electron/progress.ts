@@ -111,9 +111,6 @@ const SPECIALS_BY_KEY = new Map(
   ]),
 );
 
-/** Collecting all three "klyukva" stereotype secrets (vodka, bear, balalaika) grants a bonus special. */
-const KLYUKVA_SPECIALS = ['vodka', 'bear', 'balalaika'];
-
 const ACTION_SPECIALS: Record<LauncherAction, string> = {
   'backup-created': 'backup',
   'backup-restored': 'restore',
@@ -642,13 +639,6 @@ export const createProgress = (
 
               if (specialKey) {
                 grant(specialKey);
-
-                if (
-                  KLYUKVA_SPECIALS.includes(specialKey) &&
-                  KLYUKVA_SPECIALS.every((key) => data.unlocked[`${SPECIAL_ID_PREFIX}${key}`])
-                ) {
-                  grant('klyukva');
-                }
               }
             }
           });

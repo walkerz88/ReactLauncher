@@ -116,52 +116,11 @@ export const CHEAT_CODES = ['iddqd', 'idkfa', 'idclip', 'hesoyam', 'aezakmi', 'b
 export const SECRET_IDS: readonly string[] = [
   'hello-world',
   'konami',
-  'cheburashka',
-  'vzhukh',
-  'skibidi',
-  'sila-v-pravde',
-  'nu-pogodi',
-  'tetris',
-  'vodka',
-  'medved',
-  'balalaika',
-  'no-spoon',
-  'wingardium',
-  'hakuna-matata',
-  'elementary',
-  'to-infinity',
   ...CHEAT_CODES.map((code) => `cheat-${code}`),
 ];
 export const SECRET_SPECIALS: Record<string, string> = {
   'hello-world': 'helloWorld',
   konami: 'konami',
-  cheburashka: 'cheburashka',
-  vzhukh: 'vzhukh',
-  skibidi: 'skibidi',
-  'sila-v-pravde': 'silaVPravde',
-  'nu-pogodi': 'nuPogodi',
-  tetris: 'tetrisOrigin',
-  vodka: 'vodka',
-  medved: 'bear',
-  balalaika: 'balalaika',
-  'no-spoon': 'noSpoon',
-  wingardium: 'wingardium',
-  'hakuna-matata': 'hakunaMatata',
-  elementary: 'elementary',
-  'to-infinity': 'toInfinity',
-  // Every classic cheat code grants its own achievement immediately (on top of the `cheatCodes`
-  // family's 1/3/5/8-distinct-codes collector tiers below) — typing any of them used to silently
-  // do nothing between those thresholds, which read as broken rather than "keep going".
-  'cheat-iddqd': 'cheatIddqd',
-  'cheat-idkfa': 'cheatIdkfa',
-  'cheat-idclip': 'cheatIdclip',
-  'cheat-hesoyam': 'cheatHesoyam',
-  'cheat-aezakmi': 'cheatAezakmi',
-  'cheat-baguvix': 'cheatBaguvix',
-  'cheat-rosebud': 'cheatRosebud',
-  'cheat-motherlode': 'cheatMotherlode',
-  'cheat-xyzzy': 'cheatXyzzy',
-  'cheat-noclip': 'cheatNoclip',
 };
 
 /** Feature-use facts the renderer may report; each grants the special of that name (`light-at-night` is checked against the clock here). */
@@ -206,12 +165,12 @@ const FAMILIES: Array<{ metric: Metric; steps: Array<[target: number, tier: Tier
   { metric: 'trailerViews', steps: [[20, 'bronze'], [100, 'silver'], [300, 'gold']] },
   { metric: 'genresPlayed', steps: [[3, 'bronze'], [5, 'silver'], [8, 'gold']] },
   { metric: 'seriesCompleted', steps: [[1, 'silver'], [3, 'gold'], [5, 'gold']] },
-  { metric: 'cheatCodes', steps: [[1, 'bronze'], [3, 'silver'], [5, 'silver'], [8, 'gold']], group: 'secrets', hidden: true },
+  { metric: 'cheatCodes', steps: [[3, 'silver']], group: 'secrets', hidden: true },
   { metric: 'themesCreated', steps: [[1, 'bronze'], [3, 'silver'], [5, 'silver'], [10, 'gold']] },
   { metric: 'screenshotsTaken', steps: [[1, 'bronze'], [5, 'bronze'], [15, 'silver'], [40, 'silver'], [100, 'gold']] },
   { metric: 'recordingsMade', steps: [[1, 'bronze'], [5, 'bronze'], [15, 'silver'], [40, 'silver'], [100, 'gold']] },
   { metric: 'level', steps: [[2, 'bronze'], [3, 'bronze'], [5, 'bronze'], [8, 'silver'], [10, 'silver'], [15, 'silver'], [20, 'gold'], [25, 'gold'], [30, 'gold']] },
-  { metric: 'achievements', steps: [[5, 'bronze'], [10, 'bronze'], [20, 'silver'], [35, 'silver'], [50, 'gold'], [75, 'gold'], [100, 'gold'], [125, 'gold'], [150, 'gold'], [160, 'gold'], [180, 'gold'], [195, 'gold']] },
+  { metric: 'achievements', steps: [[5, 'bronze'], [10, 'bronze'], [20, 'silver'], [35, 'silver'], [50, 'gold'], [75, 'gold'], [100, 'gold'], [125, 'gold'], [150, 'gold'], [160, 'gold'], [180, 'gold']] },
 ];
 
 /** One-off achievements, granted directly by `progress.ts` when their event happens. */
@@ -232,35 +191,6 @@ export const SPECIALS = [
   { key: 'numberOfTheBeast', tier: 'gold', group: 'secrets', hidden: true },
   // 67 launches sits in the `launches` family's silver range (50-100), not its bronze range (1-25).
   { key: 'sixSeven', tier: 'silver', group: 'secrets', hidden: true },
-  { key: 'cheburashka', tier: 'silver', group: 'secrets', hidden: true },
-  { key: 'vzhukh', tier: 'bronze', group: 'secrets', hidden: true },
-  { key: 'skibidi', tier: 'bronze', group: 'secrets', hidden: true },
-  // Flagship Russian-culture typed phrases get silver like cheburashka, not konami's gold (that's
-  // reserved for its unique arrow-sequence mechanic) or the generic-phrase bronze below.
-  { key: 'silaVPravde', tier: 'silver', group: 'secrets', hidden: true },
-  { key: 'nuPogodi', tier: 'silver', group: 'secrets', hidden: true },
-  { key: 'tetrisOrigin', tier: 'bronze', group: 'secrets', hidden: true },
-  { key: 'vodka', tier: 'bronze', group: 'secrets', hidden: true },
-  { key: 'bear', tier: 'bronze', group: 'secrets', hidden: true },
-  { key: 'balalaika', tier: 'bronze', group: 'secrets', hidden: true },
-  // Bonus for finding all three "klyukva" stereotype secrets above — granted automatically by
-  // `progress.ts` the moment the third one lands, never typed directly.
-  { key: 'klyukva', tier: 'silver', group: 'secrets', hidden: true },
-  { key: 'noSpoon', tier: 'bronze', group: 'secrets', hidden: true },
-  { key: 'wingardium', tier: 'bronze', group: 'secrets', hidden: true },
-  { key: 'hakunaMatata', tier: 'bronze', group: 'secrets', hidden: true },
-  { key: 'elementary', tier: 'bronze', group: 'secrets', hidden: true },
-  { key: 'toInfinity', tier: 'bronze', group: 'secrets', hidden: true },
-  { key: 'cheatIddqd', tier: 'bronze', group: 'secrets', hidden: true },
-  { key: 'cheatIdkfa', tier: 'bronze', group: 'secrets', hidden: true },
-  { key: 'cheatIdclip', tier: 'bronze', group: 'secrets', hidden: true },
-  { key: 'cheatHesoyam', tier: 'bronze', group: 'secrets', hidden: true },
-  { key: 'cheatAezakmi', tier: 'bronze', group: 'secrets', hidden: true },
-  { key: 'cheatBaguvix', tier: 'bronze', group: 'secrets', hidden: true },
-  { key: 'cheatRosebud', tier: 'bronze', group: 'secrets', hidden: true },
-  { key: 'cheatMotherlode', tier: 'bronze', group: 'secrets', hidden: true },
-  { key: 'cheatXyzzy', tier: 'bronze', group: 'secrets', hidden: true },
-  { key: 'cheatNoclip', tier: 'bronze', group: 'secrets', hidden: true },
   // calendar
   { key: 'newYear', tier: 'bronze', group: 'calendar' },
   { key: 'halloween', tier: 'bronze', group: 'calendar' },
