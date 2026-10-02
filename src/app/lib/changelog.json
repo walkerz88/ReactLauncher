@@ -322,5 +322,24 @@
         "en": "Going back from a game page returns to the settings tab it was opened from"
       }
     ]
+  },
+  {
+    "version": "1.6.0",
+    "date": "2026-10-02",
+    "title": { "ru": "Перевод текстов и новый Electron", "en": "Text translation and a new Electron" },
+    "changes": [
+      {
+        "ru": "В редакторе данных игры рядом с описанием, инструкцией и заметками есть кнопка «Перевести»: перевод открывается в окне, где его можно поправить перед применением",
+        "en": "The game data editor has a \"Translate\" button next to the description, instructions and notes; the result opens in a window where it can be edited before applying"
+      },
+      {
+        "ru": "В здоровье библиотеки появилась кнопка «Перевести недостающее»: для выбранных игр заполняется только пустой язык описания, инструкции и заметок",
+        "en": "Library health has a \"Translate missing\" button: for the selected games it fills only the empty language of the description, instructions and notes"
+      },
+      {
+        "ru": "Приложение переведено на Electron 44 (Chromium 152)",
+        "en": "The app now runs on Electron 44 (Chromium 152)"
+      }
+    ]
   }
 ]
