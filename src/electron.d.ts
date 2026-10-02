@@ -92,6 +92,7 @@ export interface AppSizes {
   installer: number | null;
   data: number | null;
   trailer: number | null;
+  screenshots: number | null;
   covers: number | null;
   bonus: number | null;
 }

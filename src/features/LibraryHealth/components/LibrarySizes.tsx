@@ -17,7 +17,7 @@ interface LibrarySizesProps {
   apps: ContentApp[];
 }
 
-const SIZE_COLUMNS: ReadonlyArray<keyof AppSizes> = ['installer', 'data', 'trailer', 'covers', 'bonus'];
+const SIZE_COLUMNS: ReadonlyArray<keyof AppSizes> = ['installer', 'data', 'trailer', 'screenshots', 'covers', 'bonus'];
 
 /** `name`, `rating`, `media` and `total` aren't in `AppSizes` but sort alongside the size columns in the
  * same table, so the sortable column set is the size columns plus these. `media` is the player's own
@@ -247,8 +247,8 @@ export const LibrarySizes: FC<LibrarySizesProps> = ({ apps }) => {
             {renderSortHeader('name', t('health.columnName'))}
             {renderSortHeader('rating', t('health.column.rating'), 'library-health__col-size')}
             {SIZE_COLUMNS.map((column) => renderSortHeader(column, t(`health.sizes.${column}`), 'library-health__col-size'))}
-            {renderSortHeader('total', t('health.sizes.total'), 'library-health__col-size')}
             {renderSortHeader('media', t('health.sizes.media'), 'library-health__col-size')}
+            {renderSortHeader('total', t('health.sizes.total'), 'library-health__col-size')}
             <th className="library-health__col-open" />
           </tr>
         </thead>
@@ -275,13 +275,13 @@ export const LibrarySizes: FC<LibrarySizesProps> = ({ apps }) => {
                 </td>
               ))}
               <td className="library-health__col-size">
-                <Tooltip label={t('health.sizes.total')}>
-                  <span>{renderTotal(app)}</span>
+                <Tooltip label={t('health.sizes.media')}>
+                  <span>{mediaSizes[app.id] ? formatFileSize(mediaSizes[app.id]) : null}</span>
                 </Tooltip>
               </td>
               <td className="library-health__col-size">
-                <Tooltip label={t('health.sizes.media')}>
-                  <span>{mediaSizes[app.id] ? formatFileSize(mediaSizes[app.id]) : null}</span>
+                <Tooltip label={t('health.sizes.total')}>
+                  <span>{renderTotal(app)}</span>
                 </Tooltip>
               </td>
               <td className="library-health__col-open">

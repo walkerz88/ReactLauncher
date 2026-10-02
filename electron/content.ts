@@ -350,6 +350,7 @@ interface AppSizes {
   installer: number | null;
   data: number | null;
   trailer: number | null;
+  screenshots: number | null;
   covers: number | null;
   bonus: number | null;
 }
@@ -567,11 +568,13 @@ async function measureApp(appEntry: ScannedApp, signal: ScanSignal): Promise<App
     (cover): cover is string => cover != null,
   );
   const coverSizes = await Promise.all(covers.map((cover) => pathSize(cover, signal)));
+  const screenshotSizes = await Promise.all(appEntry.screenshotsAbs.map((shot) => pathSize(shot, signal)));
 
   return {
     installer: await optionalPathSize(appEntry.installerDirAbs ?? appEntry.installerFileAbs, signal),
     data: await optionalPathSize(appEntry.dataDirAbs, signal),
     trailer: await optionalPathSize(appEntry.trailerAbs, signal),
+    screenshots: screenshotSizes.length > 0 ? screenshotSizes.reduce((sum, size) => sum + size, 0) : null,
     covers: covers.length > 0 ? coverSizes.reduce((sum, size) => sum + size, 0) : null,
     bonus: await optionalPathSize(appEntry.bonusAbs, signal),
   };
