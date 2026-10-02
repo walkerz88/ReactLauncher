@@ -13,6 +13,7 @@ import { PathField } from '@/shared/PathField';
 import { SteamNoMatchModal } from '@/shared/SteamNoMatchModal';
 import { SteamPickerModal } from '@/shared/SteamPickerModal';
 import { Tooltip } from '@/shared/Tooltip';
+import { TranslateButton } from '@/shared/TranslateButton';
 import type { PathField as PathFieldName, RawAppConfig, SteamSearchResult } from '@/electron';
 
 import { CustomButtonRow, type CustomButtonRowValue } from './components/CustomButtonRow';
@@ -788,7 +789,16 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
                 </Tooltip>
               </h3>
 
-              <FormField label={t('editConfig.descriptionRu')}>
+              <FormField
+                label={t('editConfig.descriptionRu')}
+                action={
+                  <TranslateButton
+                    source={form.descriptionRu || form.descriptionEn}
+                    target="ru"
+                    onApply={(text) => update('descriptionRu', text)}
+                  />
+                }
+              >
                 <textarea
                   rows={4}
                   value={form.descriptionRu}
@@ -796,7 +806,16 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
                 />
               </FormField>
 
-              <FormField label={t('editConfig.descriptionEn')}>
+              <FormField
+                label={t('editConfig.descriptionEn')}
+                action={
+                  <TranslateButton
+                    source={form.descriptionEn || form.descriptionRu}
+                    target="en"
+                    onApply={(text) => update('descriptionEn', text)}
+                  />
+                }
+              >
                 <textarea
                   rows={4}
                   value={form.descriptionEn}
@@ -813,7 +832,16 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
                 </Tooltip>
               </h3>
 
-              <FormField label={t('editConfig.instructionsRu')}>
+              <FormField
+                label={t('editConfig.instructionsRu')}
+                action={
+                  <TranslateButton
+                    source={form.instructionsRu || form.instructionsEn}
+                    target="ru"
+                    onApply={(text) => update('instructionsRu', text)}
+                  />
+                }
+              >
                 <textarea
                   rows={6}
                   value={form.instructionsRu}
@@ -821,7 +849,16 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
                 />
               </FormField>
 
-              <FormField label={t('editConfig.instructionsEn')}>
+              <FormField
+                label={t('editConfig.instructionsEn')}
+                action={
+                  <TranslateButton
+                    source={form.instructionsEn || form.instructionsRu}
+                    target="en"
+                    onApply={(text) => update('instructionsEn', text)}
+                  />
+                }
+              >
                 <textarea
                   rows={6}
                   value={form.instructionsEn}

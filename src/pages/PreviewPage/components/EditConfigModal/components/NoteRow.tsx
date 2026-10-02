@@ -5,6 +5,7 @@ import { GripVertical, Trash2 } from 'lucide-react';
 import { useTranslation } from '@/app/i18n';
 import { FormField } from '@/shared/FormField';
 import { Tooltip } from '@/shared/Tooltip';
+import { TranslateButton } from '@/shared/TranslateButton';
 import type { PreviewNoteType } from '@/electron';
 
 export interface NoteRowValue {
@@ -59,11 +60,17 @@ export const NoteRow: FC<NoteRowProps> = ({ note, onChange, onRemove }) => {
           </select>
         </FormField>
 
-        <FormField label={t('editConfig.noteRu')}>
+        <FormField
+          label={t('editConfig.noteRu')}
+          action={<TranslateButton source={note.ru || note.en} target="ru" onApply={(text) => onChange({ ru: text })} />}
+        >
           <textarea rows={2} value={note.ru} onChange={(event) => onChange({ ru: event.target.value })} />
         </FormField>
 
-        <FormField label={t('editConfig.noteEn')}>
+        <FormField
+          label={t('editConfig.noteEn')}
+          action={<TranslateButton source={note.en || note.ru} target="en" onApply={(text) => onChange({ en: text })} />}
+        >
           <textarea rows={2} value={note.en} onChange={(event) => onChange({ en: event.target.value })} />
         </FormField>
       </div>

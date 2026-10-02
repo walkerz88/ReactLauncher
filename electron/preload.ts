@@ -31,6 +31,9 @@ const electronAPI = {
     search: (term: string) => ipcRenderer.invoke('steam:search', term),
     info: (steamAppId: string) => ipcRenderer.invoke('steam:info', steamAppId),
   },
+  translate: {
+    text: (text: string, target: string) => ipcRenderer.invoke('translate:text', text, target),
+  },
   profiles: {
     loadSync: (): unknown => {
       profileSnapshot ??= ipcRenderer.sendSync('profiles:load-sync');

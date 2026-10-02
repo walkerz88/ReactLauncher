@@ -1,9 +1,10 @@
 import { useRef, useState, type FC } from 'react';
 import { Link } from 'react-router-dom';
-import { Loader2, Wand2 } from 'lucide-react';
+import { Languages, Loader2, Wand2 } from 'lucide-react';
 
 import { useTranslation } from '@/app/i18n';
 import { getFieldStatus, getHealthIssues, HEALTH_FIELD_COLUMNS } from '@/app/lib/libraryHealth';
+import { fillMissingTranslations } from '@/app/lib/translateMissing';
 import { useContentStore } from '@/app/store/contentStore';
 import type { RawAppConfig, SteamSearchResult } from '@/electron';
 import { BulkFillModal, type FillFields } from '@/shared/BulkFillModal';
@@ -16,7 +17,7 @@ import { LibrarySizes } from './components/LibrarySizes';
 
 import './LibraryHealth.css';
 
-type FillStatus = 'searching' | 'updating' | 'done' | 'noMatch' | 'failed';
+type FillStatus = 'searching' | 'updating' | 'translating' | 'done' | 'nothing' | 'noMatch' | 'failed';
 
 /** Every game with a missing cover/trailer, as a table — so fixing the library doesn't mean hunting
  * problem cards one by one across the whole gallery. Checking a game and confirming the popup re-fetches
@@ -202,6 +203,49 @@ export const LibraryHealth: FC = () => {
     }
   };
 
+  /** Fills the missing language of every selected game's description, instructions and notes by machine
+   * translation — only ever into an empty field, so nothing already written is overwritten. */
+  const handleTranslateMissing = async () => {
+    const contentApi = window.electronAPI?.content;
+    const targets = rows.filter((row) => selected.has(row.app.id)).map((row) => row.app);
+
+    if (running || targets.length === 0 || !contentApi) {
+      return;
+    }
+
+    setRunning(true);
+    setFillStatus({});
+
+    for (const app of targets) {
+      setFillStatus((current) => ({ ...current, [app.id]: 'translating' }));
+
+      try {
+        const current = await contentApi.readConfig(app.id);
+        const { config, changed, failed } = await fillMissingTranslations(current?.config ?? {});
+        let ok = !failed;
+
+        if (changed) {
+          const writeResult = await contentApi.writeConfig(app.id, config);
+          ok = ok && Boolean(writeResult?.ok);
+        }
+
+        setFillStatus((state) => ({ ...state, [app.id]: !ok ? 'failed' : changed ? 'done' : 'nothing' }));
+      } catch (err) {
+        console.error('Translating missing texts failed for', app.id, err);
+        setFillStatus((state) => ({ ...state, [app.id]: 'failed' }));
+      }
+    }
+
+    setRunning(false);
+    setSelected(new Set());
+
+    try {
+      await loadApps();
+    } catch (err) {
+      console.error('Reloading the library after translating failed:', err);
+    }
+  };
+
   const allSelected = selected.size > 0 && selected.size === rows.length;
   const someSelected = selected.size > 0 && !allSelected;
 
@@ -315,6 +359,16 @@ export const LibraryHealth: FC = () => {
             >
               {running ? <Loader2 size={14} className="library-health__spin" /> : <Wand2 size={14} />}
               {t('health.fillSelected')}
+            </button>
+            <button
+              type="button"
+              className="btn btn--small"
+              onClick={() => void handleTranslateMissing()}
+              disabled={running}
+              data-gamepad-focusable
+            >
+              <Languages size={14} />
+              {t('health.translateMissing')}
             </button>
           </div>
         </div>

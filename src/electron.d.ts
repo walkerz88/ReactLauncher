@@ -405,6 +405,10 @@ export interface ElectronAPI {
     /** Game data for a Steam app id, in both languages; `null` if Steam has nothing for it. */
     info: (steamAppId: string) => Promise<SteamInfo | null>;
   };
+  translate: {
+    /** Machine-translates `text` (source language auto-detected) into `target`; `null` on failure. */
+    text: (text: string, target: 'ru' | 'en') => Promise<string | null>;
+  };
   content: {
     list: () => Promise<ContentLibrary>;
     launch: (id: string) => Promise<LaunchResult>;

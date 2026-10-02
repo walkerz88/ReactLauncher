@@ -7,6 +7,7 @@ import { initContent } from './content';
 import { initProfiles } from './profiles';
 import { initProgress } from './progressIpc';
 import { initSteam } from './steam';
+import { initTranslate } from './translate';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -98,6 +99,7 @@ app.whenReady().then(() => {
 
   initContent();
   initSteam();
+  initTranslate();
   createWindow();
 });
 

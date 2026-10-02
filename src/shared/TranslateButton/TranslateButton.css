@@ -1,0 +1,9 @@
+.translate-button__spin {
+  animation: translate-button-spin 1s linear infinite;
+}
+
+@keyframes translate-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -12,7 +12,9 @@ export type HealthIssueKey =
   | 'noRating'
   | 'descriptionLangSwapped'
   | 'instructionsIncomplete'
-  | 'instructionsLangSwapped';
+  | 'instructionsLangSwapped'
+  | 'notesIncomplete'
+  | 'notesLangSwapped';
 
 /** Serious enough to flag right on the gallery card — the rest are fine left for the health list. */
 const CRITICAL_ISSUES: readonly HealthIssueKey[] = ['noCoverHorizontal', 'noCoverVertical'];
@@ -83,6 +85,12 @@ export const getHealthIssues = (app: ContentApp): HealthIssueKey[] => {
     issues.push('instructionsLangSwapped');
   }
 
+  if (app.previewNotes.some((note) => isIncomplete(note.text))) {
+    issues.push('notesIncomplete');
+  } else if (app.previewNotes.some((note) => hasLangMismatch(note.text))) {
+    issues.push('notesLangSwapped');
+  }
+
   if (app.facts.length === 0) {
     issues.push('noFacts');
   }
@@ -133,6 +141,14 @@ export const HEALTH_FIELD_COLUMNS: readonly HealthFieldColumn[] = [
       ['instructionsLangSwapped', 'warning'],
     ],
     isEmpty: (app) => !app.instructions,
+  },
+  {
+    labelKey: 'health.column.notes',
+    checks: [
+      ['notesIncomplete', 'warning'],
+      ['notesLangSwapped', 'warning'],
+    ],
+    isEmpty: (app) => app.previewNotes.length === 0,
   },
   { labelKey: 'health.column.facts', checks: [['noFacts', 'missing']] },
   { labelKey: 'health.column.genre', checks: [['noGenre', 'missing']] },

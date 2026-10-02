@@ -312,6 +312,14 @@
       {
         "ru": "Неполная инструкция в отчёте о здоровье библиотеки теперь помечается предупреждением, а не отсутствием",
         "en": "An incomplete instruction is now flagged as a warning, not as missing, in the library health report"
+      },
+      {
+        "ru": "Проверка здоровья библиотеки теперь смотрит заметки на странице игры: есть ли оба языка и не перепутаны ли они",
+        "en": "The library health check now covers a game's page notes: both languages present and not mixed up"
+      },
+      {
+        "ru": "«Назад» с страницы игры возвращает на тот же таб настроек, с которого её открыли",
+        "en": "Going back from a game page returns to the settings tab it was opened from"
       }
     ]
   }
