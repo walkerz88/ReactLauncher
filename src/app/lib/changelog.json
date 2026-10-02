@@ -341,5 +341,36 @@
         "en": "The app now runs on Electron 44 (Chromium 152)"
       }
     ]
+  },
+  {
+    "version": "1.7.0",
+    "date": "2026-10-03",
+    "title": { "ru": "Награды, профили без прав записи и чистка секретов", "en": "Awards, profiles without write access and a secrets cleanup" },
+    "changes": [
+      {
+        "ru": "Новый тип заметки на странице игры — «Награда»: золотая карточка со звездой для пометок вроде «Игра года» или «Содержит все официальные DLC»",
+        "en": "A new page-note type, \"Award\": a gold card with a star for highlights such as \"Game of the Year\" or \"Includes all official DLC\""
+      },
+      {
+        "ru": "Если папка рядом с программой недоступна для записи (например, она стоит в Program Files), профили сохраняются в папке данных пользователя (AppData), а при невозможности создать профиль показывается понятная ошибка",
+        "en": "When the folder next to the app can't be written to (for example, it sits in Program Files), profiles are stored in the user's app data folder (AppData), and a profile that can't be created now shows a clear error"
+      },
+      {
+        "ru": "В таблице «Место на диске» появилась колонка «Скрины» (встроенные скриншоты игры), колонка «Ваши видео/скрины» переименована в «Моя галерея», «Итого» теперь последняя",
+        "en": "The disk usage table has a new \"Screenshots\" column (a game's bundled screenshots), \"Your videos/screenshots\" is renamed \"My gallery\", and \"Total\" now comes last"
+      },
+      {
+        "ru": "Убраны скрытые достижения за ввод фраз (кроме «Hello, World!» и «+30 жизней»); десять отдельных достижений за чит-коды заменены одним — за три разных чит-кода",
+        "en": "Hidden achievements for typing phrases are removed (except \"Hello, World!\" and \"+30 Lives\"); the ten individual cheat-code achievements are replaced by one for three different cheat codes"
+      },
+      {
+        "ru": "Значок шестерёнки на странице игры теперь подписан «Настройки»",
+        "en": "The gear icon on a game page is now labeled \"Settings\""
+      },
+      {
+        "ru": "Исправлено: кнопка «Перевести» срабатывала при клике на подпись рядом с ней",
+        "en": "Fixed: the Translate button fired when you clicked the label next to it"
+      }
+    ]
   }
 ]
