@@ -23,7 +23,7 @@ export interface CustomButton {
 }
 
 /** Severity of a `previewNotes` message; drives the icon/color of the `Message` component. */
-export type PreviewNoteType = 'info' | 'success' | 'warning' | 'error';
+export type PreviewNoteType = 'info' | 'success' | 'warning' | 'error' | 'award';
 
 /** Note shown under the actions row on the app page, from `config.json`'s `previewNotes`. */
 export interface PreviewNote {

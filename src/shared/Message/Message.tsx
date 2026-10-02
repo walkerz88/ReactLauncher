@@ -1,9 +1,9 @@
 import type { FC, ReactNode } from 'react';
-import { AlertTriangle, CheckCircle2, Info, Loader2, XCircle } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, Info, Loader2, Star, XCircle } from 'lucide-react';
 
 import './Message.css';
 
-export type MessageType = 'info' | 'success' | 'warning' | 'error';
+export type MessageType = 'info' | 'success' | 'warning' | 'error' | 'award';
 
 export interface MessageProps {
   type?: MessageType;
@@ -18,6 +18,7 @@ const ICON_BY_TYPE: Record<MessageType, typeof Info> = {
   success: CheckCircle2,
   warning: AlertTriangle,
   error: XCircle,
+  award: Star,
 };
 
 export const Message: FC<MessageProps> = ({ type = 'info', children, className, loading }) => {

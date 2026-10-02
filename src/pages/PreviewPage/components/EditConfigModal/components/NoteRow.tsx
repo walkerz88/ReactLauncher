@@ -22,7 +22,7 @@ export interface NoteRowProps {
   onRemove: () => void;
 }
 
-const NOTE_TYPES: PreviewNoteType[] = ['info', 'success', 'warning', 'error'];
+const NOTE_TYPES: PreviewNoteType[] = ['info', 'success', 'warning', 'error', 'award'];
 
 /** One draggable `previewNotes[]` entry: type, localized text, a remove button and a drag handle. */
 export const NoteRow: FC<NoteRowProps> = ({ note, onChange, onRemove }) => {

@@ -67,7 +67,7 @@ interface CustomButtonConfig {
 }
 
 /** Severity of a `previewNotes` message; drives the icon/color in the renderer's `Message` component. */
-type PreviewNoteType = 'info' | 'success' | 'warning' | 'error';
+type PreviewNoteType = 'info' | 'success' | 'warning' | 'error' | 'award';
 
 interface AppConfig {
   name?: string;
@@ -310,7 +310,7 @@ function readAddedAt(dir: string): number | null {
   }
 }
 
-const PREVIEW_NOTE_TYPES: PreviewNoteType[] = ['info', 'success', 'warning', 'error'];
+const PREVIEW_NOTE_TYPES: PreviewNoteType[] = ['info', 'success', 'warning', 'error', 'award'];
 
 function readPreviewNoteType(value: unknown): PreviewNoteType {
   return PREVIEW_NOTE_TYPES.includes(value as PreviewNoteType) ? (value as PreviewNoteType) : 'info';
