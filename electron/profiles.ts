@@ -50,17 +50,45 @@ const loadKey = (): Buffer => {
   return key;
 };
 
+/** `fs.accessSync` only looks at the read-only flag on Windows, not at folder permissions, so the only reliable
+ * check is to actually create the folder and write a file into it. */
+const canWriteTo = (dir: string): boolean => {
+  const probe = path.join(dir, `.write-test-${process.pid}`);
+
+  try {
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(probe, '');
+    fs.unlinkSync(probe);
+
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+const resolveProfilesDir = (): string => {
+  const baseDir = process.env.PORTABLE_EXECUTABLE_DIR ?? (app.isPackaged ? path.dirname(app.getPath('exe')) : app.getAppPath());
+  const preferred = path.join(baseDir, 'data', 'profiles');
+
+  // Profiles that already exist there keep being used even if the folder has become read-only, so they don't vanish.
+  if (!app.isPackaged || canWriteTo(preferred) || fs.existsSync(path.join(preferred, 'profiles.json'))) {
+    return preferred;
+  }
+
+  return path.join(app.getPath('userData'), 'data', 'profiles');
+};
+
+let cachedProfilesDir: string | null = null;
+
 /**
  * `data/profiles/` next to the program, so a profile travels with the app folder:
  *   portable build:   the folder the portable .exe was started from
  *   installed build:  the folder of the .exe
  *   development:      the project root
+ * If that folder can't be written to (e.g. the app sits in `C:Program Files`) and holds no profiles yet,
+ * the per-user app data folder is used instead. Decided once per run.
  */
-export const profilesDir = (): string => {
-  const baseDir = process.env.PORTABLE_EXECUTABLE_DIR ?? (app.isPackaged ? path.dirname(app.getPath('exe')) : app.getAppPath());
-
-  return path.join(baseDir, 'data', 'profiles');
-};
+export const profilesDir = (): string => (cachedProfilesDir ??= resolveProfilesDir());
 
 /**
  * The renderer reads its snapshot synchronously at startup (its persisted stores are created before any

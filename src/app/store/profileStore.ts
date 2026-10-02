@@ -17,8 +17,8 @@ interface ProfileState {
   profiles: Profile[];
   /** Id of the profile the per-profile stores were loaded for. */
   activeId: string | null;
-  /** Adds a profile and switches to it. */
-  createProfile: (name: string) => Promise<void>;
+  /** Adds a profile and switches to it; resolves to `false` if it could not be created (the app is not reloaded then). */
+  createProfile: (name: string) => Promise<boolean>;
   switchProfile: (id: string) => Promise<void>;
   renameProfile: (id: string, name: string) => Promise<void>;
   deleteProfile: (id: string) => Promise<void>;
@@ -57,8 +57,12 @@ export const useProfileStore = create<ProfileState>()((set, get) => ({
       }
 
       reloadApp();
+
+      return true;
     } catch (err) {
       console.error('Creating the profile failed:', err);
+
+      return false;
     }
   },
 

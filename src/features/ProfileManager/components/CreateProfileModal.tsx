@@ -15,16 +15,17 @@ export const CreateProfileModal: FC<CreateProfileModalProps> = ({ onClose }) => 
   const profiles = useProfileStore((state) => state.profiles);
   const createProfile = useProfileStore((state) => state.createProfile);
   const [name, setName] = useState('');
+  const [failed, setFailed] = useState(false);
 
   const trimmedName = name.trim();
   const isTaken = profiles.some((profile) => profile.name.toLowerCase() === trimmedName.toLowerCase());
   const title = t('profile.createTitle');
 
-  const submit = (event: FormEvent) => {
+  const submit = async (event: FormEvent) => {
     event.preventDefault();
 
     if (trimmedName && !isTaken) {
-      void createProfile(trimmedName);
+      setFailed(!(await createProfile(trimmedName)));
     }
   };
 
@@ -54,7 +55,7 @@ export const CreateProfileModal: FC<CreateProfileModalProps> = ({ onClose }) => 
       footer={footer}
       closeOnOverlayClick={false}
     >
-      <form id="create-profile-form" className="profile-modal__form" data-id="CreateProfileModal" onSubmit={submit}>
+      <form id="create-profile-form" className="profile-modal__form" data-id="CreateProfileModal" onSubmit={(event) => void submit(event)}>
         <FormField label={t('profile.name')}>
           <input
             type="text"
@@ -66,6 +67,7 @@ export const CreateProfileModal: FC<CreateProfileModalProps> = ({ onClose }) => 
         </FormField>
 
         {isTaken ? <Message type="warning">{t('profile.nameTaken')}</Message> : null}
+        {failed ? <Message type="error">{t('profile.createFailed')}</Message> : null}
       </form>
     </Modal>
   );

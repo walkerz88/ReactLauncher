@@ -2,6 +2,7 @@ import { useState, type FC, type FormEvent } from 'react';
 
 import { useTranslation } from '@/app/i18n';
 import { MAX_PROFILE_NAME_LENGTH, useProfileStore } from '@/app/store/profileStore';
+import { Message } from '@/shared/Message';
 
 import './ProfileSetupPage.css';
 
@@ -11,6 +12,7 @@ export const ProfileSetupPage: FC = () => {
   const createProfile = useProfileStore((state) => state.createProfile);
   const [name, setName] = useState('');
   const [isCreating, setIsCreating] = useState(false);
+  const [failed, setFailed] = useState(false);
 
   const trimmedName = name.trim();
 
@@ -22,7 +24,7 @@ export const ProfileSetupPage: FC = () => {
     }
 
     setIsCreating(true);
-    await createProfile(trimmedName);
+    setFailed(!(await createProfile(trimmedName)));
     setIsCreating(false);
   };
 
@@ -50,6 +52,8 @@ export const ProfileSetupPage: FC = () => {
       >
         {t('profile.submit')}
       </button>
+
+      {failed ? <Message type="error">{t('profile.createFailed')}</Message> : null}
     </form>
   );
 };
