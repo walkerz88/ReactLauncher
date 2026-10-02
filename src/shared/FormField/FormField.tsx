@@ -10,19 +10,15 @@ export interface FormFieldProps {
   action?: ReactNode;
 }
 
-/** Labeled wrapper for a single form control — `<span>label</span>` above the input/select/textarea. */
+/** Labeled wrapper for a single form control — `<span>label</span>` above the input/select/textarea.
+ * `action` is placed after the control in the DOM (so the label still points at the control, not at the
+ * button) and moved up beside the label with CSS. */
 export const FormField: FC<FormFieldProps> = ({ label, children, className, action }) => {
   return (
-    <label className={['form-field', className].filter(Boolean).join(' ')} data-id="FormField">
-      {action ? (
-        <span className="form-field__head">
-          <span>{label}</span>
-          {action}
-        </span>
-      ) : (
-        <span>{label}</span>
-      )}
+    <label className={['form-field', action ? 'form-field--with-action' : '', className].filter(Boolean).join(' ')} data-id="FormField">
+      <span>{label}</span>
       {children}
+      {action ? <span className="form-field__action">{action}</span> : null}
     </label>
   );
 };

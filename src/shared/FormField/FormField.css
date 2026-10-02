@@ -27,9 +27,24 @@
   outline-offset: 1px;
 }
 
-.form-field__head {
-  display: flex;
+.form-field--with-action {
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  gap: 4px;
+}
+
+.form-field--with-action > :first-child {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.form-field--with-action > .form-field__action {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.form-field--with-action > :not(:first-child):not(.form-field__action) {
+  grid-column: 1 / -1;
+  grid-row: 2;
 }
