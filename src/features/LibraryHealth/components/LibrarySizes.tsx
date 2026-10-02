@@ -1,5 +1,6 @@
 import { ArrowDown, ArrowUp, Loader2, Search, X } from 'lucide-react';
 import { useEffect, useMemo, useState, type FC } from 'react';
+import { Link } from 'react-router-dom';
 
 import { useTranslation } from '@/app/i18n';
 import { formatFileSize } from '@/app/lib/format';
@@ -18,9 +19,10 @@ interface LibrarySizesProps {
 
 const SIZE_COLUMNS: ReadonlyArray<keyof AppSizes> = ['installer', 'data', 'trailer', 'covers', 'bonus'];
 
-/** `name`, `rating` and `total` aren't size columns (not in `AppSizes`, not part of the totals bar chart)
- * but sort alongside them in the same table, so the sortable column set is the size columns plus these. */
-type TableColumn = keyof AppSizes | 'rating' | 'total' | 'name';
+/** `name`, `rating`, `media` and `total` aren't in `AppSizes` but sort alongside the size columns in the
+ * same table, so the sortable column set is the size columns plus these. `media` is the player's own
+ * screenshots/recordings, measured separately from the content folder but counted in `total` and the chart. */
+type TableColumn = keyof AppSizes | 'rating' | 'total' | 'name' | 'media';
 
 type SortDirection = 'asc' | 'desc';
 
@@ -43,6 +45,21 @@ export const LibrarySizes: FC<LibrarySizesProps> = ({ apps }) => {
   const [sort, setSort] = useState<Sort>({ column: 'data', direction: 'desc' });
   const [diskReloadKey, setDiskReloadKey] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
+  const [mediaSizes, setMediaSizes] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const loadMediaSizes = async () => {
+      try {
+        const result = await window.electronAPI?.capture.sizes();
+
+        setMediaSizes(result ?? {});
+      } catch (err) {
+        console.error('Measuring the captured media failed:', err);
+      }
+    };
+
+    void loadMediaSizes();
+  }, [diskReloadKey]);
 
   useEffect(() => {
     useLibrarySizesStore.getState().ensureLoaded(apps);
@@ -61,16 +78,22 @@ export const LibrarySizes: FC<LibrarySizesProps> = ({ apps }) => {
 
   // Sums whatever's been measured so far per column — grows live as the scan works through the library,
   // same as the table below it.
-  const totalsRows: HorizontalBarChartRow[] = SIZE_COLUMNS.map((column) => ({
+  const totalsRows: HorizontalBarChartRow[] = SIZE_COLUMNS.map((column): HorizontalBarChartRow => ({
     key: column,
     label: t(`health.sizes.${column}`),
     value: apps.reduce((sum, app) => sum + (sizes[app.id]?.[column] ?? 0), 0),
-  })).sort((a, b) => b.value - a.value);
+  }))
+    .concat({
+      key: 'media',
+      label: t('health.sizes.media'),
+      value: apps.reduce((sum, app) => sum + (mediaSizes[app.id] ?? 0), 0),
+    })
+    .sort((a, b) => b.value - a.value);
 
   const totalOf = (app: ContentApp): number => {
     const measured = sizes[app.id];
 
-    return measured ? SIZE_COLUMNS.reduce((sum, column) => sum + (measured[column] ?? 0), 0) : -1;
+    return measured ? SIZE_COLUMNS.reduce((sum, column) => sum + (measured[column] ?? 0), mediaSizes[app.id] ?? 0) : -1;
   };
 
   const handleRescan = () => {
@@ -108,13 +131,16 @@ export const LibrarySizes: FC<LibrarySizesProps> = ({ apps }) => {
       if (column === 'total') {
         return totalOf(app);
       }
+      if (column === 'media') {
+        return mediaSizes[app.id] ?? -1;
+      }
 
       return sizes[app.id]?.[column] ?? -1;
     };
 
     return [...filtered].sort((a, b) => (sort.direction === 'desc' ? value(b) - value(a) : value(a) - value(b)));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apps, sizes, sort, searchQuery]);
+  }, [apps, sizes, mediaSizes, sort, searchQuery]);
 
   const renderCell = (app: ContentApp, column: keyof AppSizes) => {
     const measured = sizes[app.id];
@@ -222,6 +248,8 @@ export const LibrarySizes: FC<LibrarySizesProps> = ({ apps }) => {
             {renderSortHeader('rating', t('health.column.rating'), 'library-health__col-size')}
             {SIZE_COLUMNS.map((column) => renderSortHeader(column, t(`health.sizes.${column}`), 'library-health__col-size'))}
             {renderSortHeader('total', t('health.sizes.total'), 'library-health__col-size')}
+            {renderSortHeader('media', t('health.sizes.media'), 'library-health__col-size')}
+            <th className="library-health__col-open" />
           </tr>
         </thead>
 
@@ -250,6 +278,16 @@ export const LibrarySizes: FC<LibrarySizesProps> = ({ apps }) => {
                 <Tooltip label={t('health.sizes.total')}>
                   <span>{renderTotal(app)}</span>
                 </Tooltip>
+              </td>
+              <td className="library-health__col-size">
+                <Tooltip label={t('health.sizes.media')}>
+                  <span>{mediaSizes[app.id] ? formatFileSize(mediaSizes[app.id]) : null}</span>
+                </Tooltip>
+              </td>
+              <td className="library-health__col-open">
+                <Link className="btn btn--small library-health__open" to={`/app/${encodeURIComponent(app.id)}`}>
+                  {t('health.open')}
+                </Link>
               </td>
             </tr>
           ))}

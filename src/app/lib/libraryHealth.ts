@@ -129,7 +129,7 @@ export const HEALTH_FIELD_COLUMNS: readonly HealthFieldColumn[] = [
   {
     labelKey: 'health.column.instructions',
     checks: [
-      ['instructionsIncomplete', 'missing'],
+      ['instructionsIncomplete', 'warning'],
       ['instructionsLangSwapped', 'warning'],
     ],
     isEmpty: (app) => !app.instructions,

@@ -360,6 +360,8 @@ export interface CaptureList {
 
 export interface CaptureAPI {
   list: (gameId: string) => Promise<CaptureList>;
+  /** Bytes taken by the player's own screenshots and recordings, by game id (active profile only). */
+  sizes: () => Promise<Record<string, number>>;
   /** Hands the finished recording's bytes to the main process to write to disk. */
   saveRecording: (gameId: string, bytes: ArrayBuffer) => Promise<void>;
   /** Deletes one of the player's own screenshots/recordings by its `media://` URL. */

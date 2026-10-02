@@ -295,5 +295,24 @@
         "en": "Videos in the gallery play in a new Plyr-based player with better controls"
       }
     ]
+  },
+  {
+    "version": "1.5.0",
+    "date": "2026-10-02",
+    "title": { "ru": "Скрины и видео в учёте места", "en": "Screenshots and videos in disk usage" },
+    "changes": [
+      {
+        "ru": "В таблице «Место на диске» появился столбец «Ваши видео/скрины»; он учитывается в «Итого» и в диаграмме итогов",
+        "en": "The disk usage table has a new \"Your videos/screenshots\" column, counted in the total and in the totals chart"
+      },
+      {
+        "ru": "В таблице места на диске у каждой игры есть кнопка «Открыть»",
+        "en": "Each game in the disk usage table now has an \"Open\" button"
+      },
+      {
+        "ru": "Неполная инструкция в отчёте о здоровье библиотеки теперь помечается предупреждением, а не отсутствием",
+        "en": "An incomplete instruction is now flagged as a warning, not as missing, in the library health report"
+      }
+    ]
   }
 ]

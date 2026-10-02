@@ -314,6 +314,38 @@ export function initCapture(files: ProfileFiles, progress: ReturnType<typeof cre
     };
   });
 
+  ipcMain.handle('capture:sizes', async (): Promise<Record<string, number>> => {
+    const profileId = files.getActiveId();
+    const result: Record<string, number> = {};
+
+    if (!profileId) {
+      return result;
+    }
+
+    try {
+      const root = path.join(profilesDir(), profileId, 'media');
+      const gameIds = await fs.promises.readdir(root);
+
+      for (const gameId of gameIds) {
+        let total = 0;
+
+        for (const kind of ['screenshots', 'recordings'] as const) {
+          const dir = mediaDir(profileId, gameId, kind);
+          const names = await fs.promises.readdir(dir).catch(() => [] as string[]);
+          const stats = await Promise.all(names.map((name) => fs.promises.stat(path.join(dir, name)).catch(() => null)));
+
+          total += stats.reduce((sum, stat) => sum + (stat?.isFile() ? stat.size : 0), 0);
+        }
+
+        result[gameId] = total;
+      }
+    } catch {
+      // No media folder yet — nothing captured.
+    }
+
+    return result;
+  });
+
   ipcMain.handle('capture:save-recording', async (_event, gameIdRaw: unknown, bytesRaw: unknown) => {
     recordingActive = false;
     setOverlayRecordingState(false);

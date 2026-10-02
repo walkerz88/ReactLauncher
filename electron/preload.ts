@@ -104,6 +104,7 @@ const electronAPI = {
   },
   capture: {
     list: (gameId: string) => ipcRenderer.invoke('capture:list', gameId),
+    sizes: () => ipcRenderer.invoke('capture:sizes'),
     saveRecording: (gameId: string, bytes: ArrayBuffer) => ipcRenderer.invoke('capture:save-recording', gameId, bytes),
     delete: (url: string) => ipcRenderer.invoke('capture:delete', url),
     reveal: (url: string) => ipcRenderer.invoke('capture:reveal', url),

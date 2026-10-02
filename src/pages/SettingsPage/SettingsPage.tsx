@@ -1,4 +1,4 @@
-import { useState, type FC } from 'react';
+import type { FC } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { useTranslation } from '@/app/i18n';
@@ -22,11 +22,15 @@ const TAB_PARAMS: readonly SettingsTab[] = ['profiles', 'library', 'about'];
 
 export const SettingsPage: FC = () => {
   const t = useTranslation();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const requestedTab = searchParams.get('tab');
-  const [tab, setTab] = useState<SettingsTab>(
-    TAB_PARAMS.find((candidate) => candidate === requestedTab) ?? 'general',
-  );
+  const tab: SettingsTab = TAB_PARAMS.find((candidate) => candidate === requestedTab) ?? 'general';
+
+  // The tab lives in the URL (replacing the entry, not pushing one) so going back from a game opened
+  // out of a tab lands on that tab again instead of resetting to "general".
+  const setTab = (next: SettingsTab) => {
+    setSearchParams(next === 'general' ? {} : { tab: next }, { replace: true });
+  };
 
   const tabs: TabItem<SettingsTab>[] = [
     { id: 'general', label: t('settings.tabGeneral') },
