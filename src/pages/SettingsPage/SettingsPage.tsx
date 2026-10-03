@@ -10,15 +10,16 @@ import { LanguageToggle } from '@/features/LanguageToggle';
 import { LibraryHealth } from '@/features/LibraryHealth';
 import { ProfileManager } from '@/features/ProfileManager';
 import { LuckySectionToggle } from '@/features/LuckySectionToggle';
+import { UniqueThemes } from '@/features/UniqueThemes';
 import { WelcomeAnimationStyle } from '@/features/WelcomeAnimationStyle';
 import { WelcomeAnimationToggle } from '@/features/WelcomeAnimationToggle';
 import { Tabs, type TabItem } from '@/shared/Tabs';
 
 import './SettingsPage.css';
 
-type SettingsTab = 'general' | 'profiles' | 'library' | 'about';
+type SettingsTab = 'general' | 'themes' | 'profiles' | 'library' | 'about';
 
-const TAB_PARAMS: readonly SettingsTab[] = ['profiles', 'library', 'about'];
+const TAB_PARAMS: readonly SettingsTab[] = ['themes', 'profiles', 'library', 'about'];
 
 export const SettingsPage: FC = () => {
   const t = useTranslation();
@@ -34,6 +35,7 @@ export const SettingsPage: FC = () => {
 
   const tabs: TabItem<SettingsTab>[] = [
     { id: 'general', label: t('settings.tabGeneral') },
+    { id: 'themes', label: t('settings.tabThemes') },
     { id: 'profiles', label: t('settings.profiles') },
     { id: 'library', label: t('settings.tabLibrary') },
     { id: 'about', label: t('settings.tabAbout') },
@@ -45,7 +47,19 @@ export const SettingsPage: FC = () => {
 
       <Tabs tabs={tabs} activeTab={tab} ariaLabel={t('settings.title')} onChange={setTab} />
 
-      {tab === 'profiles' ? (
+      {tab === 'themes' ? (
+        <>
+          <section className="settings-section">
+            <h2 className="settings-section__title">{t('settings.theme')}</h2>
+            <ThemePicker />
+          </section>
+
+          <section className="settings-section">
+            <h2 className="settings-section__title">{t('settings.uniqueThemes')}</h2>
+            <UniqueThemes />
+          </section>
+        </>
+      ) : tab === 'profiles' ? (
         <ProfileManager />
       ) : tab === 'library' ? (
         <LibraryHealth />
@@ -56,11 +70,6 @@ export const SettingsPage: FC = () => {
           <section className="settings-section">
             <h2 className="settings-section__title">{t('settings.language')}</h2>
             <LanguageToggle />
-          </section>
-
-          <section className="settings-section">
-            <h2 className="settings-section__title">{t('settings.theme')}</h2>
-            <ThemePicker />
           </section>
 
           <section className="settings-section">

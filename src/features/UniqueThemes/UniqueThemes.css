@@ -1,0 +1,277 @@
+.unique-themes__hint {
+  max-width: 820px;
+  margin: 0 0 16px;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.unique-themes {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.unique-themes__card {
+  white-space: normal;
+}
+
+.unique-themes__preview {
+  position: relative;
+  display: block;
+  height: 90px;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+/* Two small dots per preview (`::before`/`::after`) fall, rise, or float depending on the theme. */
+.unique-themes__card--anime-night .unique-themes__preview::before,
+.unique-themes__card--anime-night .unique-themes__preview::after,
+.unique-themes__card--winter .unique-themes__preview::before,
+.unique-themes__card--winter .unique-themes__preview::after,
+.unique-themes__card--autumn .unique-themes__preview::before,
+.unique-themes__card--autumn .unique-themes__preview::after,
+.unique-themes__card--ocean .unique-themes__preview::before,
+.unique-themes__card--ocean .unique-themes__preview::after,
+.unique-themes__card--embers .unique-themes__preview::before,
+.unique-themes__card--embers .unique-themes__preview::after,
+.unique-themes__card--fireflies .unique-themes__preview::before,
+.unique-themes__card--fireflies .unique-themes__preview::after {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 25%;
+  width: 10px;
+  height: 8px;
+  border-radius: 80% 0 80% 0;
+  background: #ff8fbd;
+  animation: unique-petal-fall 3.2s linear infinite;
+}
+
+.unique-themes__card--anime-night .unique-themes__preview::after,
+.unique-themes__card--winter .unique-themes__preview::after,
+.unique-themes__card--autumn .unique-themes__preview::after,
+.unique-themes__card--ocean .unique-themes__preview::after,
+.unique-themes__card--embers .unique-themes__preview::after,
+.unique-themes__card--fireflies .unique-themes__preview::after {
+  left: 68%;
+  animation-delay: -1.6s;
+}
+
+.unique-themes__card--cyberpunk .unique-themes__preview {
+  background:
+    radial-gradient(ellipse at 50% -10%, rgba(122, 44, 255, 0.5), transparent 60%),
+    #05010d;
+}
+
+.unique-themes__card--cyberpunk .unique-themes__preview::after {
+  content: '';
+  position: absolute;
+  right: -50%;
+  bottom: 0;
+  left: -50%;
+  height: 70%;
+  background-image:
+    linear-gradient(rgba(0, 240, 255, 0.6) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 43, 214, 0.55) 1px, transparent 1px);
+  background-size: 20px 20px;
+  mask-image: linear-gradient(to top, #000 10%, transparent 90%);
+  transform: perspective(120px) rotateX(62deg);
+  transform-origin: bottom;
+  animation: unique-floor-scroll 1.6s linear infinite;
+}
+
+.unique-themes__card--anime-night .unique-themes__preview {
+  background: linear-gradient(160deg, #1a1040, #120d26 50%, #3a1b57);
+}
+
+.unique-themes__card--winter .unique-themes__preview {
+  background: linear-gradient(180deg, #12294a, #0a1626 60%, #0f3050);
+}
+
+.unique-themes__card--winter .unique-themes__preview::before,
+.unique-themes__card--winter .unique-themes__preview::after {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.unique-themes__card--autumn .unique-themes__preview {
+  background: linear-gradient(170deg, #2a160a, #1d120b 50%, #3a1c0c);
+}
+
+.unique-themes__card--autumn .unique-themes__preview::before {
+  background: #ff9a3c;
+}
+
+.unique-themes__card--autumn .unique-themes__preview::after {
+  background: #e5533d;
+}
+
+.unique-themes__card--matrix .unique-themes__preview {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(0, 255, 102, 0.18), transparent 65%),
+    #020a04;
+}
+
+.unique-themes__card--matrix .unique-themes__preview::before,
+.unique-themes__card--matrix .unique-themes__preview::after {
+  content: '';
+  position: absolute;
+  top: -50px;
+  left: 30%;
+  width: 2px;
+  height: 50px;
+  background: linear-gradient(180deg, transparent, #9dffc0);
+  box-shadow: 0 0 6px rgba(0, 255, 102, 0.6);
+  animation: unique-rain-fall 2.6s linear infinite;
+}
+
+.unique-themes__card--matrix .unique-themes__preview::after {
+  left: 66%;
+  animation-delay: -1.3s;
+}
+
+.unique-themes__card--aurora .unique-themes__preview {
+  background:
+    radial-gradient(ellipse at 30% 30%, rgba(77, 255, 195, 0.55), transparent 60%),
+    radial-gradient(ellipse at 75% 25%, rgba(138, 99, 255, 0.5), transparent 60%),
+    linear-gradient(180deg, #040a18, #0b2238);
+}
+
+.unique-themes__card--nebula .unique-themes__preview {
+  background:
+    radial-gradient(ellipse at 25% 35%, rgba(181, 123, 255, 0.55), transparent 50%),
+    radial-gradient(ellipse at 75% 65%, rgba(255, 90, 180, 0.45), transparent 50%),
+    #07040f;
+}
+
+.unique-themes__card--ocean .unique-themes__preview {
+  background:
+    radial-gradient(ellipse at 30% -10%, rgba(58, 208, 232, 0.5), transparent 60%),
+    radial-gradient(ellipse at 75% -5%, rgba(90, 140, 255, 0.4), transparent 55%),
+    linear-gradient(180deg, #06384d, #031a26 70%);
+}
+
+.unique-themes__card--ocean .unique-themes__preview::before,
+.unique-themes__card--ocean .unique-themes__preview::after {
+  top: auto;
+  bottom: -12px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #d9f7ff;
+  box-shadow: 0 0 6px rgba(160, 235, 255, 0.7);
+  animation-name: unique-bubble-rise;
+}
+
+.unique-themes__card--embers .unique-themes__preview {
+  background:
+    radial-gradient(ellipse at 50% 120%, rgba(255, 90, 30, 0.5), transparent 60%),
+    #12090a;
+}
+
+.unique-themes__card--embers .unique-themes__preview::before,
+.unique-themes__card--embers .unique-themes__preview::after {
+  top: auto;
+  bottom: -12px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ff9a3c;
+  box-shadow: 0 0 6px 2px rgba(255, 106, 43, 0.7);
+  animation-name: unique-bubble-rise;
+}
+
+.unique-themes__card--fireflies .unique-themes__preview {
+  background:
+    radial-gradient(ellipse at 50% 120%, rgba(120, 200, 60, 0.25), transparent 60%),
+    #06100d;
+}
+
+.unique-themes__card--fireflies .unique-themes__preview::before,
+.unique-themes__card--fireflies .unique-themes__preview::after {
+  top: 40%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #e8ff7a;
+  box-shadow: 0 0 8px 3px rgba(196, 245, 66, 0.7);
+  animation: unique-firefly 3s ease-in-out infinite alternate;
+}
+
+.unique-themes__desc {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+@keyframes unique-floor-scroll {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 0 20px;
+  }
+}
+
+@keyframes unique-bubble-rise {
+  from {
+    transform: translate(0, 0);
+  }
+
+  to {
+    transform: translate(10px, -110px);
+  }
+}
+
+@keyframes unique-rain-fall {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(160px);
+  }
+}
+
+@keyframes unique-firefly {
+  from {
+    transform: translate(0, 0);
+    opacity: 0.2;
+  }
+
+  to {
+    transform: translate(18px, -20px);
+    opacity: 1;
+  }
+}
+
+@keyframes unique-petal-fall {
+  from {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  to {
+    transform: translate(18px, 110px) rotate(280deg);
+  }
+}
+
+@media (max-width: 720px) {
+  .unique-themes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .unique-themes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .unique-themes__preview::before,
+  .unique-themes__preview::after {
+    animation: none;
+  }
+}

@@ -137,7 +137,20 @@ export const FEATURE_SPECIALS: Record<string, string> = {
   'library-100': 'libraryComplete',
 };
 
-export const PRESET_THEME_IDS: readonly string[] = ['dark', 'light', 'amoled', 'midnight', 'dracula', 'nord', 'forest', 'crimson', 'cyberpunk', 'sepia'];
+export const PRESET_THEME_IDS: readonly string[] = ['dark', 'light', 'amoled', 'midnight', 'dracula', 'nord', 'forest', 'crimson', 'cyberpunk'];
+
+export const UNIQUE_THEME_IDS: readonly string[] = [
+  'unique-cyberpunk',
+  'unique-anime-night',
+  'unique-winter',
+  'unique-autumn',
+  'unique-matrix',
+  'unique-aurora',
+  'unique-nebula',
+  'unique-ocean',
+  'unique-embers',
+  'unique-fireflies',
+];
 
 const FAMILIES: Array<{ metric: Metric; steps: Array<[target: number, tier: Tier, xp?: number]>; group?: Group; hidden?: boolean }> = [
   // The first step of launches/gamesPlayed/daysPlayed always unlocks together, from the same very first

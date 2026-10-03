@@ -9,6 +9,7 @@ import {
   LUCKY_XP,
   metricValue,
   PRESET_THEME_IDS,
+  UNIQUE_THEME_IDS,
   SECONDS_PER_XP,
   SECRET_IDS,
   SECRET_SPECIALS,
@@ -656,7 +657,7 @@ export const createProgress = (
 
         break;
       case 'themeUsed':
-        if (PRESET_THEME_IDS.includes(id) || THEME_ID_PATTERN.test(id)) {
+        if (PRESET_THEME_IDS.includes(id) || UNIQUE_THEME_IDS.includes(id) || THEME_ID_PATTERN.test(id)) {
           mutate((data) => {
             addOnce(data.stats.themesTried, id, MAX_THEMES_TRIED);
           });

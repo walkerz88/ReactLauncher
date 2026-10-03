@@ -11,6 +11,7 @@ import { CaptureManager } from '@/widgets/CaptureManager';
 import { GamepadNavigation } from '@/widgets/GamepadNavigation';
 import { NotificationToasts } from '@/widgets/NotificationToasts';
 import { SplashScreen } from '@/widgets/SplashScreen';
+import { ThemeEffects } from '@/widgets/ThemeEffects';
 import { TitleBar } from '@/widgets/TitleBar';
 import { AchievementsPage } from '@/pages/AchievementsPage';
 import { FavoritesPage } from '@/pages/FavoritesPage';
@@ -32,6 +33,7 @@ export const App: FC = () => {
     <HashRouter>
       <div className="app" data-id="App">
         <div className="app-background" aria-hidden="true" />
+        <ThemeEffects />
         <SplashScreen />
         <GamepadNavigation />
         <AchievementToasts />

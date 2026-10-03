@@ -24,6 +24,14 @@
   pointer-events: none;
 }
 
+/* Own stacking contexts above the theme effects layer (`widgets/ThemeEffects`, z-index 0), so the UI is
+ * always painted over it. */
+.app-body,
+.title-bar {
+  position: relative;
+  z-index: 1;
+}
+
 .app-body {
   display: flex;
   flex: 1;

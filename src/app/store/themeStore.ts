@@ -9,6 +9,7 @@ import {
   PRESET_THEMES,
   STYLESHEET_THEME_IDS,
   THEME_VAR_NAMES,
+  UNIQUE_THEMES,
   type ThemeDefinition,
 } from '@/app/lib/themes';
 
@@ -26,7 +27,7 @@ interface ThemeState {
 
 /** The theme `id` refers to; falls back to the default if it no longer exists (e.g. a deleted custom theme). */
 export const resolveTheme = (id: string, customThemes: ThemeDefinition[]): ThemeDefinition =>
-  [...PRESET_THEMES, ...customThemes].find((theme) => theme.id === id) ??
+  [...PRESET_THEMES, ...UNIQUE_THEMES, ...customThemes].find((theme) => theme.id === id) ??
   PRESET_THEMES.find((theme) => theme.id === DEFAULT_THEME_ID) ??
   PRESET_THEMES[0];
 
@@ -38,6 +39,12 @@ export const resolveTheme = (id: string, customThemes: ThemeDefinition[]): Theme
 const applyThemeToDocument = (theme: ThemeDefinition): void => {
   const root = document.documentElement;
   root.dataset.theme = theme.mode;
+
+  if (theme.effect) {
+    root.dataset.fx = theme.effect;
+  } else {
+    delete root.dataset.fx;
+  }
 
   THEME_VAR_NAMES.forEach((name) => root.style.removeProperty(name));
 

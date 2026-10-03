@@ -8,12 +8,26 @@ export interface ThemeColors {
   accent: string;
 }
 
+/** Extra animation/effect set a unique theme brings on top of its colors (see `widgets/ThemeEffects`). */
+export type ThemeEffect =
+  | 'cyberpunk'
+  | 'anime-night'
+  | 'winter'
+  | 'autumn'
+  | 'matrix'
+  | 'aurora'
+  | 'nebula'
+  | 'ocean'
+  | 'embers'
+  | 'fireflies';
+
 export interface ThemeDefinition {
   id: string;
   name: string;
   /** Picks the base token set (semantic colors, `color-scheme`) the theme builds on. */
   mode: ThemeMode;
   colors: ThemeColors;
+  effect?: ThemeEffect;
 }
 
 export const COLOR_FIELDS = ['bg', 'surface', 'text', 'accent'] as const satisfies ReadonlyArray<keyof ThemeColors>;
@@ -35,7 +49,80 @@ export const PRESET_THEMES: ThemeDefinition[] = [
   { id: 'forest', name: 'Forest', mode: 'dark', colors: { bg: '#0f1a14', surface: '#16261d', text: '#dcefe3', accent: '#4ade80' } },
   { id: 'crimson', name: 'Crimson', mode: 'dark', colors: { bg: '#140b0d', surface: '#221317', text: '#f3e4e6', accent: '#f43f5e' } },
   { id: 'cyberpunk', name: 'Cyberpunk', mode: 'dark', colors: { bg: '#0d0221', surface: '#1a0b3b', text: '#f0e6ff', accent: '#ff2a6d' } },
-  { id: 'sepia', name: 'Sepia', mode: 'light', colors: { bg: '#f1e8d4', surface: '#fbf5e6', text: '#3b2f1e', accent: '#b45309' } },
+];
+
+/** Themes that differ from the presets not only in colors but in animation and effects. */
+export const UNIQUE_THEMES: ThemeDefinition[] = [
+  {
+    id: 'unique-cyberpunk',
+    name: 'Cyberpunk',
+    mode: 'dark',
+    colors: { bg: '#05010d', surface: '#120826', text: '#d9f9ff', accent: '#00f0ff' },
+    effect: 'cyberpunk',
+  },
+  {
+    id: 'unique-anime-night',
+    name: 'Anime Night',
+    mode: 'dark',
+    colors: { bg: '#120d26', surface: '#201a3d', text: '#f1e9ff', accent: '#ff7eb6' },
+    effect: 'anime-night',
+  },
+  {
+    id: 'unique-winter',
+    name: 'Winter',
+    mode: 'dark',
+    colors: { bg: '#0a1626', surface: '#13243b', text: '#e6f2ff', accent: '#7cc7ff' },
+    effect: 'winter',
+  },
+  {
+    id: 'unique-autumn',
+    name: 'Autumn',
+    mode: 'dark',
+    colors: { bg: '#1d120b', surface: '#2c1b10', text: '#f6e6d3', accent: '#ff8c3a' },
+    effect: 'autumn',
+  },
+  {
+    id: 'unique-matrix',
+    name: 'Matrix',
+    mode: 'dark',
+    colors: { bg: '#020a04', surface: '#07140b', text: '#c8ffd8', accent: '#00ff66' },
+    effect: 'matrix',
+  },
+  {
+    id: 'unique-aurora',
+    name: 'Aurora',
+    mode: 'dark',
+    colors: { bg: '#050d1c', surface: '#0d1a30', text: '#e4fff5', accent: '#4dffc3' },
+    effect: 'aurora',
+  },
+  {
+    id: 'unique-nebula',
+    name: 'Nebula',
+    mode: 'dark',
+    colors: { bg: '#07040f', surface: '#150d26', text: '#efe6ff', accent: '#b57bff' },
+    effect: 'nebula',
+  },
+  {
+    id: 'unique-ocean',
+    name: 'Ocean',
+    mode: 'dark',
+    colors: { bg: '#031a26', surface: '#0a2c3d', text: '#d9f7ff', accent: '#3ad0e8' },
+    effect: 'ocean',
+  },
+  {
+    id: 'unique-embers',
+    name: 'Embers',
+    mode: 'dark',
+    colors: { bg: '#12090a', surface: '#22110f', text: '#ffe9dc', accent: '#ff6a2b' },
+    effect: 'embers',
+  },
+  {
+    id: 'unique-fireflies',
+    name: 'Fireflies',
+    mode: 'dark',
+    colors: { bg: '#06100d', surface: '#0f1f19', text: '#e3f5c8', accent: '#c4f542' },
+    effect: 'fireflies',
+  },
 ];
 
 export const DEFAULT_THEME_ID = 'dark';
