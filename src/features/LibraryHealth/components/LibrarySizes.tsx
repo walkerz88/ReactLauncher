@@ -249,7 +249,6 @@ export const LibrarySizes: FC<LibrarySizesProps> = ({ apps }) => {
             {SIZE_COLUMNS.map((column) => renderSortHeader(column, t(`health.sizes.${column}`), 'library-health__col-size'))}
             {renderSortHeader('media', t('health.sizes.media'), 'library-health__col-size')}
             {renderSortHeader('total', t('health.sizes.total'), 'library-health__col-size')}
-            <th className="library-health__col-open" />
           </tr>
         </thead>
 
@@ -260,7 +259,9 @@ export const LibrarySizes: FC<LibrarySizesProps> = ({ apps }) => {
                 {app.id === scanningId ? (
                   <Loader2 size={14} className="library-health__spin library-health__scan-spinner" aria-hidden="true" />
                 ) : null}
-                {app.name}
+                <Link className="library-health__name-link" to={`/app/${encodeURIComponent(app.id)}`}>
+                  {app.name}
+                </Link>
               </td>
               <td className="library-health__col-size">
                 <Tooltip label={t('health.column.rating')}>
@@ -283,11 +284,6 @@ export const LibrarySizes: FC<LibrarySizesProps> = ({ apps }) => {
                 <Tooltip label={t('health.sizes.total')}>
                   <span>{renderTotal(app)}</span>
                 </Tooltip>
-              </td>
-              <td className="library-health__col-open">
-                <Link className="btn btn--small library-health__open" to={`/app/${encodeURIComponent(app.id)}`}>
-                  {t('health.open')}
-                </Link>
               </td>
             </tr>
           ))}

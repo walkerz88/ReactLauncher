@@ -277,7 +277,6 @@ export const LibraryHealth: FC = () => {
                     {t(column.labelKey)}
                   </th>
                 ))}
-                <th className="library-health__col-open" />
               </tr>
             </thead>
 
@@ -310,7 +309,9 @@ export const LibraryHealth: FC = () => {
                     </td>
 
                     <td className="library-health__name">
-                      {app.name}
+                      <Link className="library-health__name-link" to={`/app/${encodeURIComponent(app.id)}`}>
+                        {app.name}
+                      </Link>
                       {status ? <span className="library-health__tag library-health__tag--status">{t(`health.fill.${status}`)}</span> : null}
                     </td>
 
@@ -329,11 +330,6 @@ export const LibraryHealth: FC = () => {
                       );
                     })}
 
-                    <td className="library-health__col-open">
-                      <Link className="btn btn--small library-health__open" to={`/app/${encodeURIComponent(app.id)}`}>
-                        {t('health.open')}
-                      </Link>
-                    </td>
                   </tr>
                 );
               })}

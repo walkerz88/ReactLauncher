@@ -428,5 +428,18 @@
         "en": "The recording start and stop sounds no longer end up in the video"
       }
     ]
+  },
+  {
+    "version": "1.9.1",
+    "title": {
+      "ru": "Переход к игре из таблиц",
+      "en": "Opening a game from the tables"
+    },
+    "changes": [
+      {
+        "ru": "В таблицах «Проверка библиотеки» и «Место на диске» кнопки «Открыть» заменены ссылкой на названии игры: оно подсвечивается при наведении и открывает игру по клику",
+        "en": "In the library health and disk usage tables the \"Open\" buttons are replaced by a link on the game name: it highlights on hover and opens the game on click"
+      }
+    ]
   }
 ]

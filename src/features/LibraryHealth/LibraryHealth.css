@@ -107,10 +107,6 @@
   width: 1%;
 }
 
-.library-health__col-open {
-  width: 1%;
-}
-
 .library-health__col-status {
   width: 1%;
 }
@@ -159,6 +155,18 @@
   white-space: nowrap;
 }
 
+.library-health__name-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.library-health__name-link:hover,
+.library-health__name-link:focus-visible {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
 .library-health__scan-spinner {
   margin-right: 6px;
   vertical-align: -2px;
@@ -179,11 +187,6 @@
   margin-left: 8px;
   background-color: var(--color-surface-hover);
   color: var(--color-text);
-}
-
-.library-health__open {
-  white-space: nowrap;
-  text-decoration: none;
 }
 
 .library-health__field-status {
