@@ -1,14 +1,12 @@
 import { useEffect, useRef, type FC } from 'react';
 
 import { playRecordingStartSound, playRecordingStopSound, playScreenshotSound } from '@/app/lib/captureSound';
+import { getRecordingBitsPerSecond, parseRecordingResolution, useCaptureStore } from '@/app/store/captureStore';
 import { useSoundStore } from '@/app/store/soundStore';
 
-// Kept modest on purpose: hardware acceleration is off (`app.disableHardwareAcceleration()` in
-// electron.ts), so playback in the in-app gallery decodes VP9 entirely in software — 1080p/30fps
-// stuttered badly there even though it played fine in Explorer's hardware-accelerated preview.
-const VIDEO_BITS_PER_SECOND = 2_500_000;
 const AUDIO_BITS_PER_SECOND = 128_000;
-const RECORDING_CONSTRAINTS = { maxWidth: 1280, maxHeight: 720, maxFrameRate: 30 };
+// The start/stop sounds are ~220 ms; desktop audio capture would otherwise record them.
+const SOUND_CLEARANCE_MS = 300;
 
 interface ActiveRecording {
   gameId: string;
@@ -34,10 +32,32 @@ export const CaptureManager: FC = () => {
       return undefined;
     }
 
-    const soundOn = () => useSoundStore.getState().achievementSoundEnabled;
+    const screenshotSoundOn = () => useSoundStore.getState().screenshotSoundEnabled;
+    const recordingSoundOn = () => useSoundStore.getState().recordingSoundEnabled;
+
+    const syncMaxSeconds = (seconds: number) => {
+      void capture.setMaxRecordingSeconds(seconds).catch((err) => console.error('[CaptureManager] syncing max length failed:', err));
+    };
+
+    const syncShowTimer = (show: boolean) => {
+      void capture.setShowRecordingTimer(show).catch((err) => console.error('[CaptureManager] syncing timer visibility failed:', err));
+    };
+
+    syncMaxSeconds(useCaptureStore.getState().recordingMaxSeconds);
+    syncShowTimer(useCaptureStore.getState().showRecordingTimer);
+
+    const stopSyncing = useCaptureStore.subscribe((state, previous) => {
+      if (state.recordingMaxSeconds !== previous.recordingMaxSeconds) {
+        syncMaxSeconds(state.recordingMaxSeconds);
+      }
+
+      if (state.showRecordingTimer !== previous.showRecordingTimer) {
+        syncShowTimer(state.showRecordingTimer);
+      }
+    });
 
     const stopSignal = capture.onScreenshotTaken(() => {
-      if (soundOn()) {
+      if (screenshotSoundOn()) {
         playScreenshotSound();
       }
     });
@@ -64,19 +84,23 @@ export const CaptureManager: FC = () => {
         finishRecording();
       }
 
-      if (soundOn()) {
+      if (recordingSoundOn()) {
         playRecordingStartSound();
       }
 
       const startCapture = async () => {
         try {
+          const { recordingResolution, recordingFrameRate } = useCaptureStore.getState();
+          const { width, height } = parseRecordingResolution(recordingResolution);
           const constraints = {
             audio: { mandatory: { chromeMediaSource: 'desktop' } },
             video: {
               mandatory: {
                 chromeMediaSource: 'desktop',
                 chromeMediaSourceId: sourceId,
-                ...RECORDING_CONSTRAINTS,
+                maxWidth: width,
+                maxHeight: height,
+                maxFrameRate: recordingFrameRate,
               },
             },
           } as unknown as MediaStreamConstraints;
@@ -85,7 +109,7 @@ export const CaptureManager: FC = () => {
 
           const recorder = new MediaRecorder(stream, {
             mimeType: MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus') ? 'video/webm;codecs=vp9,opus' : 'video/webm',
-            videoBitsPerSecond: VIDEO_BITS_PER_SECOND,
+            videoBitsPerSecond: getRecordingBitsPerSecond(recordingResolution, recordingFrameRate),
             audioBitsPerSecond: AUDIO_BITS_PER_SECOND,
           });
           const chunks: BlobPart[] = [];
@@ -112,19 +136,20 @@ export const CaptureManager: FC = () => {
         }
       };
 
-      void startCapture();
+      window.setTimeout(() => void startCapture(), recordingSoundOn() ? SOUND_CLEARANCE_MS : 0);
     });
 
     const stopStop = capture.onStopRecording(() => {
-      if (soundOn()) {
+      finishRecording();
+
+      if (recordingSoundOn()) {
         playRecordingStopSound();
       }
-
-      finishRecording();
     });
 
     return () => {
       stopSignal();
+      stopSyncing();
       stopStart();
       stopStop();
       finishRecording();

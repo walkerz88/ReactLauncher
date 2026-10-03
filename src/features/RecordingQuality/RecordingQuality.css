@@ -1,0 +1,32 @@
+.recording-quality {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.recording-quality__hint {
+  margin: 0;
+  max-width: 60ch;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.recording-quality__length {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.recording-quality__length input {
+  width: 200px;
+  accent-color: var(--color-accent);
+}
+
+.recording-quality__length-value {
+  min-width: 48px;
+  color: var(--color-text-muted);
+}

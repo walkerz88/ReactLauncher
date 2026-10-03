@@ -399,5 +399,34 @@
         "en": "Unique themes now count towards the \"Trying themes\" achievement"
       }
     ]
+  },
+  {
+    "version": "1.9.0",
+    "title": {
+      "ru": "Настройки записи экрана",
+      "en": "Screen recording settings"
+    },
+    "changes": [
+      {
+        "ru": "Запись видео снова в высоком качестве: по умолчанию 1920×1080, 60 к/с",
+        "en": "Video recording is back to high quality: 1920×1080 at 60 fps by default"
+      },
+      {
+        "ru": "В настройках — раздел «Запись экрана»: разрешение (1280×720, 1920×1080, 2560×1440), частота кадров (30 или 60) и максимальная длина записи от 10 до 60 секунд",
+        "en": "New \"Screen recording\" settings section: resolution (1280×720, 1920×1080, 2560×1440), frame rate (30 or 60) and maximum length from 10 to 60 seconds"
+      },
+      {
+        "ru": "Можно скрыть таймер на экране во время записи",
+        "en": "The on-screen timer during recording can be hidden"
+      },
+      {
+        "ru": "Отдельные переключатели звука для скриншота и для записи видео",
+        "en": "Separate sound toggles for screenshots and for video recording"
+      },
+      {
+        "ru": "Звуки начала и конца записи больше не попадают в видео",
+        "en": "The recording start and stop sounds no longer end up in the video"
+      }
+    ]
   }
 ]

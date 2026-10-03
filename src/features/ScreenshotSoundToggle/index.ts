@@ -1,0 +1,1 @@
+export { ScreenshotSoundToggle } from './ScreenshotSoundToggle';

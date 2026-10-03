@@ -9,6 +9,9 @@ import { CardsSettings } from '@/features/CardsSettings';
 import { LanguageToggle } from '@/features/LanguageToggle';
 import { LibraryHealth } from '@/features/LibraryHealth';
 import { ProfileManager } from '@/features/ProfileManager';
+import { RecordingSoundToggle } from '@/features/RecordingSoundToggle';
+import { ScreenshotSoundToggle } from '@/features/ScreenshotSoundToggle';
+import { RecordingQuality } from '@/features/RecordingQuality';
 import { LuckySectionToggle } from '@/features/LuckySectionToggle';
 import { UniqueThemes } from '@/features/UniqueThemes';
 import { WelcomeAnimationStyle } from '@/features/WelcomeAnimationStyle';
@@ -91,6 +94,13 @@ export const SettingsPage: FC = () => {
           <section className="settings-section">
             <h2 className="settings-section__title">{t('settings.notifications')}</h2>
             <AchievementSoundToggle />
+            <ScreenshotSoundToggle />
+            <RecordingSoundToggle />
+          </section>
+
+          <section className="settings-section">
+            <h2 className="settings-section__title">{t('settings.recording')}</h2>
+            <RecordingQuality />
           </section>
         </>
       )}

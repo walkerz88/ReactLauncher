@@ -109,6 +109,8 @@ const electronAPI = {
     list: (gameId: string) => ipcRenderer.invoke('capture:list', gameId),
     sizes: () => ipcRenderer.invoke('capture:sizes'),
     saveRecording: (gameId: string, bytes: ArrayBuffer) => ipcRenderer.invoke('capture:save-recording', gameId, bytes),
+    setMaxRecordingSeconds: (seconds: number) => ipcRenderer.invoke('capture:set-max-seconds', seconds),
+    setShowRecordingTimer: (show: boolean) => ipcRenderer.invoke('capture:set-show-timer', show),
     delete: (url: string) => ipcRenderer.invoke('capture:delete', url),
     reveal: (url: string) => ipcRenderer.invoke('capture:reveal', url),
     onScreenshotTaken: (callback: (event: { gameId: string }) => void): (() => void) => {

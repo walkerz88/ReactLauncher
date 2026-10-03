@@ -365,6 +365,10 @@ export interface CaptureAPI {
   sizes: () => Promise<Record<string, number>>;
   /** Hands the finished recording's bytes to the main process to write to disk. */
   saveRecording: (gameId: string, bytes: ArrayBuffer) => Promise<void>;
+  /** Tells the main process how long a recording may run before it stops on its own. */
+  setMaxRecordingSeconds: (seconds: number) => Promise<void>;
+  /** Tells the main process whether to show the on-screen recording timer. */
+  setShowRecordingTimer: (show: boolean) => Promise<void>;
   /** Deletes one of the player's own screenshots/recordings by its `media://` URL. */
   delete: (url: string) => Promise<boolean>;
   /** Opens the OS file manager with this screenshot/recording selected, by its `media://` URL. */

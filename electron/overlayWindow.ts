@@ -87,7 +87,7 @@ const OVERLAY_HTML = `<!DOCTYPE html>
         recordingTicker = null;
       }
 
-      if (!payload || !payload.active) {
+      if (!payload || !payload.active || !payload.showTimer) {
         recordingEl.classList.remove('recording--visible');
         return;
       }
@@ -154,9 +154,9 @@ export const showOverlayToast = (text: string): void => {
   }
 };
 
-export const setOverlayRecordingState = (active: boolean, maxSeconds?: number): void => {
+export const setOverlayRecordingState = (active: boolean, maxSeconds?: number, showTimer = true): void => {
   try {
-    getOverlayWindow().webContents.send('overlay:recording', { active, maxSeconds });
+    getOverlayWindow().webContents.send('overlay:recording', { active, maxSeconds, showTimer });
   } catch (err) {
     console.error('[overlay] recording state failed:', err);
   }

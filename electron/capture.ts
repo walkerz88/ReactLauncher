@@ -37,7 +37,9 @@ protocol.registerSchemesAsPrivileged([
 export const SCREENSHOT_ACCELERATOR = 'CommandOrControl+Shift+F9';
 export const TOGGLE_RECORDING_ACCELERATOR = 'CommandOrControl+Shift+F10';
 
-export const MAX_RECORDING_SECONDS = 20;
+const MIN_RECORDING_SECONDS = 10;
+const MAX_RECORDING_SECONDS = 60;
+const DEFAULT_RECORDING_SECONDS = 20;
 const MIN_FREE_BYTES_FOR_RECORDING = 300 * 1024 * 1024;
 const MAX_ITEMS_PER_FOLDER = 200;
 
@@ -178,6 +180,8 @@ export function initCapture(files: ProfileFiles, progress: ReturnType<typeof cre
 
   let currentGameId: string | null = null;
   let recordingActive = false;
+  let maxRecordingSeconds = DEFAULT_RECORDING_SECONDS;
+  let showRecordingTimer = true;
   let recordingGameId: string | null = null;
 
   const stopRecordingSignal = (): void => {
@@ -262,8 +266,8 @@ export function initCapture(files: ProfileFiles, progress: ReturnType<typeof cre
 
     recordingActive = true;
     recordingGameId = gameId;
-    setOverlayRecordingState(true, MAX_RECORDING_SECONDS);
-    win.webContents.send('capture:start-recording', { gameId, sourceId: source.id, maxSeconds: MAX_RECORDING_SECONDS });
+    setOverlayRecordingState(true, maxRecordingSeconds, showRecordingTimer);
+    win.webContents.send('capture:start-recording', { gameId, sourceId: source.id, maxSeconds: maxRecordingSeconds });
   };
 
   onRunningEvent((event) => {
@@ -344,6 +348,18 @@ export function initCapture(files: ProfileFiles, progress: ReturnType<typeof cre
     }
 
     return result;
+  });
+
+  ipcMain.handle('capture:set-max-seconds', (_event, secondsRaw: unknown) => {
+    if (typeof secondsRaw === 'number' && Number.isFinite(secondsRaw)) {
+      maxRecordingSeconds = Math.min(MAX_RECORDING_SECONDS, Math.max(MIN_RECORDING_SECONDS, Math.round(secondsRaw)));
+    }
+  });
+
+  ipcMain.handle('capture:set-show-timer', (_event, showRaw: unknown) => {
+    if (typeof showRaw === 'boolean') {
+      showRecordingTimer = showRaw;
+    }
   });
 
   ipcMain.handle('capture:save-recording', async (_event, gameIdRaw: unknown, bytesRaw: unknown) => {
