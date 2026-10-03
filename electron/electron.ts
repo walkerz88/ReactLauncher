@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import * as path from 'path';
 
 import { app, BrowserWindow, ipcMain, Menu, shell } from 'electron';
@@ -13,8 +14,24 @@ let mainWindow: BrowserWindow | null = null;
 
 const isDev = !app.isPackaged;
 
-// Disable GPU to prevent crashes on some systems. Must run before `ready`.
-app.disableHardwareAcceleration();
+// GPU rendering is on by default. The `build:*:no-gpu` scripts inject `disableHardwareAcceleration: true`
+// into the packaged package.json (electron-builder `extraMetadata`) for machines where the GPU process is
+// unstable. Must run before `ready`.
+const readNoGpuFlag = (): boolean => {
+  try {
+    const manifest = JSON.parse(fs.readFileSync(path.join(app.getAppPath(), 'package.json'), 'utf8')) as {
+      disableHardwareAcceleration?: unknown;
+    };
+
+    return manifest.disableHardwareAcceleration === true;
+  } catch {
+    return false;
+  }
+};
+
+if (readNoGpuFlag()) {
+  app.disableHardwareAcceleration();
+}
 
 // No application menu / menu bar — the app drives navigation from its own sidebar.
 Menu.setApplicationMenu(null);
