@@ -372,5 +372,32 @@
         "en": "Fixed: the Translate button fired when you clicked the label next to it"
       }
     ]
+  },
+  {
+    "version": "1.8.0",
+    "date": "2026-10-03",
+    "title": { "ru": "Уникальные темы и аппаратное ускорение", "en": "Unique themes and GPU acceleration" },
+    "changes": [
+      {
+        "ru": "В настройках новая вкладка «Темы»: сначала обычные темы, ниже — «Уникальные темы»",
+        "en": "Settings has a new \"Themes\" tab: regular themes first, \"Unique themes\" below them"
+      },
+      {
+        "ru": "Уникальные темы отличаются не только цветами, но и анимацией и эффектами: Cyberpunk (неоновая сетка, сканлайны), Anime Night, Winter, Autumn, Matrix, Aurora, Nebula, Ocean, Embers и Fireflies",
+        "en": "Unique themes differ from regular ones not only in colours but in animation and effects: Cyberpunk (a neon grid, scanlines), Anime Night, Winter, Autumn, Matrix, Aurora, Nebula, Ocean, Embers and Fireflies"
+      },
+      {
+        "ru": "Убрана тема Sepia (остальные обычные темы остались, включая светлую)",
+        "en": "The Sepia theme is removed (the other regular themes stay, including the light one)"
+      },
+      {
+        "ru": "Аппаратное ускорение включено по умолчанию: интерфейс и видео больше не тормозят. Для компьютеров, где GPU работает нестабильно, есть сборка без ускорения — `npm run build:exe:no-gpu`",
+        "en": "Hardware acceleration is now on by default, so the interface and video no longer lag. For machines where the GPU is unstable there is a build without it: `npm run build:exe:no-gpu`"
+      },
+      {
+        "ru": "Уникальные темы засчитываются в достижении «Примерка тем»",
+        "en": "Unique themes now count towards the \"Trying themes\" achievement"
+      }
+    ]
   }
 ]
