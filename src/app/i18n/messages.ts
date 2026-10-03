@@ -83,6 +83,7 @@ const ru = {
   'home.notFound': 'Игры не найдены. Ожидаемая папка:',
   'home.tabs.recent': 'Последний запуск',
   'home.tabs.gallery': 'Галерея',
+  'home.tabs.ready': 'Готовые к запуску',
 
   'recent.empty': 'Вы ещё ничего не запускали.',
   'recent.clear': 'Очистить',
@@ -136,7 +137,7 @@ const ru = {
   'settings.profiles': 'Профили',
   'settings.tabLibrary': 'Библиотека',
   'settings.tabAbout': 'О программе',
-  'settings.tabThemes': 'Темы',
+  'settings.tabThemes': 'Внешний вид',
   'settings.uniqueThemes': 'Уникальные темы',
   'unique.hint': 'Уникальные темы меняют не только цвета, но и добавляют анимацию и эффекты.',
   'unique.unique-cyberpunk.desc': 'Неоновая сетка, бегущая по низу окна, сканлайны, мерцающие заголовки и свечение карточек.',
@@ -579,6 +580,7 @@ const en: Record<MessageKey, string> = {
   'home.notFound': 'No games found. Expected folder:',
   'home.tabs.recent': 'Recently launched',
   'home.tabs.gallery': 'Gallery',
+  'home.tabs.ready': 'Ready to launch',
 
   'recent.empty': "You haven't launched anything yet.",
   'recent.clear': 'Clear',
@@ -631,7 +633,7 @@ const en: Record<MessageKey, string> = {
   'settings.profiles': 'Profiles',
   'settings.tabLibrary': 'Library',
   'settings.tabAbout': 'About',
-  'settings.tabThemes': 'Themes',
+  'settings.tabThemes': 'Appearance',
   'settings.uniqueThemes': 'Unique themes',
   'unique.hint': 'Unique themes change more than colours: they add animation and effects.',
   'unique.unique-cyberpunk.desc': 'A neon grid scrolling along the bottom of the window, scanlines, flickering headings and glowing cards.',

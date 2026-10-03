@@ -1,5 +1,6 @@
 import { useEffect, useState, type FC } from 'react';
 
+import { isReadyToLaunch } from '@/app/lib/readyToLaunch';
 import { useContentStore } from '@/app/store/contentStore';
 import { useRecentStore } from '@/app/store/recentStore';
 import { useSectionsStore } from '@/app/store/sectionsStore';
@@ -22,6 +23,10 @@ export const GalleryPage: FC = () => {
   const hasRecent = recentIds.length > 0;
 
   const luckyEnabled = useSectionsStore((state) => state.luckyEnabled);
+  const readyEnabled = useSectionsStore((state) => state.readyEnabled);
+  const recentEnabled = useSectionsStore((state) => state.recentEnabled);
+  const readyApps = apps.filter(isReadyToLaunch);
+  const hasReady = readyApps.length > 0;
 
   const [tab, setTab] = useState<HomeTab>('gallery');
 
@@ -35,10 +40,17 @@ export const GalleryPage: FC = () => {
   // after clearing it) — fall back to Gallery instead of stranding the user
   // on a tab that no longer exists.
   useEffect(() => {
-    if (!hasRecent && tab === 'recent') {
+    if ((!hasRecent || !recentEnabled) && tab === 'recent') {
       setTab('gallery');
     }
-  }, [hasRecent, tab]);
+  }, [hasRecent, recentEnabled, tab]);
+
+  // Same for the "Ready to launch" tab once it is switched off or no game qualifies any more.
+  useEffect(() => {
+    if ((!readyEnabled || !hasReady) && tab === 'ready') {
+      setTab('gallery');
+    }
+  }, [readyEnabled, hasReady, tab]);
 
   // Same for the "Feeling Lucky" tab once it is switched off in Settings.
   useEffect(() => {
@@ -89,7 +101,16 @@ export const GalleryPage: FC = () => {
     );
   }
 
-  if (tab === 'recent') {
+  if (tab === 'ready' && hasReady) {
+    return (
+      <div className="page page--scroll-pad" data-id="GalleryPage">
+        <HomeTabs activeTab={tab} onTabChange={setTab} />
+        <AppCollection apps={readyApps} title={t('home.apps')} contextKey="ready" />
+      </div>
+    );
+  }
+
+  if (tab === 'recent' && recentEnabled) {
     // Keep launch order (most recent first); drop ids no longer present in `./content`.
     const recentApps = recentIds
       .map((id) => apps.find((entry) => entry.id === id))

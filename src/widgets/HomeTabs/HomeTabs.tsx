@@ -1,6 +1,8 @@
 import type { FC } from 'react';
 import { X } from 'lucide-react';
 
+import { isReadyToLaunch } from '@/app/lib/readyToLaunch';
+import { useContentStore } from '@/app/store/contentStore';
 import { useRecentStore } from '@/app/store/recentStore';
 import { useSectionsStore } from '@/app/store/sectionsStore';
 import { useTranslation } from '@/app/i18n';
@@ -8,7 +10,7 @@ import { Tooltip } from '@/shared/Tooltip';
 
 import './HomeTabs.css';
 
-export type HomeTab = 'gallery' | 'recent' | 'lucky';
+export type HomeTab = 'gallery' | 'recent' | 'ready' | 'lucky';
 
 export interface HomeTabsProps {
   activeTab: HomeTab;
@@ -16,8 +18,8 @@ export interface HomeTabsProps {
 }
 
 /**
- * Tab switcher between the "Recently launched", "Gallery" and "Feeling Lucky" views on the
- * home page (the last one only while it is enabled in Settings). Local UI state, not routing — both views live under "/", so the
+ * Tab switcher between the "Recently launched", "Gallery", "Ready to launch" and "Feeling Lucky" views on the
+ * home page (all but the gallery only while enabled in Settings, "Ready to launch" only while at least one game qualifies). Local UI state, not routing — both views live under "/", so the
  * sidebar's "Главная" stays highlighted no matter which tab is active.
  * The "Recently launched" tab only shows once something has actually been
  * launched, with a small "clear" icon that empties the list (and hides the
@@ -28,6 +30,9 @@ export const HomeTabs: FC<HomeTabsProps> = ({ activeTab, onTabChange }) => {
   const hasRecent = useRecentStore((state) => state.ids.length > 0);
   const clearRecent = useRecentStore((state) => state.clear);
   const luckyEnabled = useSectionsStore((state) => state.luckyEnabled);
+  const readyEnabled = useSectionsStore((state) => state.readyEnabled);
+  const recentEnabled = useSectionsStore((state) => state.recentEnabled);
+  const hasReady = useContentStore((state) => state.apps.some(isReadyToLaunch));
 
   const handleClearRecent = () => {
     clearRecent();
@@ -38,7 +43,7 @@ export const HomeTabs: FC<HomeTabsProps> = ({ activeTab, onTabChange }) => {
 
   return (
     <nav className="home-tabs" data-id="HomeTabs">
-      {hasRecent ? (
+      {hasRecent && recentEnabled ? (
         <span className="home-tabs__tab">
           <button
             type="button"
@@ -72,6 +77,18 @@ export const HomeTabs: FC<HomeTabsProps> = ({ activeTab, onTabChange }) => {
       >
         {t('home.tabs.gallery')}
       </button>
+
+      {readyEnabled && hasReady ? (
+        <button
+          type="button"
+          className={`home-tabs__item${activeTab === 'ready' ? ' active' : ''}`}
+          aria-pressed={activeTab === 'ready'}
+          onClick={() => onTabChange('ready')}
+          data-gamepad-focusable
+        >
+          {t('home.tabs.ready')}
+        </button>
+      ) : null}
 
       {luckyEnabled ? (
         <button

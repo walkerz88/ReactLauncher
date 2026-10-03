@@ -441,5 +441,30 @@
         "en": "In the library health and disk usage tables the \"Open\" buttons are replaced by a link on the game name: it highlights on hover and opens the game on click"
       }
     ]
+  },
+  {
+    "version": "1.10.0",
+    "title": {
+      "ru": "Готовые к запуску и видимость разделов",
+      "en": "Ready to launch and section visibility"
+    },
+    "changes": [
+      {
+        "ru": "Новая вкладка «Готовые к запуску»: игры с файлами в data или ссылкой на exe",
+        "en": "New \"Ready to launch\" tab: games with files in data or an exe link"
+      },
+      {
+        "ru": "В «Видимости разделов» можно скрыть вкладки «Последний запуск» и «Готовые к запуску», «Мне повезёт» и «Избранное»",
+        "en": "Section visibility now covers Recently launched, Ready to launch, Feeling Lucky and Favorites"
+      },
+      {
+        "ru": "Вкладка «Темы» стала «Внешний вид» и включает анимацию приветствия",
+        "en": "The Themes tab is now Appearance and includes the welcome animation"
+      },
+      {
+        "ru": "Свичи в настройках переключаются только по самому свичу и подписи, расстояния между ними выровнены",
+        "en": "Settings switches toggle only from the switch and its label, with even spacing"
+      }
+    ]
   }
 ]

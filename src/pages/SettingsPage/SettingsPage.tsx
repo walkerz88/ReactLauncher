@@ -8,10 +8,13 @@ import { AchievementSoundToggle } from '@/features/AchievementSoundToggle';
 import { CardsSettings } from '@/features/CardsSettings';
 import { LanguageToggle } from '@/features/LanguageToggle';
 import { LibraryHealth } from '@/features/LibraryHealth';
+import { FavoritesSectionToggle } from '@/features/FavoritesSectionToggle';
 import { ProfileManager } from '@/features/ProfileManager';
 import { RecordingSoundToggle } from '@/features/RecordingSoundToggle';
 import { ScreenshotSoundToggle } from '@/features/ScreenshotSoundToggle';
 import { RecordingQuality } from '@/features/RecordingQuality';
+import { RecentSectionToggle } from '@/features/RecentSectionToggle';
+import { ReadySectionToggle } from '@/features/ReadySectionToggle';
 import { LuckySectionToggle } from '@/features/LuckySectionToggle';
 import { UniqueThemes } from '@/features/UniqueThemes';
 import { WelcomeAnimationStyle } from '@/features/WelcomeAnimationStyle';
@@ -61,6 +64,12 @@ export const SettingsPage: FC = () => {
             <h2 className="settings-section__title">{t('settings.uniqueThemes')}</h2>
             <UniqueThemes />
           </section>
+
+          <section className="settings-section">
+            <h2 className="settings-section__title">{t('settings.appearance')}</h2>
+            <WelcomeAnimationToggle />
+            <WelcomeAnimationStyle />
+          </section>
         </>
       ) : tab === 'profiles' ? (
         <ProfileManager />
@@ -76,19 +85,16 @@ export const SettingsPage: FC = () => {
           </section>
 
           <section className="settings-section">
-            <h2 className="settings-section__title">{t('settings.appearance')}</h2>
-            <WelcomeAnimationToggle />
-            <WelcomeAnimationStyle />
-          </section>
-
-          <section className="settings-section">
             <h2 className="settings-section__title">{t('settings.cards')}</h2>
             <CardsSettings />
           </section>
 
           <section className="settings-section">
             <h2 className="settings-section__title">{t('settings.sections')}</h2>
+            <RecentSectionToggle />
+            <ReadySectionToggle />
             <LuckySectionToggle />
+            <FavoritesSectionToggle />
           </section>
 
           <section className="settings-section">

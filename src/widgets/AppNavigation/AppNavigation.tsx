@@ -6,6 +6,7 @@ import { useFullscreenState } from '@/app/hooks/useFullscreenState';
 import { useFavoritesStore } from '@/app/store/favoritesStore';
 import { useContentStore } from '@/app/store/contentStore';
 import { useNotificationStore } from '@/app/store/notificationStore';
+import { useSectionsStore } from '@/app/store/sectionsStore';
 import { useTranslation } from '@/app/i18n';
 import { AddGameButton } from '@/features/AddGame';
 import { Tooltip } from '@/shared/Tooltip';
@@ -18,6 +19,7 @@ export const AppNavigation: FC = () => {
   const t = useTranslation();
   const isFullscreen = useFullscreenState();
   const hasFavorites = useFavoritesStore((state) => state.ids.length > 0);
+  const favoritesEnabled = useSectionsStore((state) => state.favoritesEnabled);
   const isRescanning = useContentStore((state) => state.status === 'loading');
   const rescan = useContentStore((state) => state.loadApps);
 
@@ -51,7 +53,7 @@ export const AppNavigation: FC = () => {
         </NavLink>
       </Tooltip>
 
-      {hasFavorites ? (
+      {hasFavorites && favoritesEnabled ? (
         <Tooltip label={t('nav.favorites')} placement="right">
           <NavLink to="/favorites" className="app-navigation__item" aria-label={t('nav.favorites')} data-gamepad-focusable>
             <Heart size={ICON_SIZE} />

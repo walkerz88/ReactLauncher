@@ -4,8 +4,6 @@ import { useCardsStore } from '@/app/store/cardsStore';
 import { useTranslation } from '@/app/i18n';
 import { SwitchField } from '@/shared/SwitchField';
 
-import './CardsSettings.css';
-
 export const CardsSettings: FC = () => {
   const t = useTranslation();
   const previewTrailer = useCardsStore((state) => state.previewTrailer);
@@ -14,7 +12,7 @@ export const CardsSettings: FC = () => {
   const setAnimateOnHover = useCardsStore((state) => state.setAnimateOnHover);
 
   return (
-    <div className="cards-settings" data-id="CardsSettings">
+    <div data-id="CardsSettings">
       <SwitchField label={t('settings.cardsTrailer')} checked={previewTrailer} onChange={setPreviewTrailer} />
       <SwitchField label={t('settings.cardsAnimate')} checked={animateOnHover} onChange={setAnimateOnHover} />
     </div>
