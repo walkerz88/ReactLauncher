@@ -75,7 +75,7 @@ html[data-fx='cyberpunk'] .app-card__cover:hover {
 
 html[data-fx='cyberpunk'] .app-navigation,
 html[data-fx='cyberpunk'] .title-bar {
-  border-color: rgba(166, 77, 255, 0.4);
+  border-color: rgba(166, 77, 255, 0.22);
 }
 
 html[data-fx='cyberpunk'] ::-webkit-scrollbar-thumb {
