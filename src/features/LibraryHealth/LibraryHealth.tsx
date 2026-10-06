@@ -251,9 +251,7 @@ export const LibraryHealth: FC = () => {
 
   return (
     <div data-id="LibraryHealth">
-      {rows.length === 0 ? (
-        <p className="home-hint">{t('health.allGood')}</p>
-      ) : (
+      {rows.length === 0 ? null : (
         <>
           <p className="library-health__summary">
             {t('health.summary').replace('{count}', String(rows.length)).replace('{total}', String(apps.length))}

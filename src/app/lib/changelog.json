@@ -542,5 +542,22 @@
         "en": "In the Cyberpunk theme the sidebar and title bar no longer glow and their borders are now purple"
       }
     ]
+  },
+  {
+    "version": "1.12.3",
+    "title": {
+      "ru": "Автоперевод названий фактов",
+      "en": "Fact name auto-translation"
+    },
+    "changes": [
+      {
+        "ru": "В редакторе игры у названий фактов появилась кнопка автоперевода, как у остальных полей",
+        "en": "In the game editor, fact names now have an auto-translate button like the other fields"
+      },
+      {
+        "ru": "На вкладке проверки библиотеки больше не показывается сообщение «Все игры в порядке», если проблем нет",
+        "en": "The library health tab no longer shows the \"Everything looks good\" message when there are no issues"
+      }
+    ]
   }
 ]

@@ -5,6 +5,7 @@ import { GripVertical, Trash2 } from 'lucide-react';
 import { useTranslation } from '@/app/i18n';
 import { FormField } from '@/shared/FormField';
 import { Tooltip } from '@/shared/Tooltip';
+import { TranslateButton } from '@/shared/TranslateButton';
 
 export interface FactRowValue {
   /** Stable identity for `Reorder.Item`/React keys — unrelated to on-disk order. */
@@ -47,7 +48,16 @@ export const FactRow: FC<FactRowProps> = ({ fact, onChange, onRemove }) => {
       </Tooltip>
 
       <div className="edit-config-modal__fact-fields">
-        <FormField label={t('editConfig.factLabelRu')}>
+        <FormField
+          label={t('editConfig.factLabelRu')}
+          action={
+            <TranslateButton
+              source={fact.labelRu || fact.labelEn}
+              target="ru"
+              onApply={(text) => onChange({ labelRu: text })}
+            />
+          }
+        >
           <input
             type="text"
             placeholder="Год выхода"
@@ -56,7 +66,16 @@ export const FactRow: FC<FactRowProps> = ({ fact, onChange, onRemove }) => {
           />
         </FormField>
 
-        <FormField label={t('editConfig.factLabelEn')}>
+        <FormField
+          label={t('editConfig.factLabelEn')}
+          action={
+            <TranslateButton
+              source={fact.labelEn || fact.labelRu}
+              target="en"
+              onApply={(text) => onChange({ labelEn: text })}
+            />
+          }
+        >
           <input
             type="text"
             placeholder="Release year"
