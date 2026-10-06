@@ -381,6 +381,31 @@ export interface CaptureAPI {
   onStopRecording: (callback: () => void) => () => void;
 }
 
+/** One changelog entry as published in the update manifest (same shape as `app/lib/changelog.json`). */
+export interface UpdateChangelogEntry {
+  version: string;
+  date?: string;
+  title: { ru: string; en: string };
+  changes: { ru: string; en: string }[];
+}
+
+export interface UpdateInfo {
+  version: string;
+  /** Entries between the running version (exclusive) and the new one (inclusive), newest first. */
+  changelog: UpdateChangelogEntry[];
+}
+
+export type UpdateCheckResult =
+  | { status: 'disabled' }
+  | { status: 'current' }
+  | { status: 'error' }
+  | { status: 'available'; update: UpdateInfo };
+
+export type UpdateInstallResult =
+  | { status: 'restarting' }
+  | { status: 'downloaded'; path: string }
+  | { status: 'error' };
+
 export interface ElectronAPI {
   /** Quit the whole application. */
   quit: () => Promise<void>;
@@ -409,6 +434,14 @@ export interface ElectronAPI {
     search: (term: string) => Promise<SteamSearchResult[]>;
     /** Game data for a Steam app id, in both languages; `null` if Steam has nothing for it. */
     info: (steamAppId: string) => Promise<SteamInfo | null>;
+  };
+  update: {
+    /** Fetch the update manifest (`package.json`'s `updates.manifestUrl`) and compare it with the running version. */
+    check: () => Promise<UpdateCheckResult>;
+    /** Download the update found by the last `check`; the portable build then replaces itself and restarts. */
+    install: () => Promise<UpdateInstallResult>;
+    /** Bytes downloaded so far and the file size (0 if unknown); returns an unsubscribe function. */
+    onProgress: (callback: (progress: { received: number; total: number }) => void) => () => void;
   };
   translate: {
     /** Machine-translates `text` (source language auto-detected) into `target`; `null` on failure. */

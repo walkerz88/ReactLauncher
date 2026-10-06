@@ -41,6 +41,31 @@
   color: var(--color-danger);
 }
 
+.notification-toast--update {
+  min-width: 280px;
+  padding: 14px 18px;
+  border-color: var(--color-accent);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--color-accent);
+}
+
+.notification-toast__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.notification-toast__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.notification-toast__caption {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
 .notification-toast__text {
   font-size: 14px;
   font-weight: 600;

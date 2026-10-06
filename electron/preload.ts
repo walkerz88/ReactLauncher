@@ -31,6 +31,16 @@ const electronAPI = {
     search: (term: string) => ipcRenderer.invoke('steam:search', term),
     info: (steamAppId: string) => ipcRenderer.invoke('steam:info', steamAppId),
   },
+  update: {
+    check: () => ipcRenderer.invoke('update:check'),
+    install: () => ipcRenderer.invoke('update:install'),
+    onProgress: (callback: (progress: { received: number; total: number }) => void): (() => void) => {
+      const listener = (_event: IpcRendererEvent, progress: { received: number; total: number }) => callback(progress);
+      ipcRenderer.on('update:progress', listener);
+
+      return () => ipcRenderer.removeListener('update:progress', listener);
+    },
+  },
   translate: {
     text: (text: string, target: string) => ipcRenderer.invoke('translate:text', text, target),
   },

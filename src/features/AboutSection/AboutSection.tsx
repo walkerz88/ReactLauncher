@@ -1,7 +1,9 @@
-import type { FC } from 'react';
+import { useState, type FC } from 'react';
 import { Globe, Link2, Mail, Tag, User } from 'lucide-react';
 
 import { useTranslation } from '@/app/i18n';
+import { useNotificationStore } from '@/app/store/notificationStore';
+import { useUpdateStore } from '@/app/store/updateStore';
 
 import { AboutChangelog } from './components/AboutChangelog';
 import { AboutFactRow } from './components/AboutFactRow';
@@ -26,6 +28,29 @@ const stripProtocol = (url: string): string => url.replace(/^https?:\/\//, '');
 
 export const AboutSection: FC = () => {
   const t = useTranslation();
+  const updatesEnabled = useUpdateStore((state) => state.enabled === true);
+  const check = useUpdateStore((state) => state.check);
+  const openUpdateModal = useUpdateStore((state) => state.openModal);
+  const pushNotification = useNotificationStore((state) => state.pushNotification);
+  const [checking, setChecking] = useState(false);
+
+  const handleCheckUpdates = async () => {
+    setChecking(true);
+
+    try {
+      const status = await check();
+
+      if (status === 'available') {
+        openUpdateModal();
+      } else if (status === 'current') {
+        pushNotification(t('update.upToDate'));
+      } else if (status === 'error') {
+        pushNotification(t('update.checkFailed'), 'error');
+      }
+    } finally {
+      setChecking(false);
+    }
+  };
 
   const handleOpen = async (url: string) => {
     try {
@@ -43,6 +68,17 @@ export const AboutSection: FC = () => {
           <div className="about-section__app-name">{APP_NAME}</div>
           <div className="about-section__app-version">{t('settings.about.version')} {BUILD_VERSION}</div>
         </div>
+        {updatesEnabled ? (
+          <button
+            type="button"
+            className="btn about-section__check-updates"
+            disabled={checking}
+            onClick={handleCheckUpdates}
+            data-gamepad-focusable
+          >
+            {checking ? t('settings.about.checkingUpdates') : t('settings.about.checkUpdates')}
+          </button>
+        ) : null}
       </div>
 
       <div className="about-section__groups">

@@ -16,6 +16,8 @@ export interface ModalProps {
   className?: string;
   /** Set to `false` for forms where an accidental outside click shouldn't discard input. Defaults to `true`. */
   closeOnOverlayClick?: boolean;
+  /** Set to `false` to hide the header's close button (e.g. while an operation can't be interrupted). Defaults to `true`. */
+  showCloseButton?: boolean;
 }
 
 /** Portal-rendered dialog: backdrop, header with title/close, scrollable body, optional footer. Closes on Escape or a backdrop click. */
@@ -27,6 +29,7 @@ export const Modal: FC<ModalProps> = ({
   footer,
   className,
   closeOnOverlayClick = true,
+  showCloseButton = true,
 }) => {
   const t = useTranslation();
 
@@ -53,15 +56,17 @@ export const Modal: FC<ModalProps> = ({
       >
         <div className="modal__header">
           <h2 className="modal__title">{title}</h2>
-          <button
-            type="button"
-            className="icon-btn"
-            onClick={onClose}
-            aria-label={t('modal.close')}
-            data-gamepad-focusable
-          >
-            <X size={18} />
-          </button>
+          {showCloseButton ? (
+            <button
+              type="button"
+              className="icon-btn"
+              onClick={onClose}
+              aria-label={t('modal.close')}
+              data-gamepad-focusable
+            >
+              <X size={18} />
+            </button>
+          ) : null}
         </div>
 
         <div className="modal__body">{children}</div>

@@ -18,6 +18,10 @@
   flex-shrink: 0;
 }
 
+.about-section__check-updates {
+  margin-left: auto;
+}
+
 .about-section__app-name {
   font-size: 20px;
   font-weight: 700;

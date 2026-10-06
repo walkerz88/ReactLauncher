@@ -4,6 +4,7 @@ import { HashRouter, Route, Routes } from 'react-router-dom';
 import { useRunningGamesSync } from '@/app/hooks/useRunningGamesSync';
 import { useProgressSync } from '@/app/hooks/useProgressSync';
 import { useTypedSecrets } from '@/app/hooks/useTypedSecrets';
+import { useUpdateCheck } from '@/app/hooks/useUpdateCheck';
 import { useProfileStore } from '@/app/store/profileStore';
 import { AchievementToasts } from '@/widgets/AchievementToasts';
 import { AppNavigation } from '@/widgets/AppNavigation';
@@ -13,6 +14,7 @@ import { NotificationToasts } from '@/widgets/NotificationToasts';
 import { SplashScreen } from '@/widgets/SplashScreen';
 import { ThemeEffects } from '@/widgets/ThemeEffects';
 import { TitleBar } from '@/widgets/TitleBar';
+import { UpdateModal } from '@/widgets/UpdateModal';
 import { AchievementsPage } from '@/pages/AchievementsPage';
 import { FavoritesPage } from '@/pages/FavoritesPage';
 import { GalleryPage } from '@/pages/GalleryPage';
@@ -28,6 +30,7 @@ export const App: FC = () => {
   useRunningGamesSync();
   useProgressSync();
   useTypedSecrets();
+  useUpdateCheck();
 
   return (
     <HashRouter>
@@ -39,6 +42,7 @@ export const App: FC = () => {
         <AchievementToasts />
         <CaptureManager />
         <NotificationToasts />
+        <UpdateModal />
         <TitleBar />
         {hasProfiles ? (
           <div className="app-body">
