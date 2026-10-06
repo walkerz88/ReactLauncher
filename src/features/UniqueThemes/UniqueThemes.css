@@ -5,12 +5,17 @@
   font-size: 14px;
 }
 
-.unique-themes {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+.unique-themes__card {
+  padding: 0;
+  overflow: hidden;
 }
 
-.unique-themes__card {
-  white-space: normal;
+.unique-themes__card .theme-swatches {
+  padding: 0 10px;
+}
+
+.unique-themes__card .theme-picker__name {
+  padding: 0 10px 10px;
 }
 
 .unique-themes__preview {
@@ -18,7 +23,6 @@
   display: block;
   height: 90px;
   overflow: hidden;
-  border-radius: 6px;
 }
 
 /* Two small dots per preview (`::before`/`::after`) fall, rise, or float depending on the theme. */
@@ -33,7 +37,15 @@
 .unique-themes__card--embers .unique-themes__preview::before,
 .unique-themes__card--embers .unique-themes__preview::after,
 .unique-themes__card--fireflies .unique-themes__preview::before,
-.unique-themes__card--fireflies .unique-themes__preview::after {
+.unique-themes__card--fireflies .unique-themes__preview::after,
+.unique-themes__card--sakura .unique-themes__preview::before,
+.unique-themes__card--sakura .unique-themes__preview::after,
+.unique-themes__card--frost .unique-themes__preview::before,
+.unique-themes__card--frost .unique-themes__preview::after,
+.unique-themes__card--sunrise .unique-themes__preview::before,
+.unique-themes__card--sunrise .unique-themes__preview::after,
+.unique-themes__card--lavender .unique-themes__preview::before,
+.unique-themes__card--lavender .unique-themes__preview::after {
   content: '';
   position: absolute;
   top: -12px;
@@ -50,7 +62,11 @@
 .unique-themes__card--autumn .unique-themes__preview::after,
 .unique-themes__card--ocean .unique-themes__preview::after,
 .unique-themes__card--embers .unique-themes__preview::after,
-.unique-themes__card--fireflies .unique-themes__preview::after {
+.unique-themes__card--fireflies .unique-themes__preview::after,
+.unique-themes__card--sakura .unique-themes__preview::after,
+.unique-themes__card--frost .unique-themes__preview::after,
+.unique-themes__card--sunrise .unique-themes__preview::after,
+.unique-themes__card--lavender .unique-themes__preview::after {
   left: 68%;
   animation-delay: -1.6s;
 }
@@ -198,11 +214,57 @@
   animation: unique-firefly 3s ease-in-out infinite alternate;
 }
 
-.unique-themes__desc {
-  color: var(--color-text-muted);
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1.4;
+.unique-themes__card--sakura .unique-themes__preview {
+  background: linear-gradient(170deg, #ffe3ec, #fff1f5 50%, #fbd6e6);
+}
+
+.unique-themes__card--frost .unique-themes__preview {
+  background: linear-gradient(180deg, #d9ebff, #eef6ff 60%, #dcecfb);
+}
+
+.unique-themes__card--frost .unique-themes__preview::before,
+.unique-themes__card--frost .unique-themes__preview::after {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(120, 170, 230, 0.4);
+}
+
+.unique-themes__card--sunrise .unique-themes__preview {
+  background:
+    radial-gradient(ellipse at 30% -10%, rgba(255, 176, 90, 0.55), transparent 60%),
+    linear-gradient(180deg, #ffe6c7, #fff6e8);
+}
+
+.unique-themes__card--sunrise .unique-themes__preview::before,
+.unique-themes__card--sunrise .unique-themes__preview::after {
+  top: auto;
+  bottom: -12px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ffb347;
+  box-shadow: 0 0 6px 2px rgba(255, 179, 71, 0.5);
+  animation-name: unique-bubble-rise;
+}
+
+.unique-themes__card--lavender .unique-themes__preview {
+  background:
+    radial-gradient(ellipse at 25% 35%, rgba(160, 120, 255, 0.35), transparent 50%),
+    radial-gradient(ellipse at 75% 65%, rgba(255, 140, 200, 0.3), transparent 50%),
+    #f4efff;
+}
+
+.unique-themes__card--lavender .unique-themes__preview::before,
+.unique-themes__card--lavender .unique-themes__preview::after {
+  top: 40%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #9b7bff;
+  box-shadow: 0 0 8px 3px rgba(155, 123, 255, 0.5);
+  animation: unique-firefly 3s ease-in-out infinite alternate;
 }
 
 @keyframes unique-floor-scroll {
@@ -254,18 +316,6 @@
 
   to {
     transform: translate(18px, 110px) rotate(280deg);
-  }
-}
-
-@media (max-width: 720px) {
-  .unique-themes {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 520px) {
-  .unique-themes {
-    grid-template-columns: minmax(0, 1fr);
   }
 }
 

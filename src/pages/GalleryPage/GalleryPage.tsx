@@ -11,6 +11,9 @@ import { HomeTabs, type HomeTab } from '@/widgets/HomeTabs';
 
 import './GalleryPage.css';
 
+/** Survives the page unmounting, so "back" from a game returns to the tab the user came from. */
+let lastActiveTab: HomeTab = 'gallery';
+
 export const GalleryPage: FC = () => {
   const t = useTranslation();
   const apps = useContentStore((state) => state.apps);
@@ -28,7 +31,11 @@ export const GalleryPage: FC = () => {
   const readyApps = apps.filter(isReadyToLaunch);
   const hasReady = readyApps.length > 0;
 
-  const [tab, setTab] = useState<HomeTab>('gallery');
+  const [tab, setTab] = useState<HomeTab>(lastActiveTab);
+
+  useEffect(() => {
+    lastActiveTab = tab;
+  }, [tab]);
 
   useEffect(() => {
     if (status === 'idle') {

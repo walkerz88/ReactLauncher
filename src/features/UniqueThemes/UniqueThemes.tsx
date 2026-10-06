@@ -16,7 +16,7 @@ export const UniqueThemes: FC = () => {
     <div data-id="UniqueThemes">
       <p className="unique-themes__hint">{t('unique.hint')}</p>
 
-      <ul className="theme-picker unique-themes" role="radiogroup" aria-label={t('settings.uniqueThemes')}>
+      <ul className="theme-picker" role="radiogroup" aria-label={t('settings.uniqueThemes')}>
         {UNIQUE_THEMES.map((theme) => (
           <li key={theme.id} className="theme-picker__item">
             <button
@@ -30,7 +30,6 @@ export const UniqueThemes: FC = () => {
               <span className="unique-themes__preview" aria-hidden="true" />
               <ThemeSwatches theme={theme} />
               <span className="theme-picker__name">{theme.name}</span>
-              <span className="unique-themes__desc">{t(`unique.${theme.id}.desc`)}</span>
             </button>
           </li>
         ))}

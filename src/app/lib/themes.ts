@@ -19,7 +19,11 @@ export type ThemeEffect =
   | 'nebula'
   | 'ocean'
   | 'embers'
-  | 'fireflies';
+  | 'fireflies'
+  | 'sakura'
+  | 'frost'
+  | 'sunrise'
+  | 'lavender';
 
 export interface ThemeDefinition {
   id: string;
@@ -122,6 +126,34 @@ export const UNIQUE_THEMES: ThemeDefinition[] = [
     mode: 'dark',
     colors: { bg: '#06100d', surface: '#0f1f19', text: '#e3f5c8', accent: '#c4f542' },
     effect: 'fireflies',
+  },
+  {
+    id: 'unique-sakura',
+    name: 'Sakura',
+    mode: 'light',
+    colors: { bg: '#fff1f5', surface: '#ffffff', text: '#3a1f2b', accent: '#c2255c' },
+    effect: 'sakura',
+  },
+  {
+    id: 'unique-frost',
+    name: 'Frost',
+    mode: 'light',
+    colors: { bg: '#eef6ff', surface: '#ffffff', text: '#12263a', accent: '#1f6fcf' },
+    effect: 'frost',
+  },
+  {
+    id: 'unique-sunrise',
+    name: 'Sunrise',
+    mode: 'light',
+    colors: { bg: '#fff6e8', surface: '#ffffff', text: '#3b2a14', accent: '#b34a06' },
+    effect: 'sunrise',
+  },
+  {
+    id: 'unique-lavender',
+    name: 'Lavender',
+    mode: 'light',
+    colors: { bg: '#f4efff', surface: '#ffffff', text: '#2a1f45', accent: '#6a3df0' },
+    effect: 'lavender',
   },
 ];
 

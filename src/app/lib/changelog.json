@@ -466,5 +466,30 @@
         "en": "Settings switches toggle only from the switch and its label, with even spacing"
       }
     ]
+  },
+  {
+    "version": "1.11.0",
+    "title": {
+      "ru": "Новые уникальные темы и точнее проверка библиотеки",
+      "en": "New unique themes and a more accurate library check"
+    },
+    "changes": [
+      {
+        "ru": "Новые уникальные темы: Sakura, Frost, Sunrise и Lavender, обновлены эффекты и оформление существующих",
+        "en": "New unique themes: Sakura, Frost, Sunrise and Lavender, with refreshed effects and styling for the existing ones"
+      },
+      {
+        "ru": "Проверка библиотеки: русский текст с английскими названиями больше не считается перепутанным языком",
+        "en": "Library health: Russian text with English names is no longer flagged as a swapped language"
+      },
+      {
+        "ru": "Для жанра «Программа» трейлер, скриншоты и рейтинг больше не считаются недочётами",
+        "en": "For the Application genre, a missing trailer, screenshots and rating are no longer reported as issues"
+      },
+      {
+        "ru": "Кнопка «Назад» в игре возвращает на ту вкладку главной страницы, откуда игру открыли",
+        "en": "Back from a game returns to the home tab it was opened from"
+      }
+    ]
   }
 ]

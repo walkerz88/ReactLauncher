@@ -56,6 +56,12 @@ export const SettingsPage: FC = () => {
       {tab === 'themes' ? (
         <>
           <section className="settings-section">
+            <h2 className="settings-section__title">{t('settings.welcome')}</h2>
+            <WelcomeAnimationToggle />
+            <WelcomeAnimationStyle />
+          </section>
+
+          <section className="settings-section">
             <h2 className="settings-section__title">{t('settings.theme')}</h2>
             <ThemePicker />
           </section>
@@ -63,12 +69,6 @@ export const SettingsPage: FC = () => {
           <section className="settings-section">
             <h2 className="settings-section__title">{t('settings.uniqueThemes')}</h2>
             <UniqueThemes />
-          </section>
-
-          <section className="settings-section">
-            <h2 className="settings-section__title">{t('settings.appearance')}</h2>
-            <WelcomeAnimationToggle />
-            <WelcomeAnimationStyle />
           </section>
         </>
       ) : tab === 'profiles' ? (

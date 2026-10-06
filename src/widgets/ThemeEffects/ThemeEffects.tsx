@@ -16,6 +16,9 @@ const PARTICLE_COUNT: Partial<Record<ThemeEffect, number>> = {
   autumn: 16,
   embers: 30,
   ocean: 20,
+  sakura: 18,
+  frost: MAX_PARTICLES,
+  sunrise: 14,
 };
 
 /** How many twinkling dots (stars, sparkles, fireflies) each theme uses. */
@@ -24,6 +27,7 @@ const SPARKLE_COUNT: Partial<Record<ThemeEffect, number>> = {
   aurora: 10,
   nebula: MAX_SPARKLES,
   fireflies: 16,
+  lavender: 14,
 };
 
 /** Stable pseudo-random 0..1 per index, so the layout doesn't jump on re-render. */
@@ -89,13 +93,13 @@ export const ThemeEffects: FC = () => {
           <div className="theme-fx__aurora theme-fx__aurora--alt" />
         </>
       ) : null}
-      {effect === 'nebula' ? (
+      {effect === 'nebula' || effect === 'lavender' ? (
         <>
           <div className="theme-fx__nebula" />
           <div className="theme-fx__nebula theme-fx__nebula--alt" />
         </>
       ) : null}
-      {effect === 'ocean' ? (
+      {effect === 'ocean' || effect === 'sunrise' ? (
         <>
           <div className="theme-fx__glow" />
           <div className="theme-fx__glow theme-fx__glow--alt" />

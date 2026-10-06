@@ -23,6 +23,12 @@ const CRITICAL_ISSUES: readonly HealthIssueKey[] = ['noCoverHorizontal', 'noCove
  * Latin brand-name words inside an otherwise-Russian sentence) — skip rather than guess. */
 const MIN_LETTERS_FOR_LANG_CHECK = 8;
 
+/** Russian text is often full of English names (paths, DLC titles), so it only counts as swapped when
+ * Cyrillic makes up less than this share of its letters. */
+const MIN_CYRILLIC_SHARE_FOR_RU = 0.3;
+
+const isProgram = (app: ContentApp): boolean => app.genre === 'genre.app';
+
 const countMatches = (text: string, pattern: RegExp): number => (text.match(pattern)?.length ?? 0);
 
 /** True if `text` reads as the *other* language than `expected` — the dominant script is the wrong
@@ -35,7 +41,11 @@ const looksLikeWrongLanguage = (text: string, expected: 'ru' | 'en'): boolean =>
     return false;
   }
 
-  return expected === 'ru' ? latin > cyrillic : cyrillic > latin;
+  if (expected === 'ru') {
+    return cyrillic / (cyrillic + latin) < MIN_CYRILLIC_SHARE_FOR_RU;
+  }
+
+  return cyrillic > latin;
 };
 
 const hasLangMismatch = (text: LocalizedText): boolean =>
@@ -63,11 +73,11 @@ export const getHealthIssues = (app: ContentApp): HealthIssueKey[] => {
     issues.push('noCoverVertical');
   }
 
-  if (!app.trailer) {
+  if (!app.trailer && !isProgram(app)) {
     issues.push('noTrailer');
   }
 
-  if (app.screenshots.length === 0) {
+  if (app.screenshots.length === 0 && !isProgram(app)) {
     issues.push('noScreenshots');
   }
 
@@ -99,7 +109,7 @@ export const getHealthIssues = (app: ContentApp): HealthIssueKey[] => {
     issues.push('noGenre');
   }
 
-  if (app.rating == null) {
+  if (app.rating == null && !isProgram(app)) {
     issues.push('noRating');
   }
 
@@ -124,8 +134,16 @@ interface HealthFieldColumn {
 export const HEALTH_FIELD_COLUMNS: readonly HealthFieldColumn[] = [
   { labelKey: 'health.column.coverHorizontal', checks: [['noCoverHorizontal', 'missing']] },
   { labelKey: 'health.column.coverVertical', checks: [['noCoverVertical', 'missing']] },
-  { labelKey: 'health.column.trailer', checks: [['noTrailer', 'missing']] },
-  { labelKey: 'health.column.screenshots', checks: [['noScreenshots', 'missing']] },
+  {
+    labelKey: 'health.column.trailer',
+    checks: [['noTrailer', 'missing']],
+    isEmpty: (app) => isProgram(app) && !app.trailer,
+  },
+  {
+    labelKey: 'health.column.screenshots',
+    checks: [['noScreenshots', 'missing']],
+    isEmpty: (app) => isProgram(app) && app.screenshots.length === 0,
+  },
   {
     labelKey: 'health.column.description',
     checks: [
@@ -152,7 +170,11 @@ export const HEALTH_FIELD_COLUMNS: readonly HealthFieldColumn[] = [
   },
   { labelKey: 'health.column.facts', checks: [['noFacts', 'missing']] },
   { labelKey: 'health.column.genre', checks: [['noGenre', 'missing']] },
-  { labelKey: 'health.column.rating', checks: [['noRating', 'missing']] },
+  {
+    labelKey: 'health.column.rating',
+    checks: [['noRating', 'missing']],
+    isEmpty: (app) => isProgram(app) && app.rating == null,
+  },
 ];
 
 /** The cell's status plus the issue behind it (`null` when fine or empty) — for its icon and tooltip. */
