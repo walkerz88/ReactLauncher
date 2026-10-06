@@ -529,5 +529,18 @@
         "en": "The update notification no longer appears until there is an active profile"
       }
     ]
+  },
+  {
+    "version": "1.12.2",
+    "title": {
+      "ru": "Тема Cyberpunk",
+      "en": "Cyberpunk theme"
+    },
+    "changes": [
+      {
+        "ru": "В теме Cyberpunk у боковой панели и верхнего меню убрано свечение, рамки стали фиолетовыми",
+        "en": "In the Cyberpunk theme the sidebar and title bar no longer glow and their borders are now purple"
+      }
+    ]
   }
 ]
