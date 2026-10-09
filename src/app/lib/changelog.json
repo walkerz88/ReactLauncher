@@ -559,5 +559,18 @@
         "en": "The library health tab no longer shows the \"Everything looks good\" message when there are no issues"
       }
     ]
+  },
+  {
+    "version": "1.12.4",
+    "title": {
+      "ru": "Порядок кнопок на странице игры",
+      "en": "Game page button order"
+    },
+    "changes": [
+      {
+        "ru": "Кнопка «Внешние настройки» теперь стоит перед кнопкой «Инструкция»",
+        "en": "The \"External settings\" button now comes before the \"Instructions\" button"
+      }
+    ]
   }
 ]

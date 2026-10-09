@@ -268,6 +268,17 @@ export const PreviewPage: FC = () => {
           ) : null,
         )}
 
+        {app.hasSettings ? (
+          <button
+            type="button"
+            className="btn"
+            onClick={() => void window.electronAPI?.content?.openSettings(app.id)}
+            data-gamepad-focusable
+          >
+            {t('app.externalSettings')}
+          </button>
+        ) : null}
+
         {instructions ? (
           <button
             type="button"
@@ -277,17 +288,6 @@ export const PreviewPage: FC = () => {
           >
             <BookOpen size={18} />
             {t('app.instructions')}
-          </button>
-        ) : null}
-
-        {app.hasSettings ? (
-          <button
-            type="button"
-            className="btn"
-            onClick={() => void window.electronAPI?.content?.openSettings(app.id)}
-            data-gamepad-focusable
-          >
-            {t('app.externalSettings')}
           </button>
         ) : null}
 
