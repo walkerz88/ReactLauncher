@@ -585,5 +585,18 @@
         "en": "Added the \"Launch in fullscreen\" and \"Launch at system startup\" switches to the settings"
       }
     ]
+  },
+  {
+    "version": "1.12.6",
+    "title": {
+      "ru": "Поиск с неверной раскладкой",
+      "en": "Search with wrong keyboard layout"
+    },
+    "changes": [
+      {
+        "ru": "Поиск по играм находит результат, даже если забыли переключить раскладку (Ылнкшь → Skyrim)",
+        "en": "Game search finds results even if you forgot to switch the keyboard layout (Ылнкшь → Skyrim)"
+      }
+    ]
   }
 ]

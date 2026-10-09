@@ -1,6 +1,7 @@
 import { useMemo, useState, type FC } from 'react';
 
 import { groupByGenre, groupBySeries, OTHER_KEY } from '@/app/lib/groupApps';
+import { matchesSearch } from '@/app/lib/searchMatch';
 import { sortApps } from '@/app/lib/sortApps';
 import { getGalleryViewEntry, useGalleryViewStore } from '@/app/store/galleryViewStore';
 import { usePlaytimeStore } from '@/app/store/playtimeStore';
@@ -81,9 +82,8 @@ export const AppCollection: FC<AppCollectionProps> = ({ apps, title, contextKey 
     setSearchQuery('');
   };
 
-  const normalizedQuery = searchQuery.trim().toLowerCase();
   const filteredApps = sortApps(apps, sortMode, playtime).filter((app) => {
-    if (normalizedQuery && !app.name.toLowerCase().includes(normalizedQuery)) {
+    if (!matchesSearch(app.name, searchQuery)) {
       return false;
     }
     if (genreFilter && app.genre !== genreFilter) {
