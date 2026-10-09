@@ -406,6 +406,13 @@ export type UpdateInstallResult =
   | { status: 'downloaded'; path: string }
   | { status: 'error' };
 
+export interface LaunchSettings {
+  /** Start the launcher window in fullscreen. */
+  launchFullscreen: boolean;
+  /** Start the launcher when the user signs in to the system. */
+  launchAtLogin: boolean;
+}
+
 export interface ElectronAPI {
   /** Quit the whole application. */
   quit: () => Promise<void>;
@@ -429,6 +436,11 @@ export interface ElectronAPI {
   };
   profiles: ProfilesAPI;
   progress: ProgressAPI;
+  settings: {
+    get: () => Promise<LaunchSettings>;
+    /** Applies the given fields and resolves to the full settings after the change. */
+    set: (patch: Partial<LaunchSettings>) => Promise<LaunchSettings>;
+  };
   steam: {
     /** Search the Steam store by title (empty on failure or no match). */
     search: (term: string) => Promise<SteamSearchResult[]>;

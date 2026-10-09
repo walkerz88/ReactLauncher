@@ -6,6 +6,7 @@ import { AboutSection } from '@/features/AboutSection';
 import { ThemePicker } from '@/features/ThemePicker';
 import { AchievementSoundToggle } from '@/features/AchievementSoundToggle';
 import { CardsSettings } from '@/features/CardsSettings';
+import { LaunchSettings } from '@/features/LaunchSettings';
 import { LanguageToggle } from '@/features/LanguageToggle';
 import { LibraryHealth } from '@/features/LibraryHealth';
 import { FavoritesSectionToggle } from '@/features/FavoritesSectionToggle';
@@ -79,6 +80,11 @@ export const SettingsPage: FC = () => {
         <AboutSection />
       ) : (
         <>
+          <section className="settings-section">
+            <h2 className="settings-section__title">{t('settings.launch')}</h2>
+            <LaunchSettings />
+          </section>
+
           <section className="settings-section">
             <h2 className="settings-section__title">{t('settings.language')}</h2>
             <LanguageToggle />

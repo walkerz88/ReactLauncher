@@ -27,6 +27,10 @@ const electronAPI = {
     },
     close: (): Promise<void> => ipcRenderer.invoke('window:close'),
   },
+  settings: {
+    get: () => ipcRenderer.invoke('settings:get'),
+    set: (patch: unknown) => ipcRenderer.invoke('settings:set', patch),
+  },
   steam: {
     search: (term: string) => ipcRenderer.invoke('steam:search', term),
     info: (steamAppId: string) => ipcRenderer.invoke('steam:info', steamAppId),

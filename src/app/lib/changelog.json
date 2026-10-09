@@ -572,5 +572,18 @@
         "en": "The \"External settings\" button now comes before the \"Instructions\" button"
       }
     ]
+  },
+  {
+    "version": "1.12.5",
+    "title": {
+      "ru": "Настройки запуска",
+      "en": "Launch settings"
+    },
+    "changes": [
+      {
+        "ru": "В настройках появились переключатели «Запуск в полноэкранном режиме» и «Запуск при старте системы»",
+        "en": "Added the \"Launch in fullscreen\" and \"Launch at system startup\" switches to the settings"
+      }
+    ]
   }
 ]

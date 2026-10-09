@@ -3,6 +3,7 @@ import * as path from 'path';
 
 import { app, BrowserWindow, ipcMain, Menu, shell } from 'electron';
 
+import { getLaunchFullscreen, initAppSettings } from './appSettings';
 import { initCapture } from './capture';
 import { initContent } from './content';
 import { initProfiles } from './profiles';
@@ -43,7 +44,7 @@ function createWindow(): void {
     height: 800,
     minWidth: 800,
     minHeight: 600,
-    fullscreen: true,
+    fullscreen: getLaunchFullscreen(),
     frame: false,
     autoHideMenuBar: true,
     // Matches the dark theme's `--color-bg` so the window doesn't flash white
@@ -107,6 +108,8 @@ function createWindow(): void {
 }
 
 app.whenReady().then(() => {
+  initAppSettings();
+
   const profileFiles = initProfiles();
 
   if (profileFiles) {
