@@ -6,9 +6,10 @@ import { app, ipcMain } from 'electron';
 interface AppSettings {
   launchFullscreen: boolean;
   launchAtLogin: boolean;
+  autoCheckUpdates: boolean;
 }
 
-const DEFAULTS: AppSettings = { launchFullscreen: true, launchAtLogin: false };
+const DEFAULTS: AppSettings = { launchFullscreen: true, launchAtLogin: false, autoCheckUpdates: true };
 
 /**
  * Machine-level launch settings kept next to the app's user data, not in a profile: the window is created
@@ -26,6 +27,8 @@ function loadSettings(): AppSettings {
       launchFullscreen:
         typeof parsed.launchFullscreen === 'boolean' ? parsed.launchFullscreen : DEFAULTS.launchFullscreen,
       launchAtLogin: typeof parsed.launchAtLogin === 'boolean' ? parsed.launchAtLogin : DEFAULTS.launchAtLogin,
+      autoCheckUpdates:
+        typeof parsed.autoCheckUpdates === 'boolean' ? parsed.autoCheckUpdates : DEFAULTS.autoCheckUpdates,
     };
   } catch {
     return { ...DEFAULTS };
@@ -77,6 +80,9 @@ export function initAppSettings(): void {
     }
     if (typeof next.launchAtLogin === 'boolean') {
       settings.launchAtLogin = next.launchAtLogin;
+    }
+    if (typeof next.autoCheckUpdates === 'boolean') {
+      settings.autoCheckUpdates = next.autoCheckUpdates;
     }
 
     saveSettings();

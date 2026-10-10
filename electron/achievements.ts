@@ -137,7 +137,7 @@ export const FEATURE_SPECIALS: Record<string, string> = {
   'library-100': 'libraryComplete',
 };
 
-export const PRESET_THEME_IDS: readonly string[] = ['dark', 'light', 'amoled', 'midnight', 'dracula', 'nord', 'forest', 'crimson', 'cyberpunk'];
+export const PRESET_THEME_IDS: readonly string[] = ['dark', 'light', 'amoled', 'midnight', 'dracula', 'nord', 'forest', 'crimson', 'cyberpunk', 'kish'];
 
 export const UNIQUE_THEME_IDS: readonly string[] = [
   'unique-cyberpunk',
@@ -150,6 +150,7 @@ export const UNIQUE_THEME_IDS: readonly string[] = [
   'unique-ocean',
   'unique-embers',
   'unique-fireflies',
+  'unique-kish',
 ];
 
 const FAMILIES: Array<{ metric: Metric; steps: Array<[target: number, tier: Tier, xp?: number]>; group?: Group; hidden?: boolean }> = [

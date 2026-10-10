@@ -48,6 +48,11 @@ export const LaunchSettings: FC = () => {
         checked={settings.launchAtLogin}
         onChange={(launchAtLogin) => void update({ launchAtLogin })}
       />
+      <SwitchField
+        label={t('settings.autoCheckUpdates')}
+        checked={settings.autoCheckUpdates}
+        onChange={(autoCheckUpdates) => void update({ autoCheckUpdates })}
+      />
     </div>
   );
 };

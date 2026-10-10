@@ -598,5 +598,26 @@
         "en": "Game search finds results even if you forgot to switch the keyboard layout (Ылнкшь → Skyrim)"
       }
     ]
+  },
+  {
+    "version": "1.12.7",
+    "title": {
+      "ru": "Тема «Король и Шут»",
+      "en": "King and Jester theme"
+    },
+    "changes": [
+      {
+        "ru": "Новая тема «Король и Шут» — обычная и уникальная (с летучими мышами, искрами и отсветом свечей)",
+        "en": "New \"King and Jester\" theme — regular and unique (with bats, sparks and candlelight)"
+      },
+      {
+        "ru": "Выбор языка перенесён в самый верх настроек",
+        "en": "The language picker moved to the top of the settings"
+      },
+      {
+        "ru": "Появился переключатель «Проверять обновления автоматически»",
+        "en": "Added the \"Check for updates automatically\" switch"
+      }
+    ]
   }
 ]

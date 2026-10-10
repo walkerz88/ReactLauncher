@@ -81,13 +81,13 @@ export const SettingsPage: FC = () => {
       ) : (
         <>
           <section className="settings-section">
-            <h2 className="settings-section__title">{t('settings.launch')}</h2>
-            <LaunchSettings />
+            <h2 className="settings-section__title">{t('settings.language')}</h2>
+            <LanguageToggle />
           </section>
 
           <section className="settings-section">
-            <h2 className="settings-section__title">{t('settings.language')}</h2>
-            <LanguageToggle />
+            <h2 className="settings-section__title">{t('settings.launch')}</h2>
+            <LaunchSettings />
           </section>
 
           <section className="settings-section">

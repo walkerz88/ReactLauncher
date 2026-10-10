@@ -7,7 +7,7 @@ import { useUpdateStore } from '@/app/store/updateStore';
 
 const UPDATE_TOAST_LIFETIME_MS = 15000;
 
-/** Checks for a new version once per launch and shows a toast with Close / Details buttons. Waits for an
+/** Checks for a new version once per launch (unless turned off in the settings) and shows a toast with Close / Details buttons. Waits for an
  * active profile (none exists until the first one is created). Call once. */
 export const useUpdateCheck = (): void => {
   const t = useTranslation();
@@ -25,6 +25,16 @@ export const useUpdateCheck = (): void => {
     checkedRef.current = true;
 
     const run = async () => {
+      try {
+        const settings = await window.electronAPI?.settings.get();
+
+        if (settings && !settings.autoCheckUpdates) {
+          return;
+        }
+      } catch (err) {
+        console.error('Loading the update settings failed:', err);
+      }
+
       const store = useUpdateStore.getState();
       const status = await store.check();
       const { update, openModal } = useUpdateStore.getState();

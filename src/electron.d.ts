@@ -411,6 +411,8 @@ export interface LaunchSettings {
   launchFullscreen: boolean;
   /** Start the launcher when the user signs in to the system. */
   launchAtLogin: boolean;
+  /** Check for a new version on every launch. */
+  autoCheckUpdates: boolean;
 }
 
 export interface ElectronAPI {
