@@ -20,6 +20,7 @@ export const AppNavigation: FC = () => {
   const isFullscreen = useFullscreenState();
   const hasFavorites = useFavoritesStore((state) => state.ids.length > 0);
   const favoritesEnabled = useSectionsStore((state) => state.favoritesEnabled);
+  const addGameEnabled = useSectionsStore((state) => state.addGameEnabled);
   const isRescanning = useContentStore((state) => state.status === 'loading');
   const rescan = useContentStore((state) => state.loadApps);
 
@@ -73,12 +74,12 @@ export const AppNavigation: FC = () => {
         </NavLink>
       </Tooltip>
 
-      <AddGameButton className="app-navigation__item--push" />
+      {addGameEnabled ? <AddGameButton className="app-navigation__item--push" /> : null}
 
       <Tooltip label={t('nav.rescan')} placement="right">
         <button
           type="button"
-          className="app-navigation__item"
+          className={['app-navigation__item', !addGameEnabled && 'app-navigation__item--push'].filter(Boolean).join(' ')}
           onClick={() => void handleRescan()}
           disabled={isRescanning}
           aria-label={t('nav.rescan')}

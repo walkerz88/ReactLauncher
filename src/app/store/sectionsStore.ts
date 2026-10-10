@@ -8,10 +8,12 @@ interface SectionsState {
   readyEnabled: boolean;
   recentEnabled: boolean;
   favoritesEnabled: boolean;
+  addGameEnabled: boolean;
   setLuckyEnabled: (enabled: boolean) => void;
   setReadyEnabled: (enabled: boolean) => void;
   setRecentEnabled: (enabled: boolean) => void;
   setFavoritesEnabled: (enabled: boolean) => void;
+  setAddGameEnabled: (enabled: boolean) => void;
 }
 
 /** Persisted visibility of optional app sections (sidebar entries + their routes). */
@@ -22,10 +24,12 @@ export const useSectionsStore = create<SectionsState>()(
       readyEnabled: true,
       recentEnabled: true,
       favoritesEnabled: true,
+      addGameEnabled: true,
       setLuckyEnabled: (luckyEnabled) => set({ luckyEnabled }),
       setReadyEnabled: (readyEnabled) => set({ readyEnabled }),
       setRecentEnabled: (recentEnabled) => set({ recentEnabled }),
       setFavoritesEnabled: (favoritesEnabled) => set({ favoritesEnabled }),
+      setAddGameEnabled: (addGameEnabled) => set({ addGameEnabled }),
     }),
     {
       name: 'sections',
@@ -41,6 +45,8 @@ export const useSectionsStore = create<SectionsState>()(
           recentEnabled: typeof stored.recentEnabled === 'boolean' ? stored.recentEnabled : current.recentEnabled,
           favoritesEnabled:
             typeof stored.favoritesEnabled === 'boolean' ? stored.favoritesEnabled : current.favoritesEnabled,
+          addGameEnabled:
+            typeof stored.addGameEnabled === 'boolean' ? stored.addGameEnabled : current.addGameEnabled,
         };
       },
     },

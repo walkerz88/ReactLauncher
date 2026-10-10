@@ -632,5 +632,18 @@
         "en": "The \"King and Jester\" themes (regular and unique) were removed; if one was selected, the default theme is used"
       }
     ]
+  },
+  {
+    "version": "1.12.9",
+    "title": {
+      "ru": "Видимость кнопки «Добавить игру»",
+      "en": "\"Add a game\" visibility"
+    },
+    "changes": [
+      {
+        "ru": "В настройках, в блоке «Разделы», появился переключатель «Добавить игру» — им можно скрыть кнопку из боковой панели",
+        "en": "Added an \"Add a game\" switch to the Sections block in the settings — it hides the button from the sidebar"
+      }
+    ]
   }
 ]

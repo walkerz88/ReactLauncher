@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from '@/app/i18n';
 import { AboutSection } from '@/features/AboutSection';
 import { ThemePicker } from '@/features/ThemePicker';
+import { AddGameSectionToggle } from '@/features/AddGameSectionToggle';
 import { AchievementSoundToggle } from '@/features/AchievementSoundToggle';
 import { CardsSettings } from '@/features/CardsSettings';
 import { LaunchSettings } from '@/features/LaunchSettings';
@@ -101,6 +102,7 @@ export const SettingsPage: FC = () => {
             <ReadySectionToggle />
             <LuckySectionToggle />
             <FavoritesSectionToggle />
+            <AddGameSectionToggle />
           </section>
 
           <section className="settings-section">
