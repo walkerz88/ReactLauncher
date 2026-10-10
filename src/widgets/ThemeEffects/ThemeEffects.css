@@ -456,52 +456,6 @@ html[data-fx='lavender'] .theme-fx__sparkle {
   filter: drop-shadow(0 0 4px rgba(155, 123, 255, 0.6));
 }
 
-/* ---------- King and Jester ---------- */
-
-html[data-fx='kish'] .app-background {
-  background-image:
-    radial-gradient(ellipse at 50% 120%, rgba(214, 58, 47, 0.38), transparent 60%),
-    radial-gradient(ellipse at 50% -20%, rgba(120, 20, 20, 0.28), transparent 55%),
-    linear-gradient(180deg, #0a0605, #0b0807 60%, #1a0b09);
-}
-
-html[data-fx='kish'] .theme-fx__heat {
-  background: linear-gradient(0deg, rgba(214, 58, 47, 0.22), transparent);
-  animation-duration: 2.4s;
-}
-
-html[data-fx='kish'] .theme-fx__petal {
-  top: 100%;
-  width: calc(var(--size) * 0.35);
-  height: calc(var(--size) * 0.35);
-  border-radius: 50%;
-  background: radial-gradient(circle, #ffd9a0, #d63a2f 70%);
-  box-shadow: 0 0 8px 2px rgba(214, 58, 47, 0.65);
-  opacity: 0.85;
-  animation-name: theme-fx-rise;
-  animation-duration: calc(var(--duration) * 0.7);
-}
-
-.theme-fx__bat {
-  position: absolute;
-  top: var(--y);
-  left: 0;
-  width: 34px;
-  height: 14px;
-  background: #050303;
-  clip-path: polygon(0 0, 22% 30%, 38% 10%, 50% 60%, 62% 10%, 78% 30%, 100% 0, 88% 70%, 64% 56%, 50% 100%, 36% 56%, 12% 70%);
-  filter: drop-shadow(0 0 3px rgba(214, 58, 47, 0.55));
-  opacity: 0.85;
-  will-change: transform;
-  animation: theme-fx-bat var(--duration) linear var(--delay) infinite;
-}
-
-html[data-fx='kish'] .home-section__title {
-  font-family: Georgia, 'Times New Roman', serif;
-  letter-spacing: 0.04em;
-  text-shadow: 0 0 14px rgba(214, 58, 47, 0.55);
-}
-
 /* ---------- Glow on the hovered card for every unique theme except Cyberpunk and Anime Night (own colors above) ---------- */
 
 html[data-fx='winter'] .app-card__cover:hover,
@@ -515,8 +469,7 @@ html[data-fx='fireflies'] .app-card__cover:hover,
 html[data-fx='sakura'] .app-card__cover:hover,
 html[data-fx='frost'] .app-card__cover:hover,
 html[data-fx='sunrise'] .app-card__cover:hover,
-html[data-fx='lavender'] .app-card__cover:hover,
-html[data-fx='kish'] .app-card__cover:hover {
+html[data-fx='lavender'] .app-card__cover:hover {
   border-color: var(--color-accent);
   box-shadow: 0 0 0 3px var(--color-accent-subtle), 0 8px 28px var(--color-accent-subtle);
 }
@@ -546,28 +499,6 @@ html[data-fx='kish'] .app-card__cover:hover {
   100% {
     transform: translateX(6%) scale(1.12);
     opacity: 0.8;
-  }
-}
-
-@keyframes theme-fx-bat {
-  0% {
-    transform: translate(-60px, 0) scale(var(--scale));
-  }
-
-  25% {
-    transform: translate(28vw, -24px) scale(var(--scale), calc(var(--scale) * 0.55));
-  }
-
-  50% {
-    transform: translate(55vw, 10px) scale(var(--scale));
-  }
-
-  75% {
-    transform: translate(82vw, -20px) scale(var(--scale), calc(var(--scale) * 0.55));
-  }
-
-  100% {
-    transform: translate(calc(100vw + 60px), 0) scale(var(--scale));
   }
 }
 

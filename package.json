@@ -1,6 +1,6 @@
 {
   "name": "react-launcher",
-  "version": "1.12.7",
+  "version": "1.12.8",
   "description": "React Launcher - Windows desktop game launcher (Electron + React + TypeScript) with a library, Steam auto-fill, profiles, achievements and save backups",
   "main": "public/electron.js",
   "homepage": "./",

@@ -19,14 +19,7 @@ const PARTICLE_COUNT: Partial<Record<ThemeEffect, number>> = {
   sakura: 18,
   frost: MAX_PARTICLES,
   sunrise: 14,
-  kish: 18,
 };
-
-const BATS: CSSProperties[] = [
-  { '--y': '12%', '--duration': '19s', '--delay': '-4s', '--scale': '1' } as CSSProperties,
-  { '--y': '30%', '--duration': '26s', '--delay': '-15s', '--scale': '0.7' } as CSSProperties,
-  { '--y': '50%', '--duration': '22s', '--delay': '-9s', '--scale': '0.85' } as CSSProperties,
-];
 
 /** How many twinkling dots (stars, sparkles, fireflies) each theme uses. */
 const SPARKLE_COUNT: Partial<Record<ThemeEffect, number>> = {
@@ -112,10 +105,7 @@ export const ThemeEffects: FC = () => {
           <div className="theme-fx__glow theme-fx__glow--alt" />
         </>
       ) : null}
-      {effect === 'embers' || effect === 'kish' ? <div className="theme-fx__heat" /> : null}
-      {effect === 'kish'
-        ? BATS.map((style, index) => <span key={`bat-${index}`} className="theme-fx__bat" style={style} />)
-        : null}
+      {effect === 'embers' ? <div className="theme-fx__heat" /> : null}
       {SPARKLES.slice(0, SPARKLE_COUNT[effect] ?? 0).map((style, index) => (
         <span
           key={`sparkle-${index}`}

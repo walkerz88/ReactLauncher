@@ -23,8 +23,7 @@ export type ThemeEffect =
   | 'sakura'
   | 'frost'
   | 'sunrise'
-  | 'lavender'
-  | 'kish';
+  | 'lavender';
 
 export interface ThemeDefinition {
   id: string;
@@ -54,7 +53,6 @@ export const PRESET_THEMES: ThemeDefinition[] = [
   { id: 'forest', name: 'Forest', mode: 'dark', colors: { bg: '#0f1a14', surface: '#16261d', text: '#dcefe3', accent: '#4ade80' } },
   { id: 'crimson', name: 'Crimson', mode: 'dark', colors: { bg: '#140b0d', surface: '#221317', text: '#f3e4e6', accent: '#f43f5e' } },
   { id: 'cyberpunk', name: 'Cyberpunk', mode: 'dark', colors: { bg: '#0d0221', surface: '#1a0b3b', text: '#f0e6ff', accent: '#ff2a6d' } },
-  { id: 'kish', name: 'Король и Шут', mode: 'dark', colors: { bg: '#0f0c0b', surface: '#1c1514', text: '#efe3d0', accent: '#c9342b' } },
 ];
 
 /** Themes that differ from the presets not only in colors but in animation and effects. */
@@ -156,13 +154,6 @@ export const UNIQUE_THEMES: ThemeDefinition[] = [
     mode: 'light',
     colors: { bg: '#f4efff', surface: '#ffffff', text: '#2a1f45', accent: '#6a3df0' },
     effect: 'lavender',
-  },
-  {
-    id: 'unique-kish',
-    name: 'Король и Шут',
-    mode: 'dark',
-    colors: { bg: '#0b0807', surface: '#1a1211', text: '#f0e2cb', accent: '#d63a2f' },
-    effect: 'kish',
   },
 ];
 

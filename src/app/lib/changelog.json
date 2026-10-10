@@ -619,5 +619,18 @@
         "en": "Added the \"Check for updates automatically\" switch"
       }
     ]
+  },
+  {
+    "version": "1.12.8",
+    "title": {
+      "ru": "Тема «Король и Шут» удалена",
+      "en": "King and Jester theme removed"
+    },
+    "changes": [
+      {
+        "ru": "Темы «Король и Шут» (обычная и уникальная) убраны; если она была выбрана, включится тема по умолчанию",
+        "en": "The \"King and Jester\" themes (regular and unique) were removed; if one was selected, the default theme is used"
+      }
+    ]
   }
 ]
