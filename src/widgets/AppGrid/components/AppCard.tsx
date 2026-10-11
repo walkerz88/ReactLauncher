@@ -1,14 +1,10 @@
 import { useEffect, useRef, useState, type FC, type PointerEvent, type SyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { TriangleAlert } from 'lucide-react';
 
-import { useTranslation } from '@/app/i18n';
-import { getHealthIssues, hasCriticalHealthIssue } from '@/app/lib/libraryHealth';
 import { reportProgress } from '@/app/lib/progressEvents';
 import { useCardsStore } from '@/app/store/cardsStore';
 import type { ContentApp } from '@/electron';
 import { RatingBadge } from '@/shared/RatingBadge';
-import { Tooltip } from '@/shared/Tooltip';
 
 export interface AppCardProps {
   app: ContentApp;
@@ -26,7 +22,6 @@ const prefersReducedMotion = (): boolean => window.matchMedia('(prefers-reduced-
 
 /** Gallery card: the cover tilts toward the cursor with a glare, and the trailer plays after a short hover. */
 export const AppCard: FC<AppCardProps> = ({ app }) => {
-  const t = useTranslation();
   const coverRef = useRef<HTMLSpanElement>(null);
   const timerRef = useRef<number>();
   const viewTimerRef = useRef<number>();
@@ -37,13 +32,6 @@ export const AppCard: FC<AppCardProps> = ({ app }) => {
   const [isTrailerPlaying, setIsTrailerPlaying] = useState(false);
 
   const cover = app.coverVertical ?? app.coverHorizontal;
-  const criticalHealth = hasCriticalHealthIssue(app);
-  // The badge is cover-only (a missing trailer isn't shown here) — and both covers missing reads as
-  // one "no covers" message instead of joining the two separate per-orientation warnings.
-  const coverIssues = getHealthIssues(app).filter(
-    (issue): issue is 'noCoverHorizontal' | 'noCoverVertical' => issue === 'noCoverHorizontal' || issue === 'noCoverVertical',
-  );
-  const healthWarning = coverIssues.length === 2 ? t('health.noCovers') : coverIssues.map((issue) => t(`health.${issue}`)).join(', ');
 
   const resetCover = () => {
     const element = coverRef.current;
@@ -162,13 +150,6 @@ export const AppCard: FC<AppCardProps> = ({ app }) => {
         ) : null}
         <span className="app-card__glare" aria-hidden />
         {app.rating != null ? <RatingBadge rating={app.rating} className="app-card__rating" /> : null}
-        {criticalHealth ? (
-          <Tooltip label={healthWarning}>
-            <span className="app-card__health" aria-label={healthWarning}>
-              <TriangleAlert size={12} />
-            </span>
-          </Tooltip>
-        ) : null}
       </span>
       <span className="app-card__name">{app.name}</span>
     </Link>

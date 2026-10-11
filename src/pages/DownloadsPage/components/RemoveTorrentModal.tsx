@@ -33,7 +33,11 @@ export const RemoveTorrentModal: FC<RemoveTorrentModalProps> = ({ torrent, title
     <Modal title={heading} ariaLabel={heading} onClose={onCancel} className="confirm-modal remove-torrent" footer={footer}>
       <div data-id="RemoveTorrentModal">
         <p className="confirm-modal__message">{t('downloads.removeMessage').replace('{name}', title || torrent.name)}</p>
-        <p className="confirm-modal__message">{t('downloads.removeFilesHint')}</p>
+        <p className="confirm-modal__message remove-torrent__hints">
+          {t('downloads.removeKeepHint')}
+          <br />
+          {t('downloads.removeFilesHint')}
+        </p>
       </div>
     </Modal>
   );

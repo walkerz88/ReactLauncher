@@ -721,5 +721,26 @@
         "en": "Fixed trailer downloads from Steam: an empty reply is no longer counted as a download, and empty trailers, covers and screenshots count as missing (and show up in the health table)"
       }
     ]
+  },
+  {
+    "version": "1.14.3",
+    "title": {
+      "ru": "Удаление игр и чище карточки",
+      "en": "Deleting games and cleaner cards"
+    },
+    "changes": [
+      {
+        "ru": "Кнопка «Удалить» в меню игры видна всегда: если папка data пуста, можно удалить игру из библиотеки целиком; при этом лаунчер сразу возвращает в библиотеку, а папка удаляется в фоне",
+        "en": "The Delete button in the game menu is always shown: with an empty data folder you can still delete the whole game from the library; the launcher goes straight back to the library while the folder is removed in the background"
+      },
+      {
+        "ru": "С карточки игры убран значок предупреждения — все проблемы по-прежнему видны в таблице здоровья библиотеки",
+        "en": "The warning icon is gone from the game card — all issues are still listed in the library health table"
+      },
+      {
+        "ru": "Подсказка в окне удаления торрента разбита на две строки",
+        "en": "The hint in the torrent removal dialog is split into two lines"
+      }
+    ]
   }
 ]

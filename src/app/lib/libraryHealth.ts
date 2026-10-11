@@ -16,9 +16,6 @@ export type HealthIssueKey =
   | 'notesIncomplete'
   | 'notesLangSwapped';
 
-/** Serious enough to flag right on the gallery card — the rest are fine left for the health list. */
-const CRITICAL_ISSUES: readonly HealthIssueKey[] = ['noCoverHorizontal', 'noCoverVertical'];
-
 /** Below this many letters, a script-mix check is unreliable (e.g. a title made of just a couple of
  * Latin brand-name words inside an otherwise-Russian sentence) — skip rather than guess. */
 const MIN_LETTERS_FOR_LANG_CHECK = 8;
@@ -115,9 +112,6 @@ export const getHealthIssues = (app: ContentApp): HealthIssueKey[] => {
 
   return issues;
 };
-
-export const hasCriticalHealthIssue = (app: ContentApp): boolean =>
-  getHealthIssues(app).some((issue) => CRITICAL_ISSUES.includes(issue));
 
 export type FieldStatus = 'ok' | 'missing' | 'warning' | 'none';
 

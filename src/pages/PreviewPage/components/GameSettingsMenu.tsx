@@ -8,8 +8,6 @@ export interface GameSettingsMenuProps {
   appId: string;
   hasInstaller: boolean;
   hasSaves: boolean;
-  /** The game has files in `data/`, so "Delete" makes sense. */
-  hasDataFiles: boolean;
   onEditData: () => void;
   onOpenBackups: () => void;
   onDelete: () => void;
@@ -20,7 +18,6 @@ export const GameSettingsMenu: FC<GameSettingsMenuProps> = ({
   appId,
   hasInstaller,
   hasSaves,
-  hasDataFiles,
   onEditData,
   onOpenBackups,
   onDelete,
@@ -132,16 +129,14 @@ export const GameSettingsMenu: FC<GameSettingsMenuProps> = ({
           >
             {t('app.editData')}
           </button>
-          {hasDataFiles ? (
-            <button
-              type="button"
-              className="game-settings-menu__item game-settings-menu__item--danger"
-              role="menuitem"
-              onClick={handleDelete}
-            >
-              {t('app.delete')}
-            </button>
-          ) : null}
+          <button
+            type="button"
+            className="game-settings-menu__item game-settings-menu__item--danger"
+            role="menuitem"
+            onClick={handleDelete}
+          >
+            {t('app.delete')}
+          </button>
         </div>
       ) : null}
     </div>

@@ -7,13 +7,15 @@ export type DeleteScope = 'data' | 'library';
 
 export interface DeleteGameModalProps {
   appName: string;
+  /** The game has files in `data/`; without them only removing the whole game makes sense. */
+  hasData: boolean;
   hasSaves: boolean;
   onDelete: (scope: DeleteScope) => void;
   onCancel: () => void;
 }
 
 /** Asks what to delete: only the installed game data, or the whole game from the library. */
-export const DeleteGameModal: FC<DeleteGameModalProps> = ({ appName, hasSaves, onDelete, onCancel }) => {
+export const DeleteGameModal: FC<DeleteGameModalProps> = ({ appName, hasData, hasSaves, onDelete, onCancel }) => {
   const t = useTranslation();
   const title = t('app.deleteTitle');
 
@@ -22,9 +24,11 @@ export const DeleteGameModal: FC<DeleteGameModalProps> = ({ appName, hasSaves, o
       <button type="button" className="btn" autoFocus onClick={onCancel} data-gamepad-focusable>
         {t('app.deleteCancel')}
       </button>
-      <button type="button" className="btn delete-game__button" onClick={() => onDelete('data')} data-gamepad-focusable>
-        {t('app.deleteData')}
-      </button>
+      {hasData ? (
+        <button type="button" className="btn delete-game__button" onClick={() => onDelete('data')} data-gamepad-focusable>
+          {t('app.deleteData')}
+        </button>
+      ) : null}
       <button
         type="button"
         className="btn btn--danger delete-game__button"
@@ -39,8 +43,10 @@ export const DeleteGameModal: FC<DeleteGameModalProps> = ({ appName, hasSaves, o
   return (
     <Modal title={title} ariaLabel={title} onClose={onCancel} className="confirm-modal delete-game" footer={footer}>
       <div className="delete-game__body" data-id="DeleteGameModal">
-        <p className="confirm-modal__message">{t('app.deleteQuestion').replace('{name}', appName)}</p>
-        <p className="confirm-modal__message">{t('app.deleteDataHint')}</p>
+        <p className="confirm-modal__message">
+          {(hasData ? t('app.deleteQuestion') : t('app.deleteQuestionNoData')).replace('{name}', appName)}
+        </p>
+        {hasData ? <p className="confirm-modal__message">{t('app.deleteDataHint')}</p> : null}
         <p className="confirm-modal__message">{t('app.deleteLibraryHint')}</p>
         {hasSaves ? <p className="confirm-modal__message delete-game__warning">{t('app.deleteSavesHint')}</p> : null}
       </div>

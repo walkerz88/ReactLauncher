@@ -173,40 +173,50 @@ export const PreviewPage: FC = () => {
 
   const deleteGame = async (scope: DeleteScope) => {
     const { pushNotification } = useNotificationStore.getState();
+    const { id: gameId, name: gameName, hasUninstaller } = app;
+    const wasFavorite = isFavorite;
 
     setShowDelete(false);
+
+    if (scope === 'library') {
+      // Removing a whole game folder can take a while, so leave the page right away: the game disappears from
+      // the list at once and the folder is cleaned up in the background.
+      useContentStore.setState((state) => ({ apps: state.apps.filter((entry) => entry.id !== gameId) }));
+      navigate('/');
+    }
 
     try {
       if (scope === 'library') {
         // A torrent of this game keeps its files open, which would stop the folder from being deleted.
-        const gameTorrents = useTorrentsStore.getState().torrents.filter((torrent) => torrent.gameId === app.id);
+        const gameTorrents = useTorrentsStore.getState().torrents.filter((torrent) => torrent.gameId === gameId);
 
         await Promise.all(gameTorrents.map((torrent) => window.electronAPI.torrents.remove(torrent.id, false)));
       }
 
-      const result = await window.electronAPI.content.deleteGame(app.id, scope);
+      const result = await window.electronAPI.content.deleteGame(gameId, scope);
 
       if (!result.ok) {
         pushNotification(result.error ?? t('downloads.failed'), 'error');
+        await useContentStore.getState().loadApps();
 
         return;
       }
 
       if (scope === 'library') {
-        if (isFavorite) {
-          toggleFavorite(app.id);
+        if (wasFavorite) {
+          useFavoritesStore.getState().toggle(gameId);
         }
 
-        pushNotification(t('app.deleteLibraryDone'), 'success');
-        navigate('/');
+        pushNotification(t('app.deleteLibraryDone').replace('{name}', gameName), 'success');
       } else {
-        pushNotification(app.hasUninstaller ? t('app.deleteUninstallerStarted') : t('app.deleteDataDone'), 'success');
+        pushNotification(hasUninstaller ? t('app.deleteUninstallerStarted') : t('app.deleteDataDone'), 'success');
       }
 
-      await loadApps();
+      await useContentStore.getState().loadApps();
     } catch (err) {
       console.error(err);
       pushNotification(err instanceof Error ? err.message : t('downloads.failed'), 'error');
+      await useContentStore.getState().loadApps();
     }
   };
 
@@ -350,7 +360,6 @@ export const PreviewPage: FC = () => {
           appId={app.id}
           hasInstaller={app.hasInstaller && !showInstallPrimary}
           hasSaves={app.hasSaves}
-          hasDataFiles={app.hasDataFiles}
           onEditData={() => setShowEditConfig(true)}
           onOpenBackups={() => setShowBackups(true)}
           onDelete={() => setShowDelete(true)}
@@ -437,6 +446,7 @@ export const PreviewPage: FC = () => {
       {showDelete ? (
         <DeleteGameModal
           appName={app.name}
+          hasData={app.hasDataFiles}
           hasSaves={app.hasSaves}
           onDelete={(scope) => void deleteGame(scope)}
           onCancel={() => setShowDelete(false)}

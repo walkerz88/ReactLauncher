@@ -187,6 +187,10 @@ a.torrent-row__title:hover {
   white-space: nowrap;
 }
 
+.remove-torrent__hints {
+  margin-top: 12px;
+}
+
 .torrent-row__buttons {
   display: flex;
   align-items: center;
