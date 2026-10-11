@@ -1,10 +1,11 @@
-import { useMemo, useState, type FC } from 'react';
+import { useMemo, type FC } from 'react';
 
 import { groupByGenre, groupBySeries, OTHER_KEY } from '@/app/lib/groupApps';
 import { matchesSearch } from '@/app/lib/searchMatch';
 import { sortApps } from '@/app/lib/sortApps';
 import { getGalleryViewEntry, useGalleryViewStore } from '@/app/store/galleryViewStore';
 import { usePlaytimeStore } from '@/app/store/playtimeStore';
+import { useSearchStore } from '@/app/store/searchStore';
 import { useTranslation } from '@/app/i18n';
 import type { ContentApp } from '@/electron';
 import { AppGrid } from '@/widgets/AppGrid';
@@ -44,7 +45,9 @@ export const AppCollection: FC<AppCollectionProps> = ({ apps, title, contextKey 
 
   // Not persisted (unlike the filters above) — a search term left over from
   // a previous visit would just hide the library on the next launch.
-  const [searchQuery, setSearchQuery] = useState('');
+  const searchQuery = useSearchStore((state) => state.byContext[contextKey] ?? '');
+  const setQuery = useSearchStore((state) => state.setQuery);
+  const setSearchQuery = (query: string) => setQuery(contextKey, query);
 
   const genres = useMemo(
     () =>

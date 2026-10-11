@@ -657,5 +657,18 @@
         "en": "The Exit button now asks for confirmation"
       }
     ]
+  },
+  {
+    "version": "1.13.1",
+    "title": {
+      "ru": "Поиск сохраняется при возврате",
+      "en": "Search is kept on going back"
+    },
+    "changes": [
+      {
+        "ru": "Текст поиска в галерее больше не сбрасывается, когда вы возвращаетесь кнопкой «Назад» со страницы игры",
+        "en": "The gallery search text is no longer cleared when you come back from a game page with the Back button"
+      }
+    ]
   }
 ]
