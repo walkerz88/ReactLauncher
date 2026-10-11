@@ -26,6 +26,9 @@ export const AppNavigation: FC = () => {
   const torrentEnabled = useSectionsStore((state) => state.torrentEnabled);
   const hasTorrents = useTorrentsStore((state) => state.torrents.length > 0);
   const showDownloads = torrentEnabled || hasTorrents;
+  const isDownloading = useTorrentsStore((state) =>
+    state.torrents.some((torrent) => torrent.state === 'downloading' || torrent.state === 'metadata'),
+  );
   const isRescanning = useContentStore((state) => state.status === 'loading');
   const rescan = useContentStore((state) => state.loadApps);
   const [confirmingExit, setConfirmingExit] = useState(false);
@@ -72,6 +75,7 @@ export const AppNavigation: FC = () => {
         <Tooltip label={t('nav.downloads')} placement="right">
           <NavLink to="/downloads" className="app-navigation__item" aria-label={t('nav.downloads')} data-gamepad-focusable>
             <Download size={ICON_SIZE} />
+            {isDownloading ? <span className="app-navigation__badge" aria-hidden="true" /> : null}
           </NavLink>
         </Tooltip>
       ) : null}

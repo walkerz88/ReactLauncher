@@ -687,5 +687,22 @@
         "en": "The feature is controlled by the build: the game's address is set in package.json (demo.url), and without it nothing is offered"
       }
     ]
+  },
+  {
+    "version": "1.14.1",
+    "title": {
+      "ru": "Сиды и пиры, индикатор загрузки",
+      "en": "Seeds and peers, download indicator"
+    },
+    "changes": [
+      {
+        "ru": "В загрузках сиды и пиры теперь считаются отдельно: «подключено (всего в раздаче по данным трекера)», как на трекере",
+        "en": "Downloads now count seeds and peers separately: \"connected (total in the swarm, per the trackers)\", like on the tracker"
+      },
+      {
+        "ru": "Пока торрент загружается, на кнопке «Загрузки» в боковой панели горит кружок",
+        "en": "While a torrent is downloading, a dot is shown on the Downloads button in the sidebar"
+      }
+    ]
   }
 ]

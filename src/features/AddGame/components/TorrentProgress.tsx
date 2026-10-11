@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 
 import { useTranslation } from '@/app/i18n';
-import { formatSpeed, formatTransferred } from '@/app/lib/format';
+import { formatSpeed, formatSwarm, formatTransferred } from '@/app/lib/format';
 import { useTorrentsStore } from '@/app/store/torrentsStore';
 import { Message } from '@/shared/Message';
 import { ProgressBar } from '@/shared/ProgressBar';
@@ -25,7 +25,7 @@ export const TorrentProgress: FC<TorrentProgressProps> = ({ gameId }) => {
           <p className="add-game__torrent-stats">
             {(torrent.progress * 100).toFixed(1)}% · {formatTransferred(torrent.downloaded)}
             {torrent.size > 0 ? ` / ${formatTransferred(torrent.size)}` : ''} · ↓ {formatSpeed(torrent.downloadSpeed)} ·{' '}
-            {t('downloads.stat.seeds')}: {torrent.seeds} · {t('downloads.stat.peers')}: {torrent.peers}
+            {t('downloads.col.seeds')}: {formatSwarm(torrent.seeds, torrent.swarmSeeds)} · {t('downloads.col.peers')}: {formatSwarm(torrent.peers, torrent.swarmPeers)}
           </p>
         </>
       ) : null}

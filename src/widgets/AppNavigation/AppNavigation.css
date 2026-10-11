@@ -11,6 +11,7 @@
 }
 
 .app-navigation__item {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -70,4 +71,28 @@
 .app-navigation__item--exit:hover {
   background-color: var(--color-danger-subtle);
   color: var(--color-danger);
+}
+
+/* Dot on the Downloads button while a torrent is downloading. */
+.app-navigation__badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--color-bg);
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  animation: app-navigation-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes app-navigation-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
 }

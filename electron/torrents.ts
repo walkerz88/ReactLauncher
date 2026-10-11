@@ -27,10 +27,14 @@ interface TorrentView {
   uploaded: number;
   downloadSpeed: number;
   uploadSpeed: number;
-  /** Connected peers that already have the whole torrent. */
+  /** Connected peers that have every piece. */
   seeds: number;
-  /** All connected peers, seeds included. */
+  /** Connected peers that do not (leechers). */
   peers: number;
+  /** Seeds in the whole swarm, as the trackers report it; `null` until a tracker has answered. */
+  swarmSeeds: number | null;
+  /** Leechers in the whole swarm, as the trackers report it; `null` until a tracker has answered. */
+  swarmPeers: number | null;
   /** Seconds left, or `null` when unknown. */
   eta: number | null;
   ratio: number;
@@ -64,7 +68,12 @@ interface WtWire {
   peerPieces?: { get: (index: number) => boolean };
 }
 
+interface WtTracker {
+  on: (event: 'update', listener: (data: { announce?: string; complete?: number; incomplete?: number }) => void) => void;
+}
+
 interface WtTorrent {
+  discovery?: { tracker?: WtTracker } | null;
   infoHash: string;
   name: string;
   length: number;
@@ -100,6 +109,9 @@ interface Entry {
   stored: StoredTorrent;
   torrent: WtTorrent | null;
   error: string | null;
+  /** What each tracker last said about the swarm, by announce url. */
+  swarm: Map<string, { seeds: number; leechers: number }>;
+  trackerHooked: boolean;
 }
 
 const MAGNET_PATTERN = /^magnet:\?.*xt=urn:btih:/i;
@@ -220,6 +232,30 @@ const countSeeds = (torrent: WtTorrent): number => {
   }).length;
 };
 
+/** The torrent's tracker client only exists a moment after `add`, so the hook is retried from the tick. */
+const hookTracker = (entry: Entry): void => {
+  const tracker = entry.torrent?.discovery?.tracker;
+
+  if (entry.trackerHooked || !tracker) {
+    return;
+  }
+
+  entry.trackerHooked = true;
+  tracker.on('update', (data) => {
+    if (typeof data.complete === 'number' && typeof data.incomplete === 'number') {
+      entry.swarm.set(data.announce ?? '', { seeds: data.complete, leechers: data.incomplete });
+    }
+  });
+};
+
+const swarmTotals = (entry: Entry): { seeds: number | null; leechers: number | null } => {
+  const reports = [...entry.swarm.values()];
+
+  return reports.length === 0
+    ? { seeds: null, leechers: null }
+    : { seeds: Math.max(...reports.map((report) => report.seeds)), leechers: Math.max(...reports.map((report) => report.leechers)) };
+};
+
 const toView = (entry: Entry): TorrentView => {
   const { stored, torrent } = entry;
   const live = !stored.paused && torrent;
@@ -240,6 +276,8 @@ const toView = (entry: Entry): TorrentView => {
   }
 
   const timeRemaining = live ? torrent.timeRemaining : Infinity;
+  const seeds = live ? countSeeds(torrent) : 0;
+  const swarm = swarmTotals(entry);
 
   return {
     id: stored.infoHash,
@@ -253,8 +291,10 @@ const toView = (entry: Entry): TorrentView => {
     uploaded,
     downloadSpeed: live && state === 'downloading' ? torrent.downloadSpeed : 0,
     uploadSpeed: live ? torrent.uploadSpeed : 0,
-    seeds: live ? countSeeds(torrent) : 0,
-    peers: live ? torrent.numPeers : 0,
+    seeds,
+    peers: live ? Math.max(0, torrent.numPeers - seeds) : 0,
+    swarmSeeds: swarm.seeds,
+    swarmPeers: swarm.leechers,
     eta: Number.isFinite(timeRemaining) && state === 'downloading' ? Math.round(timeRemaining / 1000) : null,
     ratio: downloaded > 0 ? uploaded / downloaded : 0,
     addedAt: stored.addedAt,
@@ -270,6 +310,7 @@ const broadcast = (channel: string, payload: unknown): void => {
 const tick = (): void => {
   tickCount += 1;
   entries.forEach(syncStoredStats);
+  entries.forEach(hookTracker);
 
   if (tickCount % SAVE_EVERY_TICKS === 0) {
     saveStored();
@@ -297,6 +338,7 @@ const startEntry = async (entry: Entry): Promise<void> => {
   }
 
   entry.error = null;
+  entry.trackerHooked = false;
 
   try {
     const wt = await getClient();
@@ -449,6 +491,8 @@ const addTorrent = async (
       },
       torrent: null,
       error: null,
+      swarm: new Map(),
+      trackerHooked: false,
     };
 
     entries.set(infoHash, entry);
@@ -579,7 +623,7 @@ const pickTorrentFile = async (event: Electron.IpcMainInvokeEvent): Promise<{ pa
 /** Call once, after `app` is ready. Torrents saved by a previous run resume on their own, unless they were paused. */
 export function initTorrents(): void {
   loadStored().forEach((stored) => {
-    entries.set(stored.infoHash, { stored, torrent: null, error: null });
+    entries.set(stored.infoHash, { stored, torrent: null, error: null, swarm: new Map(), trackerHooked: false });
   });
 
   if (entries.size > 0) {

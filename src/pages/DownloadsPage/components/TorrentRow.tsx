@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FolderOpen, Pause, Play, Trash2 } from 'lucide-react';
 
 import { useTranslation } from '@/app/i18n';
-import { formatDuration, formatSpeed, formatTransferred } from '@/app/lib/format';
+import { formatDuration, formatSpeed, formatSwarm, formatTransferred } from '@/app/lib/format';
 import type { TorrentInfo } from '@/electron';
 import { ProgressBar } from '@/shared/ProgressBar';
 import { Tooltip } from '@/shared/Tooltip';
@@ -59,8 +59,12 @@ export const TorrentRow: FC<TorrentRowProps> = ({ torrent, gameName, onPause, on
       <td className="torrent-row__number">{formatSpeed(torrent.downloadSpeed)}</td>
       <td className="torrent-row__number">{formatSpeed(torrent.uploadSpeed)}</td>
       <td className="torrent-row__number">{eta}</td>
-      <td className="torrent-row__number">{torrent.seeds}</td>
-      <td className="torrent-row__number">{torrent.peers}</td>
+      <td className="torrent-row__number" title={t('downloads.swarmHint')}>
+        {formatSwarm(torrent.seeds, torrent.swarmSeeds)}
+      </td>
+      <td className="torrent-row__number" title={t('downloads.swarmHint')}>
+        {formatSwarm(torrent.peers, torrent.swarmPeers)}
+      </td>
 
       <td className="torrent-row__actions">
         <div className="torrent-row__buttons">

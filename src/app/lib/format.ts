@@ -89,3 +89,7 @@ export const formatSpeed = (bytesPerSecond: number): string =>
 
 /** Like `formatFileSize`, but shows an empty download as "0 KB". */
 export const formatTransferred = (bytes: number): string => (bytes > 0 ? formatFileSize(bytes) : '0 KB');
+
+/** "30 (1801)": peers connected right now, and the swarm total the trackers report (left out while unknown). */
+export const formatSwarm = (connected: number, total: number | null): string =>
+  total === null ? String(connected) : `${connected} (${total})`;

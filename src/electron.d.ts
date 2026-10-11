@@ -439,8 +439,12 @@ export interface TorrentInfo {
   uploadSpeed: number;
   /** Connected peers that have every piece. */
   seeds: number;
-  /** All connected peers, seeds included. */
+  /** Connected peers that do not (leechers). */
   peers: number;
+  /** Seeds in the whole swarm, as the trackers report it; `null` until a tracker has answered. */
+  swarmSeeds: number | null;
+  /** Leechers in the whole swarm, as the trackers report it; `null` until a tracker has answered. */
+  swarmPeers: number | null;
   /** Seconds left, or `null` when unknown. */
   eta: number | null;
   ratio: number;
