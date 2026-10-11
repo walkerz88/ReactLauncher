@@ -66,7 +66,7 @@ interface PendingUpdate {
 let pending: PendingUpdate | null = null;
 let installing = false;
 
-const readManifestUrl = (): string | null => {
+export const readManifestUrl = (): string | null => {
   try {
     const pkg = JSON.parse(fs.readFileSync(path.join(app.getAppPath(), 'package.json'), 'utf8')) as {
       updates?: { manifestUrl?: unknown };
@@ -80,7 +80,7 @@ const readManifestUrl = (): string | null => {
 };
 
 /** https only; plain http just for a local test server. */
-function isAllowedUrl(value: string): boolean {
+export function isAllowedUrl(value: string): boolean {
   try {
     const url = new URL(value);
 
@@ -195,14 +195,21 @@ async function checkForUpdate(): Promise<UpdateCheckResult> {
   }
 }
 
-/** Streams `url` to `dest`, reporting bytes received so far, and resolves with the file's sha256. */
-async function download(
+/** Streams `url` to `dest`, reporting bytes received so far, and resolves with the file's sha256. `signal` aborts it. */
+export async function download(
   url: string,
   dest: string,
   sizeHint: number,
   onProgress: (progress: UpdateProgress) => void,
+  signal?: AbortSignal,
 ): Promise<string> {
-  const response = await fetch(url, { signal: AbortSignal.timeout(DOWNLOAD_TIMEOUT_MS) });
+  const aborter = new AbortController();
+  const abort = () => aborter.abort();
+
+  AbortSignal.timeout(DOWNLOAD_TIMEOUT_MS).addEventListener('abort', abort);
+  signal?.addEventListener('abort', abort);
+
+  const response = await fetch(url, { signal: aborter.signal });
 
   if (!response.ok || !response.body) {
     throw new Error(`Download failed: ${response.status}`);

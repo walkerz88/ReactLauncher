@@ -10,6 +10,7 @@ import { useProfileStore } from '@/app/store/profileStore';
 import { AchievementToasts } from '@/widgets/AchievementToasts';
 import { AppNavigation } from '@/widgets/AppNavigation';
 import { CaptureManager } from '@/widgets/CaptureManager';
+import { DemoOffer } from '@/widgets/DemoOffer';
 import { GamepadNavigation } from '@/widgets/GamepadNavigation';
 import { NotificationToasts } from '@/widgets/NotificationToasts';
 import { SplashScreen } from '@/widgets/SplashScreen';
@@ -46,6 +47,7 @@ export const App: FC = () => {
         <CaptureManager />
         <NotificationToasts />
         <UpdateModal />
+        <DemoOffer />
         <TitleBar />
         {hasProfiles ? (
           <div className="app-body">

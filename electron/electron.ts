@@ -5,6 +5,7 @@ import { app, BrowserWindow, ipcMain, Menu, shell } from 'electron';
 
 import { getLaunchFullscreen, initAppSettings } from './appSettings';
 import { initCapture } from './capture';
+import { initDemo } from './demo';
 import { initContent } from './content';
 import { initProfiles } from './profiles';
 import { initProgress } from './progressIpc';
@@ -121,6 +122,7 @@ app.whenReady().then(() => {
 
   initContent();
   initTorrents();
+  initDemo();
   initSteam();
   initTranslate();
   initUpdater();

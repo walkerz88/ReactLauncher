@@ -220,6 +220,36 @@ toast, no "Check for updates" button. Only `https://` URLs are accepted
 - Builds older than the first one with this feature have no updater and must
   be updated by hand once.
 
+## Demo game on first launch
+
+An optional feature of the build. When the app starts with a profile but an
+empty library, it offers to set the folders up and download a demo game into
+the content folder. It is asked once: the answer is remembered in
+`launcher-settings.json` (`demoOffered`).
+
+**Setup for your own build.** The address of the demo zip lives in
+`package.json`:
+
+```json
+"demo": { "url": "https://example.com/downloads/content-demo.zip" }
+```
+
+Remove the field and the feature is off entirely: no request, no dialog. Only
+`https://` URLs are accepted (plain `http://` only for `localhost` /
+`127.0.0.1`).
+
+- The zip's top-level folder is the game folder (`Tic Tac Toe/config.json`,
+  `data/`, `assets/`, …); it is unpacked straight into the content folder.
+- The update manifest (`updates.manifestUrl`) has to describe the same file:
+  `"demo": { "url": "content-demo.zip", "sha256": "<64 hex chars>", "size": 252696307 }`.
+  The url there must resolve to the one in `package.json`; an archive whose
+  sha256 cannot be checked is never downloaded. So the feature needs both
+  `demo.url` and `updates.manifestUrl`.
+- The project's own `site/deploy` builds the zip from
+  `dist/content/Tic Tac Toe`, writes the `demo` entry into `latest.json` and
+  uploads the archive only when its hash changed (the last uploaded hash is kept
+  in `site/deploy/.deploy-state.json`; `--force-demo` uploads it anyway).
+
 ## Path alias
 
 `@` points at `src/`, so `import { X } from '@/widgets/X'` works from

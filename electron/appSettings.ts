@@ -7,9 +7,11 @@ interface AppSettings {
   launchFullscreen: boolean;
   launchAtLogin: boolean;
   autoCheckUpdates: boolean;
+  /** The "download the demo game" offer has been answered, so it is not shown again. */
+  demoOffered: boolean;
 }
 
-const DEFAULTS: AppSettings = { launchFullscreen: true, launchAtLogin: false, autoCheckUpdates: true };
+const DEFAULTS: AppSettings = { launchFullscreen: true, launchAtLogin: false, autoCheckUpdates: true, demoOffered: false };
 
 /**
  * Machine-level launch settings kept next to the app's user data, not in a profile: the window is created
@@ -29,6 +31,7 @@ function loadSettings(): AppSettings {
       launchAtLogin: typeof parsed.launchAtLogin === 'boolean' ? parsed.launchAtLogin : DEFAULTS.launchAtLogin,
       autoCheckUpdates:
         typeof parsed.autoCheckUpdates === 'boolean' ? parsed.autoCheckUpdates : DEFAULTS.autoCheckUpdates,
+      demoOffered: typeof parsed.demoOffered === 'boolean' ? parsed.demoOffered : DEFAULTS.demoOffered,
     };
   } catch {
     return { ...DEFAULTS };
@@ -83,6 +86,9 @@ export function initAppSettings(): void {
     }
     if (typeof next.autoCheckUpdates === 'boolean') {
       settings.autoCheckUpdates = next.autoCheckUpdates;
+    }
+    if (typeof next.demoOffered === 'boolean') {
+      settings.demoOffered = next.demoOffered;
     }
 
     saveSettings();

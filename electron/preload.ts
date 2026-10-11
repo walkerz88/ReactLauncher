@@ -45,6 +45,17 @@ const electronAPI = {
       return () => ipcRenderer.removeListener('update:progress', listener);
     },
   },
+  demo: {
+    info: () => ipcRenderer.invoke('demo:info'),
+    download: () => ipcRenderer.invoke('demo:download'),
+    cancel: () => ipcRenderer.invoke('demo:cancel'),
+    onProgress: (callback: (progress: unknown) => void): (() => void) => {
+      const listener = (_event: IpcRendererEvent, payload: unknown) => callback(payload);
+      ipcRenderer.on('demo:progress', listener);
+
+      return () => ipcRenderer.removeListener('demo:progress', listener);
+    },
+  },
   torrents: {
     list: () => ipcRenderer.invoke('torrents:list'),
     inspect: (source: unknown) => ipcRenderer.invoke('torrents:inspect', source),

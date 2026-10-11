@@ -670,5 +670,22 @@
         "en": "The gallery search text is no longer cleared when you come back from a game page with the Back button"
       }
     ]
+  },
+  {
+    "version": "1.14.0",
+    "title": {
+      "ru": "Демонстрационная игра при первом запуске",
+      "en": "Demo game on first launch"
+    },
+    "changes": [
+      {
+        "ru": "Если библиотека пуста, лаунчер предлагает настроить папки и скачать демонстрационную игру — с прогрессом скачивания, один раз",
+        "en": "If the library is empty, the launcher offers to set the folders up and download a demo game — with download progress, asked once"
+      },
+      {
+        "ru": "Функция управляется сборкой: адрес игры задаётся в package.json (demo.url), без него предложение не показывается",
+        "en": "The feature is controlled by the build: the game's address is set in package.json (demo.url), and without it nothing is offered"
+      }
+    ]
   }
 ]

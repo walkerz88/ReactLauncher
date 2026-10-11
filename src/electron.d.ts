@@ -417,6 +417,8 @@ export interface LaunchSettings {
   launchAtLogin: boolean;
   /** Check for a new version on every launch. */
   autoCheckUpdates: boolean;
+  /** The demo-game offer has been answered. */
+  demoOffered: boolean;
 }
 
 export type TorrentState = 'metadata' | 'downloading' | 'seeding' | 'paused' | 'error';
@@ -477,6 +479,24 @@ export interface TorrentsAPI {
   onCompleted: (callback: (event: { id: string; gameId: string; name: string }) => void) => () => void;
 }
 
+export interface DemoProgress {
+  phase: 'download' | 'extract';
+  received: number;
+  /** 0 when the size is unknown. */
+  total: number;
+}
+
+export type DemoResult = { ok: true } | { ok: false; cancelled: boolean; error: string };
+
+export interface DemoAPI {
+  /** The demo game the update manifest offers (its download size in bytes), or `null` if there is none or the site is unreachable. */
+  info: () => Promise<{ size: number } | null>;
+  /** Downloads the demo game into the content folder; progress arrives through `onProgress`. */
+  download: () => Promise<DemoResult>;
+  cancel: () => Promise<void>;
+  onProgress: (callback: (progress: DemoProgress) => void) => () => void;
+}
+
 export interface ElectronAPI {
   /** Quit the whole application. */
   quit: () => Promise<void>;
@@ -519,6 +539,7 @@ export interface ElectronAPI {
     /** Bytes downloaded so far and the file size (0 if unknown); returns an unsubscribe function. */
     onProgress: (callback: (progress: { received: number; total: number }) => void) => () => void;
   };
+  demo: DemoAPI;
   torrents: TorrentsAPI;
   translate: {
     /** Machine-translates `text` (source language auto-detected) into `target`; `null` on failure. */

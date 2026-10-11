@@ -1,6 +1,7 @@
 import { useEffect, useState, type FC } from 'react';
 
 import { consumeSplashSkip } from '@/app/lib/profile';
+import { useSplashStore } from '@/app/store/splashStore';
 import { useWelcomeAnimationStore } from '@/app/store/welcomeAnimationStore';
 import { WelcomeScene, getWelcomeSceneDuration } from '@/shared/WelcomeScene';
 
@@ -25,6 +26,12 @@ export const SplashScreen: FC = () => {
   const [phase, setPhase] = useState<Phase>(() =>
     useWelcomeAnimationStore.getState().enabled && !shouldSkipSplash ? 'visible' : 'hidden',
   );
+
+  useEffect(() => {
+    if (phase === 'hidden') {
+      useSplashStore.getState().setDone();
+    }
+  }, [phase]);
 
   useEffect(() => {
     const visibleMs = getWelcomeSceneDuration(variant);
