@@ -5,6 +5,7 @@ import { Info, Loader2, Plus, Wand2 } from 'lucide-react';
 
 import { useTranslation } from '@/app/i18n';
 import { GENRE_KEYS } from '@/app/lib/genres';
+import { useContentStore } from '@/app/store/contentStore';
 import { useNotificationStore } from '@/app/store/notificationStore';
 import { BulkFillModal, type FillFields } from '@/shared/BulkFillModal';
 import { FormField } from '@/shared/FormField';
@@ -19,6 +20,7 @@ import type { PathField as PathFieldName, RawAppConfig, SteamSearchResult } from
 import { CustomButtonRow, type CustomButtonRowValue } from './components/CustomButtonRow';
 import { FactRow, type FactRowValue } from './components/FactRow';
 import { NoteRow, type NoteRowValue } from './components/NoteRow';
+import { TrailerStartPicker } from './components/TrailerStartPicker';
 
 export interface EditConfigModalProps {
   appId: string;
@@ -304,6 +306,7 @@ function formToConfig(form: FormState): RawAppConfig {
 /** Full editor for `config.json` — every field the app page can display. */
 export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onClose, onSaved }) => {
   const t = useTranslation();
+  const trailer = useContentStore((state) => state.apps.find((app) => app.id === appId)?.trailer ?? null);
   const [form, setForm] = useState<FormState | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -694,19 +697,11 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
                 </FormField>
               </div>
 
-              <div className="edit-config-modal__row">
-                <FormField label={t('editConfig.previewStart')}>
-                  <input
-                    type="number"
-                    min={0}
-                    max={100}
-                    step={1}
-                    placeholder="50"
-                    value={form.previewStart}
-                    onChange={(event) => update('previewStart', event.target.value)}
-                  />
-                </FormField>
-              </div>
+              <TrailerStartPicker
+                trailerSrc={trailer}
+                value={form.previewStart}
+                onChange={(value) => update('previewStart', value)}
+              />
             </section>
 
             <section className="edit-config-modal__section">

@@ -287,6 +287,7 @@ function listScreenshots(folder: string | null): string[] {
     return fs
       .readdirSync(folder)
       .filter((name) => IMAGE_EXTENSIONS.has(path.extname(name).toLowerCase()))
+      .filter((name) => fs.statSync(path.join(folder, name)).size > 0)
       .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
       .slice(0, MAX_SCREENSHOTS)
       .map((name) => path.join(folder, name));
@@ -480,6 +481,18 @@ function resolveInside(dir: string, relative: string): string | null {
   return fs.existsSync(abs) ? abs : null;
 }
 
+/** Like `resolveInside`, but an empty file counts as missing — a failed download leaves one behind, and a
+ * cover or trailer of 0 bytes is not a cover or trailer. */
+function resolveNonEmptyFileInside(dir: string, relative: string): string | null {
+  const abs = resolveInside(dir, relative);
+
+  try {
+    return abs && fs.statSync(abs).size > 0 ? abs : null;
+  } catch {
+    return null;
+  }
+}
+
 /** Launch targets (executable, settings tool, installer, custom buttons) may live anywhere on disk: an absolute
  * path is used as is, a relative one is resolved inside the game folder like every other `paths.*` value. */
 function resolveLaunchTarget(dir: string, value: string): string | null {
@@ -646,9 +659,9 @@ async function scanContent(): Promise<ScannedApp[]> {
       bonusAbs: config.paths?.bonus
         ? resolveInside(dir, config.paths.bonus)
         : resolveNonEmptyDirInside(dir, 'bonus'),
-      coverHorizontalAbs: resolveInside(dir, config.paths?.coverHorizontal ?? 'assets/cover_horizontal.jpg'),
-      coverVerticalAbs: resolveInside(dir, config.paths?.coverVertical ?? 'assets/cover_vertical.jpg'),
-      trailerAbs: resolveInside(dir, config.paths?.trailer ?? 'assets/trailer.mp4'),
+      coverHorizontalAbs: resolveNonEmptyFileInside(dir, config.paths?.coverHorizontal ?? 'assets/cover_horizontal.jpg'),
+      coverVerticalAbs: resolveNonEmptyFileInside(dir, config.paths?.coverVertical ?? 'assets/cover_vertical.jpg'),
+      trailerAbs: resolveNonEmptyFileInside(dir, config.paths?.trailer ?? 'assets/trailer.mp4'),
       screenshotsAbs: listScreenshots(resolveDirInside(dir, config.paths?.screenshots ?? 'screenshots')),
       savesAbs: resolveSavesPath(dir, config.paths?.saves),
       launch: readLaunchOptions(config.launch),

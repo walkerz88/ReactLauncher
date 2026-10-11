@@ -191,6 +191,14 @@ async function downloadFile(url: string, dest: string): Promise<boolean> {
 
     await fs.promises.mkdir(path.dirname(dest), { recursive: true });
     await pipeline(Readable.fromWeb(response.body as Parameters<typeof Readable.fromWeb>[0]), fs.createWriteStream(partial));
+
+    // Steam answers some files (e.g. a trailer's `movie_max.mp4`) with 200 and no body: that is a miss, not a download.
+    if ((await fs.promises.stat(partial)).size === 0) {
+      await fs.promises.rm(partial, { force: true });
+
+      return false;
+    }
+
     await fs.promises.rename(partial, dest);
 
     return true;

@@ -704,5 +704,22 @@
         "en": "While a torrent is downloading, a dot is shown on the Downloads button in the sidebar"
       }
     ]
+  },
+  {
+    "version": "1.14.2",
+    "title": {
+      "ru": "Превью трейлера и загрузка трейлеров",
+      "en": "Trailer preview and trailer downloads"
+    },
+    "changes": [
+      {
+        "ru": "Старт превью трейлера теперь настраивается слайдером с живым просмотром выбранного места в трейлере",
+        "en": "The trailer preview start is now set with a slider that shows the chosen spot of the trailer live"
+      },
+      {
+        "ru": "Исправлена загрузка трейлеров из Steam: пустой ответ больше не считается скачанным файлом, а пустые трейлеры, обложки и скриншоты считаются отсутствующими (и попадают в таблицу здоровья)",
+        "en": "Fixed trailer downloads from Steam: an empty reply is no longer counted as a download, and empty trailers, covers and screenshots count as missing (and show up in the health table)"
+      }
+    ]
   }
 ]
