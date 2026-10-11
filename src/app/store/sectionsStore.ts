@@ -10,12 +10,14 @@ interface SectionsState {
   favoritesEnabled: boolean;
   addGameEnabled: boolean;
   torrentEnabled: boolean;
+  showCounts: boolean;
   setLuckyEnabled: (enabled: boolean) => void;
   setReadyEnabled: (enabled: boolean) => void;
   setRecentEnabled: (enabled: boolean) => void;
   setFavoritesEnabled: (enabled: boolean) => void;
   setAddGameEnabled: (enabled: boolean) => void;
   setTorrentEnabled: (enabled: boolean) => void;
+  setShowCounts: (show: boolean) => void;
 }
 
 /** Persisted visibility of optional app sections (sidebar entries + their routes). */
@@ -28,12 +30,14 @@ export const useSectionsStore = create<SectionsState>()(
       favoritesEnabled: true,
       addGameEnabled: true,
       torrentEnabled: true,
+      showCounts: true,
       setLuckyEnabled: (luckyEnabled) => set({ luckyEnabled }),
       setReadyEnabled: (readyEnabled) => set({ readyEnabled }),
       setRecentEnabled: (recentEnabled) => set({ recentEnabled }),
       setFavoritesEnabled: (favoritesEnabled) => set({ favoritesEnabled }),
       setAddGameEnabled: (addGameEnabled) => set({ addGameEnabled }),
       setTorrentEnabled: (torrentEnabled) => set({ torrentEnabled }),
+      setShowCounts: (showCounts) => set({ showCounts }),
     }),
     {
       name: 'sections',
@@ -53,6 +57,7 @@ export const useSectionsStore = create<SectionsState>()(
             typeof stored.addGameEnabled === 'boolean' ? stored.addGameEnabled : current.addGameEnabled,
           torrentEnabled:
             typeof stored.torrentEnabled === 'boolean' ? stored.torrentEnabled : current.torrentEnabled,
+          showCounts: typeof stored.showCounts === 'boolean' ? stored.showCounts : current.showCounts,
         };
       },
     },

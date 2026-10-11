@@ -32,7 +32,10 @@ export const HomeTabs: FC<HomeTabsProps> = ({ activeTab, onTabChange }) => {
   const luckyEnabled = useSectionsStore((state) => state.luckyEnabled);
   const readyEnabled = useSectionsStore((state) => state.readyEnabled);
   const recentEnabled = useSectionsStore((state) => state.recentEnabled);
-  const hasReady = useContentStore((state) => state.apps.some(isReadyToLaunch));
+  const galleryCount = useContentStore((state) => state.apps.length);
+  const readyCount = useContentStore((state) => state.apps.filter(isReadyToLaunch).length);
+  const hasReady = readyCount > 0;
+  const showCounts = useSectionsStore((state) => state.showCounts);
 
   const handleClearRecent = () => {
     clearRecent();
@@ -76,6 +79,7 @@ export const HomeTabs: FC<HomeTabsProps> = ({ activeTab, onTabChange }) => {
         data-gamepad-focusable
       >
         {t('home.tabs.gallery')}
+        {showCounts ? <span className="home-tabs__count">{galleryCount}</span> : null}
       </button>
 
       {readyEnabled && hasReady ? (
@@ -87,6 +91,7 @@ export const HomeTabs: FC<HomeTabsProps> = ({ activeTab, onTabChange }) => {
           data-gamepad-focusable
         >
           {t('home.tabs.ready')}
+          {showCounts ? <span className="home-tabs__count">{readyCount}</span> : null}
         </button>
       ) : null}
 

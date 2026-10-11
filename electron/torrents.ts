@@ -61,6 +61,8 @@ interface StoredTorrent {
   addedAt: number;
   downloaded: number;
   uploaded: number;
+  /** Completion has been announced; a restart re-checks the files and fires `done` again, which is not news. */
+  completed?: boolean;
 }
 
 interface WtWire {
@@ -117,6 +119,7 @@ interface Entry {
 const MAGNET_PATTERN = /^magnet:\?.*xt=urn:btih:/i;
 const MAX_TORRENT_FILE_BYTES = 5 * 1024 * 1024;
 const TICK_MS = 1000;
+const LEGACY_COMPLETED_AFTER_MS = 10 * 60 * 1000;
 const SAVE_EVERY_TICKS = 10;
 
 // A literal `new Function` keeps TypeScript from rewriting `import()` into `require()`, which can't load an ESM package.
@@ -187,6 +190,11 @@ const saveStored = (): void => {
   }
 };
 
+/** Bytes of the torrent already on disk. `torrent.downloaded` only counts what arrived during this run, so after a
+ * restart a half-done (or finished) torrent would read as 0. */
+const bytesOnDisk = (torrent: WtTorrent): number =>
+  torrent.ready && torrent.length > 0 ? Math.round(torrent.progress * torrent.length) : torrent.downloaded;
+
 const syncStoredStats = (entry: Entry): void => {
   const torrent = entry.torrent;
 
@@ -200,7 +208,7 @@ const syncStoredStats = (entry: Entry): void => {
   if (torrent.length) {
     entry.stored.size = torrent.length;
   }
-  entry.stored.downloaded = torrent.downloaded;
+  entry.stored.downloaded = bytesOnDisk(torrent);
   entry.stored.uploaded = torrent.uploaded;
 };
 
@@ -260,7 +268,7 @@ const toView = (entry: Entry): TorrentView => {
   const { stored, torrent } = entry;
   const live = !stored.paused && torrent;
   const size = stored.size;
-  const downloaded = live ? torrent.downloaded : stored.downloaded;
+  const downloaded = live ? bytesOnDisk(torrent) : stored.downloaded;
   const uploaded = live ? torrent.uploaded : stored.uploaded;
 
   let state: TorrentState = 'downloading';
@@ -358,9 +366,15 @@ const startEntry = async (entry: Entry): Promise<void> => {
       saveStored();
     });
     torrent.on('done', () => {
+      const firstTime = entry.stored.completed !== true;
+
+      entry.stored.completed = true;
       syncStoredStats(entry);
       saveStored();
-      broadcast('torrents:completed', { id: entry.stored.infoHash, gameId: entry.stored.gameId, name: entry.stored.name });
+
+      if (firstTime) {
+        broadcast('torrents:completed', { id: entry.stored.infoHash, gameId: entry.stored.gameId, name: entry.stored.name });
+      }
     });
   } catch (err) {
     entry.error = errorMessage(err);
@@ -488,6 +502,7 @@ const addTorrent = async (
         addedAt: Date.now(),
         downloaded: 0,
         uploaded: 0,
+        completed: false,
       },
       torrent: null,
       error: null,
@@ -623,6 +638,11 @@ const pickTorrentFile = async (event: Electron.IpcMainInvokeEvent): Promise<{ pa
 /** Call once, after `app` is ready. Torrents saved by a previous run resume on their own, unless they were paused. */
 export function initTorrents(): void {
   loadStored().forEach((stored) => {
+    // Entries saved before the flag existed: one that has been around for a while is taken as already announced.
+    if (typeof stored.completed !== 'boolean') {
+      stored.completed = Date.now() - stored.addedAt > LEGACY_COMPLETED_AFTER_MS;
+    }
+
     entries.set(stored.infoHash, { stored, torrent: null, error: null, swarm: new Map(), trackerHooked: false });
   });
 

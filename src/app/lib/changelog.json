@@ -742,5 +742,26 @@
         "en": "The hint in the torrent removal dialog is split into two lines"
       }
     ]
+  },
+  {
+    "version": "1.14.4",
+    "title": {
+      "ru": "Количество игр на вкладках",
+      "en": "Game counts on the tabs"
+    },
+    "changes": [
+      {
+        "ru": "На вкладках «Галерея» и «Готовые к запуску» показывается количество игр; отключить можно в настройках («Показывать количество игр»)",
+        "en": "The Gallery and Ready to launch tabs show how many games they hold; it can be turned off in the settings (\"Show game counts\")"
+      },
+      {
+        "ru": "Уведомление «Загрузка завершена» больше не появляется при каждом запуске для давно скачанных торрентов",
+        "en": "The \"Download finished\" notification no longer shows up on every launch for torrents that finished long ago"
+      },
+      {
+        "ru": "После перезапуска у торрента снова показывается реальный объём скачанного, а не ноль",
+        "en": "After a restart a torrent shows the real amount downloaded again, not zero"
+      }
+    ]
   }
 ]

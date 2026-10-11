@@ -5,6 +5,7 @@ import { useTranslation } from '@/app/i18n';
 import { AboutSection } from '@/features/AboutSection';
 import { ThemePicker } from '@/features/ThemePicker';
 import { AddGameSectionToggle } from '@/features/AddGameSectionToggle';
+import { ShowCountsToggle } from '@/features/ShowCountsToggle';
 import { TorrentAddToggle } from '@/features/TorrentAddToggle';
 import { AchievementSoundToggle } from '@/features/AchievementSoundToggle';
 import { CardsSettings } from '@/features/CardsSettings';
@@ -105,6 +106,7 @@ export const SettingsPage: FC = () => {
             <FavoritesSectionToggle />
             <AddGameSectionToggle />
             <TorrentAddToggle />
+            <ShowCountsToggle />
           </section>
 
           <section className="settings-section">

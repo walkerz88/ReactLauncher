@@ -20,6 +20,16 @@
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 
+/* The game count sits like a superscript in the tab's top-right corner. */
+.home-tabs__count {
+  margin-left: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  vertical-align: super;
+  color: var(--color-text-muted);
+}
+
 .home-tabs__item:hover {
   color: var(--color-text);
 }
