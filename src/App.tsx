@@ -3,6 +3,7 @@ import { HashRouter, Route, Routes } from 'react-router-dom';
 
 import { useRunningGamesSync } from '@/app/hooks/useRunningGamesSync';
 import { useProgressSync } from '@/app/hooks/useProgressSync';
+import { useTorrentsSync } from '@/app/hooks/useTorrentsSync';
 import { useTypedSecrets } from '@/app/hooks/useTypedSecrets';
 import { useUpdateCheck } from '@/app/hooks/useUpdateCheck';
 import { useProfileStore } from '@/app/store/profileStore';
@@ -16,6 +17,7 @@ import { ThemeEffects } from '@/widgets/ThemeEffects';
 import { TitleBar } from '@/widgets/TitleBar';
 import { UpdateModal } from '@/widgets/UpdateModal';
 import { AchievementsPage } from '@/pages/AchievementsPage';
+import { DownloadsPage } from '@/pages/DownloadsPage';
 import { FavoritesPage } from '@/pages/FavoritesPage';
 import { GalleryPage } from '@/pages/GalleryPage';
 import { PreviewPage } from '@/pages/PreviewPage';
@@ -29,6 +31,7 @@ export const App: FC = () => {
 
   useRunningGamesSync();
   useProgressSync();
+  useTorrentsSync();
   useTypedSecrets();
   useUpdateCheck();
 
@@ -53,6 +56,7 @@ export const App: FC = () => {
                 <Route path="/favorites" element={<FavoritesPage />} />
                 <Route path="/achievements" element={<AchievementsPage />} />
                 <Route path="/app/:id" element={<PreviewPage />} />
+                <Route path="/downloads" element={<DownloadsPage />} />
                 <Route path="/settings" element={<SettingsPage />} />
               </Routes>
             </main>

@@ -602,14 +602,10 @@
   {
     "version": "1.12.7",
     "title": {
-      "ru": "Тема «Король и Шут»",
-      "en": "King and Jester theme"
+      "ru": "Настройки языка и обновлений",
+      "en": "Language and update settings"
     },
     "changes": [
-      {
-        "ru": "Новая тема «Король и Шут» — обычная и уникальная (с летучими мышами, искрами и отсветом свечей)",
-        "en": "New \"King and Jester\" theme — regular and unique (with bats, sparks and candlelight)"
-      },
       {
         "ru": "Выбор языка перенесён в самый верх настроек",
         "en": "The language picker moved to the top of the settings"
@@ -617,19 +613,6 @@
       {
         "ru": "Появился переключатель «Проверять обновления автоматически»",
         "en": "Added the \"Check for updates automatically\" switch"
-      }
-    ]
-  },
-  {
-    "version": "1.12.8",
-    "title": {
-      "ru": "Тема «Король и Шут» удалена",
-      "en": "King and Jester theme removed"
-    },
-    "changes": [
-      {
-        "ru": "Темы «Король и Шут» (обычная и уникальная) убраны; если она была выбрана, включится тема по умолчанию",
-        "en": "The \"King and Jester\" themes (regular and unique) were removed; if one was selected, the default theme is used"
       }
     ]
   },
@@ -643,6 +626,35 @@
       {
         "ru": "В настройках, в блоке «Разделы», появился переключатель «Добавить игру» — им можно скрыть кнопку из боковой панели",
         "en": "Added an \"Add a game\" switch to the Sections block in the settings — it hides the button from the sidebar"
+      }
+    ]
+  },
+  {
+    "version": "1.13.0",
+    "title": {
+      "ru": "Загрузка игр через торрент и удаление игр",
+      "en": "Torrent downloads and deleting games"
+    },
+    "changes": [
+      {
+        "ru": "В «Добавить игру» можно выбрать Torrent: указать магнет-ссылку или .torrent файл, папку загрузки (по умолчанию installer) — после создания папок игры начнётся закачка",
+        "en": "\"Add a game\" now offers Torrent: give a magnet link or a .torrent file and a download folder (installer by default) — the download starts once the game folders are created"
+      },
+      {
+        "ru": "Появился раздел «Загрузки»: прогресс, скорость, сиды и пиры, пауза, продолжение и удаление; его можно отключить в настройках («Загрузка через торрент»)",
+        "en": "New Downloads section: progress, speed, seeds and peers, pause, resume and remove; it can be turned off in the settings (\"Download via torrent\")"
+      },
+      {
+        "ru": "В меню игры появилась кнопка «Удалить»: можно удалить данные игры (запустится деинсталлятор, если он указан в настройках игры) или всю игру из библиотеки",
+        "en": "The game menu has a \"Delete\" button: delete the game data (the uninstaller runs if one is set in the game settings) or the whole game from the library"
+      },
+      {
+        "ru": "Файл запуска, внешние настройки, установщик и деинсталлятор можно указать на любом диске",
+        "en": "The executable, external settings tool, installer and uninstaller can be set to a file on any drive"
+      },
+      {
+        "ru": "Кнопка «Выход» теперь просит подтверждение",
+        "en": "The Exit button now asks for confirmation"
       }
     ]
   }

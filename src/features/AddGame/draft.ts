@@ -1,4 +1,27 @@
-import type { RawAppConfig } from '@/electron';
+import type { RawAppConfig, TorrentInspection, TorrentSource } from '@/electron';
+
+/** How the game is added: files put in by hand, or downloaded from a torrent. */
+export type AddMode = 'manual' | 'torrent';
+
+/** The torrent step — a magnet link or a picked `.torrent` file (the file wins when both are set). */
+export interface TorrentDraft {
+  magnet: string;
+  file: { path: string; name: string } | null;
+  /** Set once the source has been recognized. */
+  info: TorrentInspection | null;
+}
+
+export const EMPTY_TORRENT: TorrentDraft = { magnet: '', file: null, info: null };
+
+export const toTorrentSource = (torrent: TorrentDraft): TorrentSource | null => {
+  if (torrent.file) {
+    return { file: torrent.file.path };
+  }
+
+  const magnet = torrent.magnet.trim();
+
+  return magnet ? { magnet } : null;
+};
 
 /** Step 1 — data that needs no files on disk. */
 export interface BasicsDraft {

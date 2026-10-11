@@ -9,6 +9,7 @@ import { initContent } from './content';
 import { initProfiles } from './profiles';
 import { initProgress } from './progressIpc';
 import { initSteam } from './steam';
+import { initTorrents } from './torrents';
 import { initTranslate } from './translate';
 import { initUpdater } from './updater';
 
@@ -119,6 +120,7 @@ app.whenReady().then(() => {
   }
 
   initContent();
+  initTorrents();
   initSteam();
   initTranslate();
   initUpdater();

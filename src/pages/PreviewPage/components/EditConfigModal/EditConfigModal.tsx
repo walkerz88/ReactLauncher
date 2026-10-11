@@ -43,6 +43,7 @@ interface FormState {
   pathExec: string;
   pathSettings: string;
   pathInstaller: string;
+  pathUninstaller: string;
   pathCoverHorizontal: string;
   pathCoverVertical: string;
   pathBonus: string;
@@ -60,6 +61,7 @@ const PATH_FIELDS: Array<{
     | 'pathExec'
     | 'pathSettings'
     | 'pathInstaller'
+    | 'pathUninstaller'
     | 'pathCoverHorizontal'
     | 'pathCoverVertical'
     | 'pathBonus'
@@ -106,6 +108,12 @@ const PATH_FIELDS: Array<{
     labelKey: 'editConfig.pathInstaller',
     placeholder: 'installer/Setup.exe',
     supportsFolder: true,
+  },
+  {
+    formKey: 'pathUninstaller',
+    configField: 'uninstaller',
+    labelKey: 'editConfig.pathUninstaller',
+    placeholder: 'data/unins000.exe',
   },
   {
     formKey: 'pathBonus',
@@ -183,6 +191,7 @@ function configToForm(config: RawAppConfig): FormState {
     pathExec: config.paths?.exec ?? '',
     pathSettings: config.paths?.settings ?? '',
     pathInstaller: config.paths?.installer ?? '',
+    pathUninstaller: config.paths?.uninstaller ?? '',
     pathCoverHorizontal: config.paths?.coverHorizontal ?? '',
     pathCoverVertical: config.paths?.coverVertical ?? '',
     pathBonus: config.paths?.bonus ?? '',
@@ -729,7 +738,7 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
                 ))}
               </div>
 
-              {PATH_FIELDS.slice(2, 5).map(({ formKey, configField, labelKey, placeholder, supportsFolder, hideFileBrowse }) => (
+              {PATH_FIELDS.slice(2, 6).map(({ formKey, configField, labelKey, placeholder, supportsFolder, hideFileBrowse }) => (
                 <PathField
                   key={formKey}
                   label={t(labelKey)}
@@ -741,7 +750,7 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
                 />
               ))}
 
-              {PATH_FIELDS.slice(5).map(({ formKey, configField, labelKey, placeholder, supportsFolder, hideFileBrowse }) => (
+              {PATH_FIELDS.slice(6).map(({ formKey, configField, labelKey, placeholder, supportsFolder, hideFileBrowse }) => (
                 <PathField
                   key={formKey}
                   label={t(labelKey)}

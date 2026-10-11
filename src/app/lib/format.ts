@@ -82,3 +82,10 @@ export const formatFileSize = (bytes: number): string =>
     : bytes >= 1024 * 1024
       ? `${(bytes / 1024 / 1024).toFixed(1)} MB`
       : `${Math.max(1, Math.round(bytes / 1024))} KB`;
+
+/** "0 B/s" / "37 B/s" / "850 KB/s" / "12.4 MB/s" — below 1 KB it is shown in bytes, so an idle torrent reads 0, not 1 KB. */
+export const formatSpeed = (bytesPerSecond: number): string =>
+  bytesPerSecond >= 1024 ? `${formatFileSize(bytesPerSecond)}/s` : `${Math.max(0, Math.round(bytesPerSecond))} B/s`;
+
+/** Like `formatFileSize`, but shows an empty download as "0 KB". */
+export const formatTransferred = (bytes: number): string => (bytes > 0 ? formatFileSize(bytes) : '0 KB');

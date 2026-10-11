@@ -1,14 +1,16 @@
-import type { FC } from 'react';
+import { useState, type FC } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Heart, Home, LogOut, Maximize, Minimize, RotateCw, Settings, UserRound } from 'lucide-react';
+import { Download, Heart, Home, LogOut, Maximize, Minimize, RotateCw, Settings, UserRound } from 'lucide-react';
 
 import { useFullscreenState } from '@/app/hooks/useFullscreenState';
 import { useFavoritesStore } from '@/app/store/favoritesStore';
 import { useContentStore } from '@/app/store/contentStore';
 import { useNotificationStore } from '@/app/store/notificationStore';
 import { useSectionsStore } from '@/app/store/sectionsStore';
+import { useTorrentsStore } from '@/app/store/torrentsStore';
 import { useTranslation } from '@/app/i18n';
 import { AddGameButton } from '@/features/AddGame';
+import { ConfirmModal } from '@/shared/ConfirmModal';
 import { Tooltip } from '@/shared/Tooltip';
 
 import './AppNavigation.css';
@@ -21,8 +23,12 @@ export const AppNavigation: FC = () => {
   const hasFavorites = useFavoritesStore((state) => state.ids.length > 0);
   const favoritesEnabled = useSectionsStore((state) => state.favoritesEnabled);
   const addGameEnabled = useSectionsStore((state) => state.addGameEnabled);
+  const torrentEnabled = useSectionsStore((state) => state.torrentEnabled);
+  const hasTorrents = useTorrentsStore((state) => state.torrents.length > 0);
+  const showDownloads = torrentEnabled || hasTorrents;
   const isRescanning = useContentStore((state) => state.status === 'loading');
   const rescan = useContentStore((state) => state.loadApps);
+  const [confirmingExit, setConfirmingExit] = useState(false);
 
   const handleRescan = async () => {
     try {
@@ -58,6 +64,14 @@ export const AppNavigation: FC = () => {
         <Tooltip label={t('nav.favorites')} placement="right">
           <NavLink to="/favorites" className="app-navigation__item" aria-label={t('nav.favorites')} data-gamepad-focusable>
             <Heart size={ICON_SIZE} />
+          </NavLink>
+        </Tooltip>
+      ) : null}
+
+      {showDownloads ? (
+        <Tooltip label={t('nav.downloads')} placement="right">
+          <NavLink to="/downloads" className="app-navigation__item" aria-label={t('nav.downloads')} data-gamepad-focusable>
+            <Download size={ICON_SIZE} />
           </NavLink>
         </Tooltip>
       ) : null}
@@ -107,13 +121,25 @@ export const AppNavigation: FC = () => {
         <button
           type="button"
           className="app-navigation__item app-navigation__item--exit"
-          onClick={handleExit}
+          onClick={() => setConfirmingExit(true)}
           aria-label={t('nav.exit')}
           data-gamepad-focusable
         >
           <LogOut size={ICON_SIZE} />
         </button>
       </Tooltip>
+
+      {confirmingExit ? (
+        <ConfirmModal
+          title={t('nav.exitTitle')}
+          message={t('nav.exitConfirm')}
+          confirmLabel={t('nav.exit')}
+          cancelLabel={t('nav.exitCancel')}
+          danger
+          onConfirm={handleExit}
+          onCancel={() => setConfirmingExit(false)}
+        />
+      ) : null}
     </nav>
   );
 };

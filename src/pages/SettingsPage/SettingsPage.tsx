@@ -5,6 +5,7 @@ import { useTranslation } from '@/app/i18n';
 import { AboutSection } from '@/features/AboutSection';
 import { ThemePicker } from '@/features/ThemePicker';
 import { AddGameSectionToggle } from '@/features/AddGameSectionToggle';
+import { TorrentAddToggle } from '@/features/TorrentAddToggle';
 import { AchievementSoundToggle } from '@/features/AchievementSoundToggle';
 import { CardsSettings } from '@/features/CardsSettings';
 import { LaunchSettings } from '@/features/LaunchSettings';
@@ -103,6 +104,7 @@ export const SettingsPage: FC = () => {
             <LuckySectionToggle />
             <FavoritesSectionToggle />
             <AddGameSectionToggle />
+            <TorrentAddToggle />
           </section>
 
           <section className="settings-section">

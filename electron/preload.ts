@@ -45,6 +45,31 @@ const electronAPI = {
       return () => ipcRenderer.removeListener('update:progress', listener);
     },
   },
+  torrents: {
+    list: () => ipcRenderer.invoke('torrents:list'),
+    inspect: (source: unknown) => ipcRenderer.invoke('torrents:inspect', source),
+    pickFile: () => ipcRenderer.invoke('torrents:pick-file'),
+    pickFolder: () => ipcRenderer.invoke('torrents:pick-folder'),
+    defaultDir: (gameId: string) => ipcRenderer.invoke('torrents:default-dir', gameId),
+    add: (source: unknown, gameId: string, downloadDir?: string) =>
+      ipcRenderer.invoke('torrents:add', source, gameId, downloadDir),
+    pause: (id: string) => ipcRenderer.invoke('torrents:pause', id),
+    resume: (id: string) => ipcRenderer.invoke('torrents:resume', id),
+    remove: (id: string, deleteFiles: boolean) => ipcRenderer.invoke('torrents:remove', id, deleteFiles),
+    openFolder: (id: string) => ipcRenderer.invoke('torrents:open-folder', id),
+    onUpdated: (callback: (torrents: unknown) => void): (() => void) => {
+      const listener = (_event: IpcRendererEvent, payload: unknown) => callback(payload);
+      ipcRenderer.on('torrents:updated', listener);
+
+      return () => ipcRenderer.removeListener('torrents:updated', listener);
+    },
+    onCompleted: (callback: (event: unknown) => void): (() => void) => {
+      const listener = (_event: IpcRendererEvent, payload: unknown) => callback(payload);
+      ipcRenderer.on('torrents:completed', listener);
+
+      return () => ipcRenderer.removeListener('torrents:completed', listener);
+    },
+  },
   translate: {
     text: (text: string, target: string) => ipcRenderer.invoke('translate:text', text, target),
   },
@@ -83,6 +108,7 @@ const electronAPI = {
     openInstaller: (id: string) => ipcRenderer.invoke('content:open-installer', id),
     openData: (id: string) => ipcRenderer.invoke('content:open-data', id),
     openAppFolder: (id: string) => ipcRenderer.invoke('content:open-app-folder', id),
+    deleteGame: (id: string, scope: string) => ipcRenderer.invoke('content:delete-game', id, scope),
     openBonus: (id: string) => ipcRenderer.invoke('content:open-bonus', id),
     diskSpace: () => ipcRenderer.invoke('content:disk-space'),
     sizes: (skipIds?: string[]) => ipcRenderer.invoke('content:sizes', skipIds ?? []),

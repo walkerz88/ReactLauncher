@@ -105,6 +105,8 @@ interface AppConfig {
     settings?: string;
     /** Installer executable. If omitted, the `installer/` folder (if present) is opened instead of running a file. */
     installer?: string;
+    /** Uninstaller executable; run by "Delete game data" instead of wiping `data/` itself. */
+    uninstaller?: string;
     coverHorizontal?: string;
     coverVertical?: string;
     /** Bonus content folder (concept art, soundtrack, …); defaults to `bonus`. */
@@ -145,6 +147,7 @@ interface ScannedApp {
   /** Installer executable from `paths.installer`, if configured and it resolves to a file. */
   installerFileAbs: string | null;
   installerDirAbs: string | null;
+  uninstallerAbs: string | null;
   dataDirAbs: string | null;
   /** Bonus content target from `paths.bonus` — may be a file or a folder. */
   bonusAbs: string | null;
@@ -179,6 +182,7 @@ interface ContentAppMeta {
   hasExec: boolean;
   hasSettings: boolean;
   hasInstaller: boolean;
+  hasUninstaller: boolean;
   hasDataFiles: boolean;
   hasBonusContent: boolean;
   /** `content://` URLs of the screenshots, in file-name order. */
@@ -373,6 +377,7 @@ type PathField =
   | 'exec'
   | 'settings'
   | 'installer'
+  | 'uninstaller'
   | 'coverHorizontal'
   | 'coverVertical'
   | 'bonus'
@@ -436,7 +441,7 @@ function contentDirCandidates(): string[] {
     .map((entry) => path.resolve(entry));
 }
 
-function getContentDir(): string {
+export function getContentDir(): string {
   if (contentDirCache) {
     return contentDirCache;
   }
@@ -473,6 +478,18 @@ function resolveInside(dir: string, relative: string): string | null {
   }
 
   return fs.existsSync(abs) ? abs : null;
+}
+
+/** Launch targets (executable, settings tool, installer, custom buttons) may live anywhere on disk: an absolute
+ * path is used as is, a relative one is resolved inside the game folder like every other `paths.*` value. */
+function resolveLaunchTarget(dir: string, value: string): string | null {
+  if (path.isAbsolute(value)) {
+    const abs = path.normalize(value);
+
+    return fs.existsSync(abs) ? abs : null;
+  }
+
+  return resolveInside(dir, value);
 }
 
 /** Like `resolveInside`, but only returns the path if it is an existing directory. */
@@ -614,14 +631,15 @@ async function scanContent(): Promise<ScannedApp[]> {
       facts: readFacts(config.facts),
       customButtons: readCustomButtons(config.customButtons).map((button) => ({
         label: button.label,
-        abs: resolveInside(dir, button.path),
+        abs: resolveLaunchTarget(dir, button.path),
       })),
       previewNotes: readPreviewNotes(config.previewNotes),
       dir,
-      execAbs: resolveInside(dir, config.paths?.exec ?? `data/${id}.exe`),
-      settingsAbs: config.paths?.settings ? resolveInside(dir, config.paths.settings) : null,
-      installerFileAbs: config.paths?.installer ? resolveInside(dir, config.paths.installer) : null,
+      execAbs: resolveLaunchTarget(dir, config.paths?.exec ?? `data/${id}.exe`),
+      settingsAbs: config.paths?.settings ? resolveLaunchTarget(dir, config.paths.settings) : null,
+      installerFileAbs: config.paths?.installer ? resolveLaunchTarget(dir, config.paths.installer) : null,
       installerDirAbs: resolveDirInside(dir, 'installer'),
+      uninstallerAbs: config.paths?.uninstaller ? resolveLaunchTarget(dir, config.paths.uninstaller) : null,
       dataDirAbs: resolveNonEmptyDirInside(dir, 'data'),
       // An explicit `paths.bonus` may be a file or a folder (like exec/settings/installer);
       // the unconfigured default only guesses a folder, and only if it actually has content.
@@ -813,6 +831,7 @@ function registerIpc(): void {
         hasExec: appEntry.execAbs != null,
         hasSettings: appEntry.settingsAbs != null,
         hasInstaller: appEntry.installerFileAbs != null || appEntry.installerDirAbs != null,
+        hasUninstaller: appEntry.uninstallerAbs != null,
         hasDataFiles: appEntry.dataDirAbs != null,
         hasBonusContent: appEntry.bonusAbs != null,
         screenshots: appEntry.screenshotsAbs.map(toContentUrl),
@@ -900,6 +919,56 @@ function registerIpc(): void {
 
     return error ? { ok: false, error } : { ok: true };
   });
+
+  const REMOVE_OPTIONS = { recursive: true, force: true, maxRetries: 10, retryDelay: 300 };
+
+  /**
+   * "Delete game data": the configured uninstaller is started (the launcher can't tell when it finishes, so the
+   * files stay until the library is rescanned); without one the content of `data/` is wiped and the folder kept.
+   * "Delete from library": the whole game folder goes — config, covers, installer, everything.
+   */
+  ipcMain.handle(
+    'content:delete-game',
+    async (_event, appId: unknown, scope: unknown): Promise<LaunchResult> => {
+      if (typeof appId !== 'string' || (scope !== 'data' && scope !== 'library')) {
+        return { ok: false, error: 'Некорректные параметры' };
+      }
+      const target = (await scanContent()).find((appEntry) => appEntry.id === appId);
+      if (!target) {
+        return { ok: false, error: 'Игра не найдена' };
+      }
+      if (getRunningIds().includes(target.id)) {
+        return { ok: false, error: 'Игра запущена — сначала закройте её' };
+      }
+
+      try {
+        if (scope === 'library') {
+          const root = getContentDir();
+
+          if (path.resolve(root, target.id) !== target.dir || !target.dir.startsWith(root + path.sep)) {
+            return { ok: false, error: 'Некорректная папка игры' };
+          }
+          await fs.promises.rm(target.dir, REMOVE_OPTIONS);
+
+          return { ok: true };
+        }
+
+        if (target.uninstallerAbs) {
+          return await launchPath(target.uninstallerAbs);
+        }
+        if (!target.dataDirAbs) {
+          return { ok: false, error: 'Папка data пуста' };
+        }
+
+        const names = await fs.promises.readdir(target.dataDirAbs);
+        await Promise.all(names.map((name) => fs.promises.rm(path.join(target.dataDirAbs as string, name), REMOVE_OPTIONS)));
+
+        return { ok: true };
+      } catch (err) {
+        return { ok: false, error: err instanceof Error ? err.message : String(err) };
+      }
+    },
+  );
 
   ipcMain.handle('content:open-data', async (_event, appId: unknown): Promise<LaunchResult> => {
     if (typeof appId !== 'string') {
@@ -1077,11 +1146,11 @@ function registerIpc(): void {
   );
 
   const IMAGE_FIELDS = new Set<PathField>(['coverHorizontal', 'coverVertical']);
-  const EXECUTABLE_FIELDS = new Set<PathField>(['exec', 'settings', 'installer', 'customButton']);
+  const EXECUTABLE_FIELDS = new Set<PathField>(['exec', 'settings', 'installer', 'uninstaller', 'customButton']);
   // Windows can't show one dialog offering both files and folders (it silently
   // degrades to a folder-only, icon-less picker), so these fields get separate
   // "browse file" / "browse folder" dialogs instead, picked via `mode`.
-  const DUAL_MODE_FIELDS = new Set<PathField>(['exec', 'settings', 'installer', 'bonus', 'saves', 'customButton']);
+  const DUAL_MODE_FIELDS = new Set<PathField>(['exec', 'settings', 'installer', 'uninstaller', 'bonus', 'saves', 'customButton']);
   const FOLDER_ONLY_FIELDS = new Set<PathField>(['screenshots']);
   const VIDEO_FIELDS = new Set<PathField>(['trailer']);
 
@@ -1132,7 +1201,12 @@ function registerIpc(): void {
       const picked = result.filePaths[0];
       const relative = path.relative(target.dir, picked);
       const isInside = relative !== '' && !relative.startsWith('..') && !path.isAbsolute(relative);
-      const stored = pathField === 'saves' && !isInside ? toPortablePath(picked) : relative.split(path.sep).join('/');
+      const stored =
+        pathField === 'saves' && !isInside
+          ? toPortablePath(picked)
+          : EXECUTABLE_FIELDS.has(pathField) && !isInside
+            ? picked
+            : relative.split(path.sep).join('/');
 
       return { ok: true, path: stored };
     },

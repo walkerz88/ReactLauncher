@@ -3,8 +3,12 @@ import type { FC } from 'react';
 import { useTranslation } from '@/app/i18n';
 import { Message } from '@/shared/Message';
 
+import { TorrentProgress } from './TorrentProgress';
+
 export interface FilesStepProps {
   assetsStatus: 'idle' | 'loading' | 'done' | 'failed';
+  /** Folder id of the game whose torrent download was started; `null` when the files are put in by hand. */
+  torrentGameId: string | null;
 }
 
 const FOLDERS = [
@@ -15,12 +19,14 @@ const FOLDERS = [
   { name: 'bonus/', textKey: 'addGame.files.bonus' },
 ];
 
-export const FilesStep: FC<FilesStepProps> = ({ assetsStatus }) => {
+export const FilesStep: FC<FilesStepProps> = ({ assetsStatus, torrentGameId }) => {
   const t = useTranslation();
 
   return (
     <div className="add-game__step-body" data-id="FilesStep">
       <p className="add-game__intro">{t('addGame.files.intro')}</p>
+
+      {torrentGameId ? <TorrentProgress gameId={torrentGameId} /> : null}
 
       <Message type="info">{t('addGame.files.tip')}</Message>
 

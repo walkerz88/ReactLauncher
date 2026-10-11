@@ -352,6 +352,32 @@
   background-color: var(--color-surface-hover);
 }
 
+.game-settings-menu__item--danger {
+  color: var(--color-danger);
+}
+
+.delete-game {
+  max-width: 600px;
+}
+
+.delete-game .modal__footer {
+  flex-wrap: wrap;
+}
+
+.delete-game__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.delete-game__button {
+  white-space: nowrap;
+}
+
+.delete-game__warning {
+  color: var(--color-warning);
+}
+
 /* --- instructions popup (InstructionsModal) --- */
 
 .instructions-modal__text {

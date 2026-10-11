@@ -8,12 +8,23 @@ export interface GameSettingsMenuProps {
   appId: string;
   hasInstaller: boolean;
   hasSaves: boolean;
+  /** The game has files in `data/`, so "Delete" makes sense. */
+  hasDataFiles: boolean;
   onEditData: () => void;
   onOpenBackups: () => void;
+  onDelete: () => void;
 }
 
 /** Gear button for install-related actions ("Установить", "Показать файлы", "Редактировать данные"). */
-export const GameSettingsMenu: FC<GameSettingsMenuProps> = ({ appId, hasInstaller, hasSaves, onEditData, onOpenBackups }) => {
+export const GameSettingsMenu: FC<GameSettingsMenuProps> = ({
+  appId,
+  hasInstaller,
+  hasSaves,
+  hasDataFiles,
+  onEditData,
+  onOpenBackups,
+  onDelete,
+}) => {
   const t = useTranslation();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -56,6 +67,11 @@ export const GameSettingsMenu: FC<GameSettingsMenuProps> = ({ appId, hasInstalle
   const handleOpenBackups = () => {
     setOpen(false);
     onOpenBackups();
+  };
+
+  const handleDelete = () => {
+    setOpen(false);
+    onDelete();
   };
 
   const handleEditData = () => {
@@ -116,6 +132,16 @@ export const GameSettingsMenu: FC<GameSettingsMenuProps> = ({ appId, hasInstalle
           >
             {t('app.editData')}
           </button>
+          {hasDataFiles ? (
+            <button
+              type="button"
+              className="game-settings-menu__item game-settings-menu__item--danger"
+              role="menuitem"
+              onClick={handleDelete}
+            >
+              {t('app.delete')}
+            </button>
+          ) : null}
         </div>
       ) : null}
     </div>

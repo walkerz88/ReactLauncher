@@ -20,9 +20,11 @@ import { useContentStore } from '@/app/store/contentStore';
 import { launchFactEvents, reportProgress } from '@/app/lib/progressEvents';
 import { useFavoritesStore } from '@/app/store/favoritesStore';
 import { useLocaleStore } from '@/app/store/localeStore';
+import { useNotificationStore } from '@/app/store/notificationStore';
 import { useRecentStore } from '@/app/store/recentStore';
 import { usePlaytimeStore } from '@/app/store/playtimeStore';
 import { useRunningStore } from '@/app/store/runningStore';
+import { useTorrentsStore } from '@/app/store/torrentsStore';
 import { formatPlaytime, formatRelativeTime } from '@/app/lib/format';
 import { useTranslation } from '@/app/i18n';
 import { Message } from '@/shared/Message';
@@ -30,6 +32,7 @@ import { RatingBadge } from '@/shared/RatingBadge';
 import { Tooltip } from '@/shared/Tooltip';
 
 import { BackupsModal } from './components/BackupsModal';
+import { DeleteGameModal, type DeleteScope } from './components/DeleteGameModal';
 import { EditConfigModal } from './components/EditConfigModal';
 import { GameSettingsMenu } from './components/GameSettingsMenu';
 import { InstructionsModal } from './components/InstructionsModal';
@@ -62,6 +65,7 @@ export const PreviewPage: FC = () => {
   const [showInstructions, setShowInstructions] = useState(false);
   const [showEditConfig, setShowEditConfig] = useState(false);
   const [showBackups, setShowBackups] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
 
   useEffect(() => {
     if (status === 'idle') {
@@ -164,6 +168,45 @@ export const PreviewPage: FC = () => {
       await window.electronAPI?.content?.stop(app.id);
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const deleteGame = async (scope: DeleteScope) => {
+    const { pushNotification } = useNotificationStore.getState();
+
+    setShowDelete(false);
+
+    try {
+      if (scope === 'library') {
+        // A torrent of this game keeps its files open, which would stop the folder from being deleted.
+        const gameTorrents = useTorrentsStore.getState().torrents.filter((torrent) => torrent.gameId === app.id);
+
+        await Promise.all(gameTorrents.map((torrent) => window.electronAPI.torrents.remove(torrent.id, false)));
+      }
+
+      const result = await window.electronAPI.content.deleteGame(app.id, scope);
+
+      if (!result.ok) {
+        pushNotification(result.error ?? t('downloads.failed'), 'error');
+
+        return;
+      }
+
+      if (scope === 'library') {
+        if (isFavorite) {
+          toggleFavorite(app.id);
+        }
+
+        pushNotification(t('app.deleteLibraryDone'), 'success');
+        navigate('/');
+      } else {
+        pushNotification(app.hasUninstaller ? t('app.deleteUninstallerStarted') : t('app.deleteDataDone'), 'success');
+      }
+
+      await loadApps();
+    } catch (err) {
+      console.error(err);
+      pushNotification(err instanceof Error ? err.message : t('downloads.failed'), 'error');
     }
   };
 
@@ -307,8 +350,10 @@ export const PreviewPage: FC = () => {
           appId={app.id}
           hasInstaller={app.hasInstaller && !showInstallPrimary}
           hasSaves={app.hasSaves}
+          hasDataFiles={app.hasDataFiles}
           onEditData={() => setShowEditConfig(true)}
           onOpenBackups={() => setShowBackups(true)}
+          onDelete={() => setShowDelete(true)}
         />
 
         <Tooltip label={isFavorite ? t('app.favoriteRemove') : t('app.favoriteAdd')}>
@@ -386,6 +431,15 @@ export const PreviewPage: FC = () => {
           appName={app.name}
           text={instructions}
           onClose={() => setShowInstructions(false)}
+        />
+      ) : null}
+
+      {showDelete ? (
+        <DeleteGameModal
+          appName={app.name}
+          hasSaves={app.hasSaves}
+          onDelete={(scope) => void deleteGame(scope)}
+          onCancel={() => setShowDelete(false)}
         />
       ) : null}
 

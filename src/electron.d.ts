@@ -67,6 +67,8 @@ export interface ContentApp {
   hasSettings: boolean;
   /** Whether `paths.installer` resolved to a file, or the app folder has an `installer/` sub-folder. */
   hasInstaller: boolean;
+  /** Whether `paths.uninstaller` resolved to a file. */
+  hasUninstaller: boolean;
   /** Whether the app folder has a non-empty `data/` sub-folder. */
   hasDataFiles: boolean;
   /** Whether `paths.bonus` (a file or a folder; defaults to a non-empty `bonus/` folder) resolved to something. */
@@ -140,6 +142,7 @@ export interface RawAppConfig {
     exec?: string;
     settings?: string;
     installer?: string;
+    uninstaller?: string;
     coverHorizontal?: string;
     coverVertical?: string;
     bonus?: string;
@@ -168,6 +171,7 @@ export type PathField =
   | 'exec'
   | 'settings'
   | 'installer'
+  | 'uninstaller'
   | 'coverHorizontal'
   | 'coverVertical'
   | 'bonus'
@@ -415,6 +419,64 @@ export interface LaunchSettings {
   autoCheckUpdates: boolean;
 }
 
+export type TorrentState = 'metadata' | 'downloading' | 'seeding' | 'paused' | 'error';
+
+export interface TorrentInfo {
+  id: string;
+  gameId: string;
+  name: string;
+  state: TorrentState;
+  error: string | null;
+  /** 0–1 */
+  progress: number;
+  size: number;
+  downloaded: number;
+  uploaded: number;
+  /** Bytes per second. */
+  downloadSpeed: number;
+  uploadSpeed: number;
+  /** Connected peers that have every piece. */
+  seeds: number;
+  /** All connected peers, seeds included. */
+  peers: number;
+  /** Seconds left, or `null` when unknown. */
+  eta: number | null;
+  ratio: number;
+  addedAt: number;
+}
+
+export type TorrentSource = { magnet: string } | { file: string };
+
+export interface TorrentInspection {
+  infoHash: string;
+  name: string | null;
+  /** `null` for a magnet link: the size is only known once the metadata arrives. */
+  size: number | null;
+}
+
+export type TorrentResult<T = object> = ({ ok: true } & T) | { ok: false; error: string };
+
+export interface TorrentsAPI {
+  list: () => Promise<TorrentInfo[]>;
+  /** Validates a source without starting anything. */
+  inspect: (source: TorrentSource) => Promise<TorrentResult<{ torrent: TorrentInspection }>>;
+  /** Opens the file dialog; `null` if cancelled. */
+  pickFile: () => Promise<{ path: string; name: string } | null>;
+  /** Opens the folder dialog; `null` if cancelled. */
+  pickFolder: () => Promise<string | null>;
+  /** The game folder's `installer/` — where a torrent goes unless another folder is given; `null` if the game is unknown. */
+  defaultDir: (gameId: string) => Promise<string | null>;
+  /** Starts downloading into `downloadDir`, or into the game folder's `installer/` when that is omitted. */
+  add: (source: TorrentSource, gameId: string, downloadDir?: string) => Promise<TorrentResult<{ torrent: TorrentInfo }>>;
+  pause: (id: string) => Promise<TorrentResult>;
+  resume: (id: string) => Promise<TorrentResult>;
+  remove: (id: string, deleteFiles: boolean) => Promise<TorrentResult>;
+  openFolder: (id: string) => Promise<TorrentResult>;
+  /** Fires every second while there are torrents; returns an unsubscribe function. */
+  onUpdated: (callback: (torrents: TorrentInfo[]) => void) => () => void;
+  onCompleted: (callback: (event: { id: string; gameId: string; name: string }) => void) => () => void;
+}
+
 export interface ElectronAPI {
   /** Quit the whole application. */
   quit: () => Promise<void>;
@@ -457,6 +519,7 @@ export interface ElectronAPI {
     /** Bytes downloaded so far and the file size (0 if unknown); returns an unsubscribe function. */
     onProgress: (callback: (progress: { received: number; total: number }) => void) => () => void;
   };
+  torrents: TorrentsAPI;
   translate: {
     /** Machine-translates `text` (source language auto-detected) into `target`; `null` on failure. */
     text: (text: string, target: 'ru' | 'en') => Promise<string | null>;
@@ -469,6 +532,8 @@ export interface ElectronAPI {
     openInstaller: (id: string) => Promise<LaunchResult>;
     /** Open the app's `data/` folder in the OS file manager. */
     openData: (id: string) => Promise<LaunchResult>;
+    /** Deletes a game: `data` runs its uninstaller (or wipes `data/`), `library` removes the whole game folder. */
+    deleteGame: (id: string, scope: 'data' | 'library') => Promise<LaunchResult>;
     /** Open the app's root content folder (contains `data/`, `installer/`, `config.json`, …) in the OS file manager. */
     openAppFolder: (id: string) => Promise<LaunchResult>;
     /** Open the app's bonus content (`paths.bonus`) — a folder in the OS file manager, or a file with its default app. */

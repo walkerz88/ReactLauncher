@@ -1,6 +1,6 @@
 {
   "name": "react-launcher",
-  "version": "1.12.9",
+  "version": "1.13.0",
   "description": "React Launcher - Windows desktop game launcher (Electron + React + TypeScript) with a library, Steam auto-fill, profiles, achievements and save backups",
   "main": "public/electron.js",
   "homepage": "./",
@@ -108,6 +108,7 @@
     "framer-motion": "^13.3.0",
     "lucide-react": "^1.44.0",
     "modern-normalize": "^3.0.1",
+    "parse-torrent": "^11.0.24",
     "plyr": "^3.8.4",
     "plyr-react": "^6.0.0",
     "react": "^18.2.0",
@@ -117,6 +118,7 @@
     "recharts": "^3.10.1",
     "remark-breaks": "^4.0.0",
     "remark-gfm": "^4.0.1",
+    "webtorrent": "^3.0.21",
     "zustand": "^5.0.15"
   }
 }

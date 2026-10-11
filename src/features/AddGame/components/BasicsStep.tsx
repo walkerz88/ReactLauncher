@@ -21,13 +21,13 @@ export const BasicsStep: FC<BasicsStepProps> = ({ basics, onChange }) => {
     <div className="add-game__step-body" data-id="BasicsStep">
       <p className="add-game__intro">{t('addGame.basics.intro')}</p>
 
+      <Message type="warning">{t('addGame.basics.nameWarning')}</Message>
+
       <FormField label={t('editConfig.name')}>
         <input type="text" value={basics.name} onChange={(event) => onChange({ name: event.target.value })} autoFocus />
       </FormField>
 
       <SteamSearch query={basics.name} steamAppId={basics.steamAppId} onImport={onChange} />
-
-      <Message type="warning">{t('addGame.basics.nameWarning')}</Message>
 
       <div className="add-game__row">
         <FormField label={t('editConfig.genre')}>
