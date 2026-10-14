@@ -806,5 +806,18 @@
         "en": "When an update fails to install, the notification shows the reason and it is written to a log in the temp folder"
       }
     ]
+  },
+  {
+    "version": "1.14.8",
+    "title": {
+      "ru": "Короче вопрос при выходе",
+      "en": "Shorter exit prompt"
+    },
+    "changes": [
+      {
+        "ru": "При выходе спрашивается просто «Вы действительно хотите выйти из программы?»",
+        "en": "The exit prompt now simply asks \"Do you really want to exit the program?\""
+      }
+    ]
   }
 ]

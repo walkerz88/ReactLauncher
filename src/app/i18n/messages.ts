@@ -72,7 +72,7 @@ const ru = {
   'nav.rescanSuccess': 'Библиотека успешно обновлена',
   'nav.exit': 'Выход',
   'nav.exitTitle': 'Выйти из приложения',
-  'nav.exitConfirm': 'Закрыть лаунчер? Текущие загрузки торрентов будут приостановлены и продолжатся при следующем запуске.',
+  'nav.exitConfirm': 'Вы действительно хотите выйти из программы?',
   'nav.exitCancel': 'Отмена',
 
   'window.minimize': 'Свернуть',
@@ -665,7 +665,7 @@ const en: Record<MessageKey, string> = {
   'nav.rescanSuccess': 'Library updated successfully',
   'nav.exit': 'Exit',
   'nav.exitTitle': 'Exit the app',
-  'nav.exitConfirm': 'Close the launcher? Running torrent downloads will be paused and continue on the next launch.',
+  'nav.exitConfirm': 'Do you really want to exit the program?',
   'nav.exitCancel': 'Cancel',
 
   'window.minimize': 'Minimize',
