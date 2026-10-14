@@ -1,5 +1,5 @@
 import { useState, type FC } from 'react';
-import { ArrowDown, ArrowUp, Plus } from 'lucide-react';
+import { ArrowDown, ArrowUp, Plus, Search, X } from 'lucide-react';
 
 import { useTranslation } from '@/app/i18n';
 import { useContentStore } from '@/app/store/contentStore';
@@ -43,6 +43,7 @@ export const DownloadsPage: FC = () => {
   const [wizard, setWizard] = useState<{ initialMode?: AddMode } | null>(null);
   const [removing, setRemoving] = useState<TorrentInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
   const sortByTable = useTableSortStore((state) => state.byTable);
   const setStoredSort = useTableSortStore((state) => state.setSort);
   const sort: Sort | null = pickTableSort(sortByTable, 'downloads', COLUMNS);
@@ -73,8 +74,15 @@ export const DownloadsPage: FC = () => {
     }
   };
 
+  const needle = query.trim().toLowerCase();
+  const visibleTorrents = needle
+    ? torrents.filter((torrent) =>
+        [gameNameOf(torrent), torrent.name].some((name) => name?.toLowerCase().includes(needle)),
+      )
+    : torrents;
+
   const sortedTorrents = sort
-    ? [...torrents].sort((a, b) => {
+    ? [...visibleTorrents].sort((a, b) => {
         const first = sortValue(a, sort.column);
         const second = sortValue(b, sort.column);
         const order =
@@ -84,7 +92,7 @@ export const DownloadsPage: FC = () => {
 
         return sort.descending ? -order : order;
       })
-    : torrents;
+    : visibleTorrents;
 
   const toggleSort = (column: Column) => {
     setStoredSort('downloads', { column, descending: sort?.column === column ? !sort.descending : false });
@@ -120,6 +128,30 @@ export const DownloadsPage: FC = () => {
               <Plus size={18} />
             </button>
           </Tooltip>
+        ) : null}
+
+        {torrents.length > 0 ? (
+          <div className="downloads__search">
+            <Search size={14} className="downloads__search-icon" aria-hidden="true" />
+            <input
+              type="text"
+              className="downloads__search-input"
+              value={query}
+              placeholder={t('gallery.filter.search')}
+              aria-label={t('gallery.filter.search')}
+              onChange={(event) => setQuery(event.target.value)}
+            />
+            {query ? (
+              <button
+                type="button"
+                className="downloads__search-clear"
+                aria-label={t('gallery.filter.searchClear')}
+                onClick={() => setQuery('')}
+              >
+                <X size={12} />
+              </button>
+            ) : null}
+          </div>
         ) : null}
       </div>
 
