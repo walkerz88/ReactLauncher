@@ -322,6 +322,20 @@ async function launchReplacement(oldExe: string, downloaded: string, target: str
   );
 }
 
+/** A portable exe can sit where the user may not create files (the root of a drive, say), and then it cannot replace itself. */
+async function canCreateFileIn(dir: string): Promise<boolean> {
+  const probe = path.join(dir, `.react-launcher-write-test-${process.pid}`);
+
+  try {
+    await fs.promises.writeFile(probe, '');
+    await fs.promises.rm(probe, { force: true });
+
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function installUpdate(sender: WebContents): Promise<UpdateInstallResult> {
   if (!pending || installing) {
     return { status: 'error', reason: installing ? 'already installing' : 'no update found by the last check' };
@@ -331,8 +345,9 @@ async function installUpdate(sender: WebContents): Promise<UpdateInstallResult> 
 
   const update = pending;
   const portableExe = process.env.PORTABLE_EXECUTABLE_FILE;
+  const replaceInPlace = Boolean(portableExe) && (await canCreateFileIn(path.dirname(portableExe as string)));
   const fileName = decodeURIComponent(path.posix.basename(new URL(update.url).pathname));
-  const targetDir = portableExe ? path.dirname(portableExe) : app.getPath('downloads');
+  const targetDir = replaceInPlace ? path.dirname(portableExe as string) : app.getPath('downloads');
   const target = path.join(targetDir, fileName);
   const partial = `${target}.download`;
   const sendProgress = (progress: UpdateProgress) => {
@@ -348,14 +363,14 @@ async function installUpdate(sender: WebContents): Promise<UpdateInstallResult> 
       throw new Error('Checksum mismatch');
     }
 
-    if (!portableExe) {
+    if (!replaceInPlace) {
       await fs.promises.rename(partial, target);
       shell.showItemInFolder(target);
 
       return { status: 'downloaded', path: target };
     }
 
-    await launchReplacement(portableExe, partial, target);
+    await launchReplacement(portableExe as string, partial, target);
     app.quit();
 
     return { status: 'restarting' };
