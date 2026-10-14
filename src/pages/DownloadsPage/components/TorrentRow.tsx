@@ -32,40 +32,6 @@ export const TorrentRow: FC<TorrentRowProps> = ({ torrent, gameName, onPause, on
 
   return (
     <tr className={['torrent-row', `torrent-row--${state}`].join(' ')} data-id="TorrentRow">
-      <td className="torrent-row__name">
-        {gameName ? (
-          <Link to={`/app/${encodeURIComponent(torrent.gameId)}`} className="torrent-row__title" data-gamepad-focusable>
-            {title}
-          </Link>
-        ) : (
-          <span className="torrent-row__title">{title}</span>
-        )}
-        {gameName && torrent.name ? <span className="torrent-row__subtitle">{torrent.name}</span> : null}
-        {torrent.error ? <span className="torrent-row__error">{torrent.error}</span> : null}
-      </td>
-
-      <td>
-        <span className="torrent-row__state">{t(`downloads.state.${state}`)}</span>
-      </td>
-
-      <td className="torrent-row__progress">
-        <ProgressBar value={progress} label={title} muted={!active} />
-        <span className="torrent-row__percent">{(progress * 100).toFixed(1)}%</span>
-      </td>
-
-      <td className="torrent-row__number">
-        {formatTransferred(torrent.downloaded)} / {torrent.size > 0 ? formatTransferred(torrent.size) : '—'}
-      </td>
-      <td className="torrent-row__number">{formatSpeed(torrent.downloadSpeed)}</td>
-      <td className="torrent-row__number">{formatSpeed(torrent.uploadSpeed)}</td>
-      <td className="torrent-row__number">{eta}</td>
-      <td className="torrent-row__number" title={t('downloads.swarmHint')}>
-        {formatSwarm(torrent.seeds, torrent.swarmSeeds)}
-      </td>
-      <td className="torrent-row__number" title={t('downloads.swarmHint')}>
-        {formatSwarm(torrent.peers, torrent.swarmPeers)}
-      </td>
-
       <td className="torrent-row__actions">
         <div className="torrent-row__buttons">
           {canResume ? (
@@ -118,6 +84,40 @@ export const TorrentRow: FC<TorrentRowProps> = ({ torrent, gameName, onPause, on
             </button>
           </Tooltip>
         </div>
+      </td>
+
+      <td className="torrent-row__name">
+        {gameName ? (
+          <Link to={`/app/${encodeURIComponent(torrent.gameId)}`} className="torrent-row__title" data-gamepad-focusable>
+            {title}
+          </Link>
+        ) : (
+          <span className="torrent-row__title">{title}</span>
+        )}
+        {gameName && torrent.name ? <span className="torrent-row__subtitle">{torrent.name}</span> : null}
+        {torrent.error ? <span className="torrent-row__error">{torrent.error}</span> : null}
+      </td>
+
+      <td>
+        <span className="torrent-row__state">{t(`downloads.state.${state}`)}</span>
+      </td>
+
+      <td className="torrent-row__progress">
+        <ProgressBar value={progress} label={title} muted={!active} />
+        <span className="torrent-row__percent">{(progress * 100).toFixed(1)}%</span>
+      </td>
+
+      <td className="torrent-row__number">
+        {formatTransferred(torrent.downloaded)} / {torrent.size > 0 ? formatTransferred(torrent.size) : '—'}
+      </td>
+      <td className="torrent-row__number">{formatSpeed(torrent.downloadSpeed)}</td>
+      <td className="torrent-row__number">{formatSpeed(torrent.uploadSpeed)}</td>
+      <td className="torrent-row__number">{eta}</td>
+      <td className="torrent-row__number" title={t('downloads.swarmHint')}>
+        {formatSwarm(torrent.seeds, torrent.swarmSeeds)}
+      </td>
+      <td className="torrent-row__number" title={t('downloads.swarmHint')}>
+        {formatSwarm(torrent.peers, torrent.swarmPeers)}
       </td>
     </tr>
   );

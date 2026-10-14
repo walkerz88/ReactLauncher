@@ -275,19 +275,59 @@ function readLaunchOptions(value: AppConfig['launch']): LaunchOptions {
   };
 }
 
+/** Caps how many `lstat`/`readdir` calls are in flight at once, process-wide. A huge `data/` folder
+ * recursed with plain `Promise.all` kicks off one of these per file/subfolder *immediately* — for a
+ * deep tree that's easily tens of thousands at once, which floods the OS (file-handle limits, disk
+ * queue depth) and can make the whole scan appear to hang on one folder. The recursion itself stays
+ * unbounded (cheap, just pending promises); only the actual syscalls are throttled. */
+const MAX_CONCURRENT_FS_OPS = 32;
+let activeFsOps = 0;
+const fsOpQueue: Array<() => void> = [];
+
+function runLimited<T>(fn: () => Promise<T>): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const run = () => {
+      activeFsOps++;
+      fn()
+        .then(resolve, reject)
+        .finally(() => {
+          activeFsOps--;
+          fsOpQueue.shift()?.();
+        });
+    };
+
+    if (activeFsOps < MAX_CONCURRENT_FS_OPS) {
+      run();
+    } else {
+      fsOpQueue.push(run);
+    }
+  });
+}
+
+async function statOrNull(target: string): Promise<fs.Stats | null> {
+  try {
+    return await runLimited(() => fs.promises.stat(target));
+  } catch {
+    return null;
+  }
+}
+
 const IMAGE_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.avif']);
 const MAX_SCREENSHOTS = 40;
 
 /** Image files of a screenshots folder in natural file-name order (`2.jpg` before `10.jpg`). */
-function listScreenshots(folder: string | null): string[] {
+async function listScreenshots(folder: string | null): Promise<string[]> {
   if (!folder) {
     return [];
   }
   try {
-    return fs
-      .readdirSync(folder)
-      .filter((name) => IMAGE_EXTENSIONS.has(path.extname(name).toLowerCase()))
-      .filter((name) => fs.statSync(path.join(folder, name)).size > 0)
+    const names = (await runLimited(() => fs.promises.readdir(folder))).filter((name) =>
+      IMAGE_EXTENSIONS.has(path.extname(name).toLowerCase()),
+    );
+    const sizes = await Promise.all(names.map((name) => runLimited(() => fs.promises.stat(path.join(folder, name)))));
+
+    return names
+      .filter((_name, index) => sizes[index].size > 0)
       .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
       .slice(0, MAX_SCREENSHOTS)
       .map((name) => path.join(folder, name));
@@ -307,9 +347,9 @@ function resolveSavesPath(dir: string, value: string | undefined): string | null
   return path.isAbsolute(expanded) ? path.normalize(expanded) : path.resolve(dir, expanded);
 }
 
-function readAddedAt(dir: string): number | null {
+async function readAddedAt(dir: string): Promise<number | null> {
   try {
-    return Math.round(fs.statSync(dir).birthtimeMs);
+    return Math.round((await runLimited(() => fs.promises.stat(dir))).birthtimeMs);
   } catch {
     return null;
   }
@@ -472,86 +512,53 @@ async function readConfig(dir: string): Promise<AppConfig> {
 }
 
 /** Resolve a config-relative path, but only if it stays inside `dir` and exists. */
-function resolveInside(dir: string, relative: string): string | null {
+async function resolveInside(dir: string, relative: string): Promise<string | null> {
   const abs = path.resolve(dir, relative);
   if (abs !== dir && !abs.startsWith(dir + path.sep)) {
     return null;
   }
 
-  return fs.existsSync(abs) ? abs : null;
+  return (await statOrNull(abs)) ? abs : null;
 }
 
 /** Like `resolveInside`, but an empty file counts as missing — a failed download leaves one behind, and a
  * cover or trailer of 0 bytes is not a cover or trailer. */
-function resolveNonEmptyFileInside(dir: string, relative: string): string | null {
-  const abs = resolveInside(dir, relative);
+async function resolveNonEmptyFileInside(dir: string, relative: string): Promise<string | null> {
+  const abs = await resolveInside(dir, relative);
+  const stat = abs ? await statOrNull(abs) : null;
 
-  try {
-    return abs && fs.statSync(abs).size > 0 ? abs : null;
-  } catch {
-    return null;
-  }
+  return abs && stat && stat.size > 0 ? abs : null;
 }
 
 /** Launch targets (executable, settings tool, installer, custom buttons) may live anywhere on disk: an absolute
  * path is used as is, a relative one is resolved inside the game folder like every other `paths.*` value. */
-function resolveLaunchTarget(dir: string, value: string): string | null {
+async function resolveLaunchTarget(dir: string, value: string): Promise<string | null> {
   if (path.isAbsolute(value)) {
     const abs = path.normalize(value);
 
-    return fs.existsSync(abs) ? abs : null;
+    return (await statOrNull(abs)) ? abs : null;
   }
 
   return resolveInside(dir, value);
 }
 
 /** Like `resolveInside`, but only returns the path if it is an existing directory. */
-function resolveDirInside(dir: string, relative: string): string | null {
-  const abs = resolveInside(dir, relative);
-  try {
-    return abs && fs.statSync(abs).isDirectory() ? abs : null;
-  } catch {
-    return null;
-  }
+async function resolveDirInside(dir: string, relative: string): Promise<string | null> {
+  const abs = await resolveInside(dir, relative);
+  const stat = abs ? await statOrNull(abs) : null;
+
+  return abs && stat?.isDirectory() ? abs : null;
 }
 
 /** Like `resolveDirInside`, but only returns the path if the directory is non-empty. */
-function resolveNonEmptyDirInside(dir: string, relative: string): string | null {
-  const abs = resolveDirInside(dir, relative);
+async function resolveNonEmptyDirInside(dir: string, relative: string): Promise<string | null> {
+  const abs = await resolveDirInside(dir, relative);
+
   try {
-    return abs && fs.readdirSync(abs).length > 0 ? abs : null;
+    return abs && (await runLimited(() => fs.promises.readdir(abs))).length > 0 ? abs : null;
   } catch {
     return null;
   }
-}
-
-/** Caps how many `lstat`/`readdir` calls are in flight at once, process-wide. A huge `data/` folder
- * recursed with plain `Promise.all` kicks off one of these per file/subfolder *immediately* — for a
- * deep tree that's easily tens of thousands at once, which floods the OS (file-handle limits, disk
- * queue depth) and can make the whole scan appear to hang on one folder. The recursion itself stays
- * unbounded (cheap, just pending promises); only the actual syscalls are throttled. */
-const MAX_CONCURRENT_FS_OPS = 32;
-let activeFsOps = 0;
-const fsOpQueue: Array<() => void> = [];
-
-function runLimited<T>(fn: () => Promise<T>): Promise<T> {
-  return new Promise((resolve, reject) => {
-    const run = () => {
-      activeFsOps++;
-      fn()
-        .then(resolve, reject)
-        .finally(() => {
-          activeFsOps--;
-          fsOpQueue.shift()?.();
-        });
-    };
-
-    if (activeFsOps < MAX_CONCURRENT_FS_OPS) {
-      run();
-    } else {
-      fsOpQueue.push(run);
-    }
-  });
 }
 
 /** Lets a size scan be abandoned early (tab switched away) without waiting for whatever huge folder
@@ -610,6 +617,78 @@ async function measureApp(appEntry: ScannedApp, signal: ScanSignal): Promise<App
   };
 }
 
+async function scanApp(root: string, id: string): Promise<ScannedApp> {
+  const dir = path.join(root, id);
+  const config = await readConfig(dir);
+  const name = typeof config.name === 'string' && config.name.trim() ? config.name.trim() : id;
+  const [
+    customButtons,
+    execAbs,
+    settingsAbs,
+    installerFileAbs,
+    installerDirAbs,
+    uninstallerAbs,
+    dataDirAbs,
+    bonusAbs,
+    coverHorizontalAbs,
+    coverVerticalAbs,
+    trailerAbs,
+    screenshotsAbs,
+    addedAt,
+  ] = await Promise.all([
+    Promise.all(
+      readCustomButtons(config.customButtons).map(async (button) => ({
+        label: button.label,
+        abs: await resolveLaunchTarget(dir, button.path),
+      })),
+    ),
+    resolveLaunchTarget(dir, config.paths?.exec ?? `data/${id}.exe`),
+    config.paths?.settings ? resolveLaunchTarget(dir, config.paths.settings) : null,
+    config.paths?.installer ? resolveLaunchTarget(dir, config.paths.installer) : null,
+    resolveDirInside(dir, 'installer'),
+    config.paths?.uninstaller ? resolveLaunchTarget(dir, config.paths.uninstaller) : null,
+    resolveNonEmptyDirInside(dir, 'data'),
+    // An explicit `paths.bonus` may be a file or a folder (like exec/settings/installer);
+    // the unconfigured default only guesses a folder, and only if it actually has content.
+    config.paths?.bonus ? resolveInside(dir, config.paths.bonus) : resolveNonEmptyDirInside(dir, 'bonus'),
+    resolveNonEmptyFileInside(dir, config.paths?.coverHorizontal ?? 'assets/cover_horizontal.jpg'),
+    resolveNonEmptyFileInside(dir, config.paths?.coverVertical ?? 'assets/cover_vertical.jpg'),
+    resolveNonEmptyFileInside(dir, config.paths?.trailer ?? 'assets/trailer.mp4'),
+    resolveDirInside(dir, config.paths?.screenshots ?? 'screenshots').then(listScreenshots),
+    readAddedAt(dir),
+  ]);
+
+  return {
+    id,
+    name,
+    description: readLocalizedText(config.description),
+    instructions: readLocalizedText(config.instructions),
+    rating: readRating(config.rating),
+    previewStart: readPercent(config.previewStart),
+    genre: readPlainString(config.genre),
+    series: readPlainString(config.series),
+    coverHorizontalPosition: readCoverPosition(config.coverHorizontalPosition),
+    facts: readFacts(config.facts),
+    customButtons,
+    previewNotes: readPreviewNotes(config.previewNotes),
+    dir,
+    execAbs,
+    settingsAbs,
+    installerFileAbs,
+    installerDirAbs,
+    uninstallerAbs,
+    dataDirAbs,
+    bonusAbs,
+    coverHorizontalAbs,
+    coverVerticalAbs,
+    trailerAbs,
+    screenshotsAbs,
+    savesAbs: resolveSavesPath(dir, config.paths?.saves),
+    launch: readLaunchOptions(config.launch),
+    addedAt,
+  };
+}
+
 async function scanContent(): Promise<ScannedApp[]> {
   const root = getContentDir();
 
@@ -620,54 +699,9 @@ async function scanContent(): Promise<ScannedApp[]> {
     return [];
   }
 
-  const apps: ScannedApp[] = [];
-  for (const entry of entries) {
-    if (!entry.isDirectory()) {
-      continue;
-    }
-
-    const id = entry.name;
-    const dir = path.join(root, id);
-    const config = await readConfig(dir);
-    const name = typeof config.name === 'string' && config.name.trim() ? config.name.trim() : id;
-
-    apps.push({
-      id,
-      name,
-      description: readLocalizedText(config.description),
-      instructions: readLocalizedText(config.instructions),
-      rating: readRating(config.rating),
-      previewStart: readPercent(config.previewStart),
-      genre: readPlainString(config.genre),
-      series: readPlainString(config.series),
-      coverHorizontalPosition: readCoverPosition(config.coverHorizontalPosition),
-      facts: readFacts(config.facts),
-      customButtons: readCustomButtons(config.customButtons).map((button) => ({
-        label: button.label,
-        abs: resolveLaunchTarget(dir, button.path),
-      })),
-      previewNotes: readPreviewNotes(config.previewNotes),
-      dir,
-      execAbs: resolveLaunchTarget(dir, config.paths?.exec ?? `data/${id}.exe`),
-      settingsAbs: config.paths?.settings ? resolveLaunchTarget(dir, config.paths.settings) : null,
-      installerFileAbs: config.paths?.installer ? resolveLaunchTarget(dir, config.paths.installer) : null,
-      installerDirAbs: resolveDirInside(dir, 'installer'),
-      uninstallerAbs: config.paths?.uninstaller ? resolveLaunchTarget(dir, config.paths.uninstaller) : null,
-      dataDirAbs: resolveNonEmptyDirInside(dir, 'data'),
-      // An explicit `paths.bonus` may be a file or a folder (like exec/settings/installer);
-      // the unconfigured default only guesses a folder, and only if it actually has content.
-      bonusAbs: config.paths?.bonus
-        ? resolveInside(dir, config.paths.bonus)
-        : resolveNonEmptyDirInside(dir, 'bonus'),
-      coverHorizontalAbs: resolveNonEmptyFileInside(dir, config.paths?.coverHorizontal ?? 'assets/cover_horizontal.jpg'),
-      coverVerticalAbs: resolveNonEmptyFileInside(dir, config.paths?.coverVertical ?? 'assets/cover_vertical.jpg'),
-      trailerAbs: resolveNonEmptyFileInside(dir, config.paths?.trailer ?? 'assets/trailer.mp4'),
-      screenshotsAbs: listScreenshots(resolveDirInside(dir, config.paths?.screenshots ?? 'screenshots')),
-      savesAbs: resolveSavesPath(dir, config.paths?.saves),
-      launch: readLaunchOptions(config.launch),
-      addedAt: readAddedAt(dir),
-    });
-  }
+  const apps = await Promise.all(
+    entries.filter((entry) => entry.isDirectory()).map((entry) => scanApp(root, entry.name)),
+  );
 
   // Highest rated first; unrated apps sink to the end. Ties broken by name.
   apps.sort((a, b) => {

@@ -75,12 +75,12 @@ export const DownloadsPage: FC = () => {
           <table className="downloads__table">
             <thead>
               <tr>
+                <th scope="col" />
                 {COLUMNS.map((column) => (
                   <th key={column} scope="col">
                     {t(`downloads.col.${column}`)}
                   </th>
                 ))}
-                <th scope="col" />
               </tr>
             </thead>
             <tbody>

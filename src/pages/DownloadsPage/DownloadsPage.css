@@ -2,8 +2,17 @@
   position: relative;
 }
 
+/* The page itself does not scroll: the table takes the rest of the screen and scrolls inside. */
+.app-main > .downloads {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-bottom: var(--page-padding);
+}
+
 .downloads__table-wrap {
-  overflow-x: auto;
+  min-height: 0;
+  overflow: auto;
   border: 1px solid var(--color-border);
   border-radius: 12px;
   background-color: var(--color-surface);
@@ -17,7 +26,11 @@
 }
 
 .downloads__table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   padding: 12px 14px;
+  background-color: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
   font-size: 12px;
   font-weight: 600;
@@ -168,7 +181,7 @@ a.torrent-row__title:hover {
 
 .torrent-row__actions {
   white-space: nowrap;
-  text-align: right;
+  text-align: left;
 }
 
 .torrent-row__remove:hover {
@@ -194,6 +207,6 @@ a.torrent-row__title:hover {
 .torrent-row__buttons {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 6px;
 }

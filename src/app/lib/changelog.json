@@ -776,5 +776,22 @@
         "en": "A game downloaded through the torrent (an installer, say) can now be launched while it is seeding: no more \"the program is busy\" error"
       }
     ]
+  },
+  {
+    "version": "1.14.6",
+    "title": {
+      "ru": "Быстрее обновление библиотеки, удобнее загрузки",
+      "en": "Faster library refresh, nicer downloads"
+    },
+    "changes": [
+      {
+        "ru": "Обновление библиотеки стало быстрее и меньше тормозит, когда идёт много торрентов",
+        "en": "Refreshing the library is faster and lags less while many torrents are running"
+      },
+      {
+        "ru": "Таблица загрузок занимает всю высоту экрана и прокручивается внутри, кнопки управления перенесены влево",
+        "en": "The downloads table fills the screen height and scrolls inside, the control buttons moved to the left"
+      }
+    ]
   }
 ]
