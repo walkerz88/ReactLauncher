@@ -190,10 +190,14 @@ a.torrent-row__title:hover {
   content: '';
 }
 
-.torrent-row--metadata .torrent-row__state,
-.torrent-row--checking .torrent-row__state {
+.torrent-row--metadata .torrent-row__state {
   --badge-color: var(--color-info);
   --badge-bg: var(--color-info-subtle);
+}
+
+.torrent-row--checking .torrent-row__state {
+  --badge-color: var(--color-text-muted);
+  --badge-bg: color-mix(in srgb, var(--color-text-muted) 15%, transparent);
 }
 
 .torrent-row--downloading .torrent-row__state {
