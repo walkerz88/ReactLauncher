@@ -19,6 +19,7 @@
 
 .downloads__header .home-section__title {
   margin: 0;
+  line-height: 32px;
 }
 
 .downloads__plus {
@@ -29,7 +30,7 @@
   height: 32px;
   border: 1px solid var(--color-border);
   border-radius: 8px;
-  background-color: var(--color-surface);
+  background-color: transparent;
   color: var(--color-text);
   cursor: pointer;
   transition:
