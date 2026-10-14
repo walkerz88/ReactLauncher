@@ -67,6 +67,8 @@ export interface ContentApp {
   hasSettings: boolean;
   /** Whether `paths.installer` resolved to a file, or the app folder has an `installer/` sub-folder. */
   hasInstaller: boolean;
+  /** Whether `paths.installer` resolved to a file, or the `installer/` folder is not empty. */
+  hasInstallerFiles: boolean;
   /** Whether `paths.uninstaller` resolved to a file. */
   hasUninstaller: boolean;
   /** Whether the app folder has a non-empty `data/` sub-folder. */

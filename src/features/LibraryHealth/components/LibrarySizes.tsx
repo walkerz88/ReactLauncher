@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from '@/app/i18n';
 import { formatFileSize } from '@/app/lib/format';
 import { useLibrarySizesStore } from '@/app/store/librarySizesStore';
+import { pickTableSort, useTableSortStore } from '@/app/store/tableSortStore';
 import { HorizontalBarChart, type HorizontalBarChartRow } from '@/shared/HorizontalBarChart';
 import { RatingBadge } from '@/shared/RatingBadge';
 import { Tooltip } from '@/shared/Tooltip';
@@ -24,6 +25,8 @@ const SIZE_COLUMNS: ReadonlyArray<keyof AppSizes> = ['installer', 'data', 'trail
  * screenshots/recordings, measured separately from the content folder but counted in `total` and the chart. */
 type TableColumn = keyof AppSizes | 'rating' | 'total' | 'name' | 'media';
 
+const TABLE_COLUMNS: readonly TableColumn[] = [...SIZE_COLUMNS, 'rating', 'total', 'name', 'media'];
+
 type SortDirection = 'asc' | 'desc';
 
 interface Sort {
@@ -42,7 +45,12 @@ export const LibrarySizes: FC<LibrarySizesProps> = ({ apps }) => {
   const scanning = useLibrarySizesStore((state) => state.scanning);
   const failed = useLibrarySizesStore((state) => state.failed);
   const rescan = useLibrarySizesStore((state) => state.rescan);
-  const [sort, setSort] = useState<Sort>({ column: 'data', direction: 'desc' });
+  const sortByTable = useTableSortStore((state) => state.byTable);
+  const setStoredSort = useTableSortStore((state) => state.setSort);
+  const stored = pickTableSort(sortByTable, 'librarySizes', TABLE_COLUMNS);
+  const sort: Sort = stored
+    ? { column: stored.column, direction: stored.descending ? 'desc' : 'asc' }
+    : { column: 'data', direction: 'desc' };
   const [diskReloadKey, setDiskReloadKey] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [mediaSizes, setMediaSizes] = useState<Record<string, number>>({});
@@ -102,11 +110,7 @@ export const LibrarySizes: FC<LibrarySizesProps> = ({ apps }) => {
   };
 
   const toggleSort = (column: TableColumn) => {
-    setSort((current) =>
-      current.column === column
-        ? { column, direction: current.direction === 'desc' ? 'asc' : 'desc' }
-        : { column, direction: 'desc' },
-    );
+    setStoredSort('librarySizes', { column, descending: sort.column === column ? sort.direction !== 'desc' : true });
   };
 
   const sortedApps = useMemo(() => {

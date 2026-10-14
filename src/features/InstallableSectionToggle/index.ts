@@ -1,0 +1,1 @@
+export { InstallableSectionToggle } from './InstallableSectionToggle';

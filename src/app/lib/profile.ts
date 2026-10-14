@@ -14,6 +14,7 @@ export const PROFILE_STORE_NAMES = [
   'cards',
   'sections',
   'galleryView',
+  'tableSort',
 ] as const;
 
 /** Outside Electron (plain browser during development) there is no disk to write to: profiles last until the reload. */

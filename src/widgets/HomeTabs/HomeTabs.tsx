@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { X } from 'lucide-react';
 
 import { isReadyToLaunch } from '@/app/lib/readyToLaunch';
+import { useInstallableApps } from '@/app/lib/useInstallableApps';
 import { useContentStore } from '@/app/store/contentStore';
 import { useRecentStore } from '@/app/store/recentStore';
 import { useSectionsStore } from '@/app/store/sectionsStore';
@@ -10,7 +11,7 @@ import { Tooltip } from '@/shared/Tooltip';
 
 import './HomeTabs.css';
 
-export type HomeTab = 'gallery' | 'recent' | 'ready' | 'lucky';
+export type HomeTab = 'gallery' | 'recent' | 'ready' | 'installable' | 'lucky';
 
 export interface HomeTabsProps {
   activeTab: HomeTab;
@@ -35,6 +36,8 @@ export const HomeTabs: FC<HomeTabsProps> = ({ activeTab, onTabChange }) => {
   const galleryCount = useContentStore((state) => state.apps.length);
   const readyCount = useContentStore((state) => state.apps.filter(isReadyToLaunch).length);
   const hasReady = readyCount > 0;
+  const installableEnabled = useSectionsStore((state) => state.installableEnabled);
+  const installableCount = useInstallableApps().length;
   const showCounts = useSectionsStore((state) => state.showCounts);
 
   const handleClearRecent = () => {
@@ -92,6 +95,19 @@ export const HomeTabs: FC<HomeTabsProps> = ({ activeTab, onTabChange }) => {
         >
           {t('home.tabs.ready')}
           {showCounts ? <span className="home-tabs__count">{readyCount}</span> : null}
+        </button>
+      ) : null}
+
+      {installableEnabled && installableCount > 0 ? (
+        <button
+          type="button"
+          className={`home-tabs__item${activeTab === 'installable' ? ' active' : ''}`}
+          aria-pressed={activeTab === 'installable'}
+          onClick={() => onTabChange('installable')}
+          data-gamepad-focusable
+        >
+          {t('home.tabs.installable')}
+          {showCounts ? <span className="home-tabs__count">{installableCount}</span> : null}
         </button>
       ) : null}
 

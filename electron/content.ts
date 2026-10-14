@@ -147,6 +147,8 @@ interface ScannedApp {
   /** Installer executable from `paths.installer`, if configured and it resolves to a file. */
   installerFileAbs: string | null;
   installerDirAbs: string | null;
+  /** `paths.installer` resolved, or the `installer/` folder has something in it. */
+  installerHasFiles: boolean;
   uninstallerAbs: string | null;
   dataDirAbs: string | null;
   /** Bonus content target from `paths.bonus` — may be a file or a folder. */
@@ -182,6 +184,7 @@ interface ContentAppMeta {
   hasExec: boolean;
   hasSettings: boolean;
   hasInstaller: boolean;
+  hasInstallerFiles: boolean;
   hasUninstaller: boolean;
   hasDataFiles: boolean;
   hasBonusContent: boolean;
@@ -627,6 +630,7 @@ async function scanApp(root: string, id: string): Promise<ScannedApp> {
     settingsAbs,
     installerFileAbs,
     installerDirAbs,
+    installerFilledDirAbs,
     uninstallerAbs,
     dataDirAbs,
     bonusAbs,
@@ -646,6 +650,7 @@ async function scanApp(root: string, id: string): Promise<ScannedApp> {
     config.paths?.settings ? resolveLaunchTarget(dir, config.paths.settings) : null,
     config.paths?.installer ? resolveLaunchTarget(dir, config.paths.installer) : null,
     resolveDirInside(dir, 'installer'),
+    resolveNonEmptyDirInside(dir, 'installer'),
     config.paths?.uninstaller ? resolveLaunchTarget(dir, config.paths.uninstaller) : null,
     resolveNonEmptyDirInside(dir, 'data'),
     // An explicit `paths.bonus` may be a file or a folder (like exec/settings/installer);
@@ -676,6 +681,7 @@ async function scanApp(root: string, id: string): Promise<ScannedApp> {
     settingsAbs,
     installerFileAbs,
     installerDirAbs,
+    installerHasFiles: installerFileAbs != null || installerFilledDirAbs != null,
     uninstallerAbs,
     dataDirAbs,
     bonusAbs,
@@ -878,6 +884,7 @@ function registerIpc(): void {
         hasExec: appEntry.execAbs != null,
         hasSettings: appEntry.settingsAbs != null,
         hasInstaller: appEntry.installerFileAbs != null || appEntry.installerDirAbs != null,
+        hasInstallerFiles: appEntry.installerHasFiles,
         hasUninstaller: appEntry.uninstallerAbs != null,
         hasDataFiles: appEntry.dataDirAbs != null,
         hasBonusContent: appEntry.bonusAbs != null,

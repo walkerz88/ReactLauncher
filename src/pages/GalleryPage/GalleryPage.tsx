@@ -1,6 +1,7 @@
 import { useEffect, useState, type FC } from 'react';
 
 import { isReadyToLaunch } from '@/app/lib/readyToLaunch';
+import { useInstallableApps } from '@/app/lib/useInstallableApps';
 import { useContentStore } from '@/app/store/contentStore';
 import { useRecentStore } from '@/app/store/recentStore';
 import { useSectionsStore } from '@/app/store/sectionsStore';
@@ -30,6 +31,9 @@ export const GalleryPage: FC = () => {
   const recentEnabled = useSectionsStore((state) => state.recentEnabled);
   const readyApps = apps.filter(isReadyToLaunch);
   const hasReady = readyApps.length > 0;
+  const installableEnabled = useSectionsStore((state) => state.installableEnabled);
+  const installableApps = useInstallableApps();
+  const hasInstallable = installableEnabled && installableApps.length > 0;
 
   const [tab, setTab] = useState<HomeTab>(lastActiveTab);
 
@@ -58,6 +62,13 @@ export const GalleryPage: FC = () => {
       setTab('gallery');
     }
   }, [readyEnabled, hasReady, tab]);
+
+  // And for "Ready to install" once no game qualifies any more.
+  useEffect(() => {
+    if (!hasInstallable && tab === 'installable') {
+      setTab('gallery');
+    }
+  }, [hasInstallable, tab]);
 
   // Same for the "Feeling Lucky" tab once it is switched off in Settings.
   useEffect(() => {
@@ -113,6 +124,15 @@ export const GalleryPage: FC = () => {
       <div className="page page--scroll-pad" data-id="GalleryPage">
         <HomeTabs activeTab={tab} onTabChange={setTab} />
         <AppCollection apps={readyApps} title={t('home.apps')} contextKey="ready" />
+      </div>
+    );
+  }
+
+  if (tab === 'installable' && hasInstallable) {
+    return (
+      <div className="page page--scroll-pad" data-id="GalleryPage">
+        <HomeTabs activeTab={tab} onTabChange={setTab} />
+        <AppCollection apps={installableApps} title={t('home.apps')} contextKey="installable" />
       </div>
     );
   }

@@ -12,17 +12,19 @@
 
 .downloads__header {
   display: flex;
-  align-items: center;
   gap: 12px;
   margin-bottom: 16px;
 }
 
 .downloads__header .home-section__title {
   margin: 0;
-  line-height: 32px;
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .downloads__plus {
+  position: relative;
+  top: -2px;
   display: flex;
   align-items: center;
   justify-content: center;

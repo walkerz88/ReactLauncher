@@ -6,6 +6,7 @@ import { profileStorage } from '@/app/lib/profile';
 interface SectionsState {
   luckyEnabled: boolean;
   readyEnabled: boolean;
+  installableEnabled: boolean;
   recentEnabled: boolean;
   favoritesEnabled: boolean;
   addGameEnabled: boolean;
@@ -13,6 +14,7 @@ interface SectionsState {
   showCounts: boolean;
   setLuckyEnabled: (enabled: boolean) => void;
   setReadyEnabled: (enabled: boolean) => void;
+  setInstallableEnabled: (enabled: boolean) => void;
   setRecentEnabled: (enabled: boolean) => void;
   setFavoritesEnabled: (enabled: boolean) => void;
   setAddGameEnabled: (enabled: boolean) => void;
@@ -26,6 +28,7 @@ export const useSectionsStore = create<SectionsState>()(
     (set) => ({
       luckyEnabled: true,
       readyEnabled: true,
+      installableEnabled: true,
       recentEnabled: true,
       favoritesEnabled: true,
       addGameEnabled: true,
@@ -33,6 +36,7 @@ export const useSectionsStore = create<SectionsState>()(
       showCounts: true,
       setLuckyEnabled: (luckyEnabled) => set({ luckyEnabled }),
       setReadyEnabled: (readyEnabled) => set({ readyEnabled }),
+      setInstallableEnabled: (installableEnabled) => set({ installableEnabled }),
       setRecentEnabled: (recentEnabled) => set({ recentEnabled }),
       setFavoritesEnabled: (favoritesEnabled) => set({ favoritesEnabled }),
       setAddGameEnabled: (addGameEnabled) => set({ addGameEnabled }),
@@ -50,6 +54,8 @@ export const useSectionsStore = create<SectionsState>()(
           ...current,
           luckyEnabled: typeof stored.luckyEnabled === 'boolean' ? stored.luckyEnabled : current.luckyEnabled,
           readyEnabled: typeof stored.readyEnabled === 'boolean' ? stored.readyEnabled : current.readyEnabled,
+          installableEnabled:
+            typeof stored.installableEnabled === 'boolean' ? stored.installableEnabled : current.installableEnabled,
           recentEnabled: typeof stored.recentEnabled === 'boolean' ? stored.recentEnabled : current.recentEnabled,
           favoritesEnabled:
             typeof stored.favoritesEnabled === 'boolean' ? stored.favoritesEnabled : current.favoritesEnabled,

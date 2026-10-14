@@ -19,6 +19,7 @@ import { ScreenshotSoundToggle } from '@/features/ScreenshotSoundToggle';
 import { RecordingQuality } from '@/features/RecordingQuality';
 import { RecentSectionToggle } from '@/features/RecentSectionToggle';
 import { ReadySectionToggle } from '@/features/ReadySectionToggle';
+import { InstallableSectionToggle } from '@/features/InstallableSectionToggle';
 import { LuckySectionToggle } from '@/features/LuckySectionToggle';
 import { UniqueThemes } from '@/features/UniqueThemes';
 import { WelcomeAnimationStyle } from '@/features/WelcomeAnimationStyle';
@@ -102,6 +103,7 @@ export const SettingsPage: FC = () => {
             <h2 className="settings-section__title">{t('settings.sections')}</h2>
             <RecentSectionToggle />
             <ReadySectionToggle />
+            <InstallableSectionToggle />
             <LuckySectionToggle />
             <FavoritesSectionToggle />
             <AddGameSectionToggle />

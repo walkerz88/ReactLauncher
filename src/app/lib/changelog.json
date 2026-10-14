@@ -870,5 +870,22 @@
         "en": "A failed update now also suggests running the app as administrator"
       }
     ]
+  },
+  {
+    "version": "1.14.12",
+    "title": {
+      "ru": "Вкладка «Можно установить»",
+      "en": "\"Ready to install\" tab"
+    },
+    "changes": [
+      {
+        "ru": "Новая вкладка «Можно установить» после «Готовых к запуску»: игры, у которых есть файлы установщика и пусто в data; игры, чей установщик ещё качается торрентом, не показываются; вкладку можно отключить в настройках",
+        "en": "New \"Ready to install\" tab after \"Ready to launch\": games with installer files and an empty data folder; games whose installer is still being downloaded by a torrent are left out; the tab can be turned off in the settings"
+      },
+      {
+        "ru": "Выбранная сортировка в таблице загрузок и в таблице размеров библиотеки сохраняется",
+        "en": "The chosen sort in the downloads table and the library sizes table is remembered"
+      }
+    ]
   }
 ]

@@ -3,6 +3,7 @@ import { ArrowDown, ArrowUp, Plus } from 'lucide-react';
 
 import { useTranslation } from '@/app/i18n';
 import { useContentStore } from '@/app/store/contentStore';
+import { pickTableSort, useTableSortStore } from '@/app/store/tableSortStore';
 import { useTorrentsStore } from '@/app/store/torrentsStore';
 import type { TorrentInfo, TorrentResult } from '@/electron';
 import { AddGameWizard, type AddMode } from '@/features/AddGame';
@@ -42,7 +43,9 @@ export const DownloadsPage: FC = () => {
   const [wizard, setWizard] = useState<{ initialMode?: AddMode } | null>(null);
   const [removing, setRemoving] = useState<TorrentInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [sort, setSort] = useState<Sort | null>(null);
+  const sortByTable = useTableSortStore((state) => state.byTable);
+  const setStoredSort = useTableSortStore((state) => state.setSort);
+  const sort: Sort | null = pickTableSort(sortByTable, 'downloads', COLUMNS);
 
   const gameNameOf = (torrent: TorrentInfo): string | null =>
     apps.find((app) => app.id === torrent.gameId)?.name ?? null;
@@ -84,7 +87,7 @@ export const DownloadsPage: FC = () => {
     : torrents;
 
   const toggleSort = (column: Column) => {
-    setSort((current) => (current?.column === column ? { column, descending: !current.descending } : { column, descending: false }));
+    setStoredSort('downloads', { column, descending: sort?.column === column ? !sort.descending : false });
   };
 
   const run = async (action: () => Promise<TorrentResult> | undefined) => {

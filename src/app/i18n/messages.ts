@@ -87,6 +87,7 @@ const ru = {
   'home.tabs.recent': 'Последний запуск',
   'home.tabs.gallery': 'Галерея',
   'home.tabs.ready': 'Готовые к запуску',
+  'home.tabs.installable': 'Можно установить',
 
   'recent.empty': 'Вы ещё ничего не запускали.',
   'recent.clear': 'Очистить',
@@ -682,6 +683,7 @@ const en: Record<MessageKey, string> = {
   'home.tabs.recent': 'Recently launched',
   'home.tabs.gallery': 'Gallery',
   'home.tabs.ready': 'Ready to launch',
+  'home.tabs.installable': 'Ready to install',
 
   'recent.empty': "You haven't launched anything yet.",
   'recent.clear': 'Clear',
