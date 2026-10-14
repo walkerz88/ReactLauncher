@@ -74,7 +74,13 @@ interface WtTracker {
   on: (event: 'update', listener: (data: { announce?: string; complete?: number; incomplete?: number }) => void) => void;
 }
 
+interface StoreFile {
+  path: string;
+  open: (cb: (err: Error | null, file?: unknown) => void) => void;
+}
+
 interface WtTorrent {
+  store?: unknown;
   discovery?: { tracker?: WtTracker } | null;
   infoHash: string;
   name: string;
@@ -264,6 +270,51 @@ const swarmTotals = (entry: Entry): { seeds: number | null; leechers: number | n
     : { seeds: Math.max(...reports.map((report) => report.seeds)), leechers: Math.max(...reports.map((report) => report.leechers)) };
 };
 
+/**
+ * WebTorrent keeps every file open for writing for as long as the torrent lives, and Windows refuses to run an
+ * .exe that somebody has open for writing ("the program is busy"). Once the download is done the files are
+ * swapped for read-only handles, which is all seeding needs.
+ */
+const releaseWriteHandles = (torrent: WtTorrent): void => {
+  let store = torrent.store as { files?: StoreFile[]; store?: unknown } | undefined;
+
+  while (store && !store.files && store.store) {
+    store = store.store as typeof store;
+  }
+
+  store?.files?.forEach((file) => {
+    const writable = file.open;
+    let handle: Promise<fs.promises.FileHandle> | null = null;
+
+    file.open = (cb) => {
+      handle ??= fs.promises.open(file.path, 'r');
+      handle.then(
+        (opened) =>
+          cb(null, {
+            read: (offset: number, length: number, done: (err: Error | null, buffer?: Buffer) => void) => {
+              const buffer = Buffer.alloc(length);
+
+              opened.read(buffer, 0, length, offset).then(
+                () => done(null, buffer),
+                (err: Error) => done(err),
+              );
+            },
+            close: (done: () => void) => {
+              opened.close().then(done, done);
+            },
+          }),
+        (err: Error) => cb(err),
+      );
+    };
+
+    writable((err, opened) => {
+      if (!err && opened) {
+        (opened as { close: (done: () => void) => void }).close(() => undefined);
+      }
+    });
+  });
+};
+
 const toView = (entry: Entry): TorrentView => {
   const { stored, torrent } = entry;
   const live = !stored.paused && torrent;
@@ -369,6 +420,7 @@ const startEntry = async (entry: Entry): Promise<void> => {
       const firstTime = entry.stored.completed !== true;
 
       entry.stored.completed = true;
+      releaseWriteHandles(torrent);
       syncStoredStats(entry);
       saveStored();
 

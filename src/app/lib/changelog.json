@@ -763,5 +763,18 @@
         "en": "After a restart a torrent shows the real amount downloaded again, not zero"
       }
     ]
+  },
+  {
+    "version": "1.14.5",
+    "title": {
+      "ru": "Запуск установщика во время раздачи",
+      "en": "Running the installer while seeding"
+    },
+    "changes": [
+      {
+        "ru": "Скачанную через торрент игру (например, установщик) теперь можно запускать, пока она раздаётся: больше нет ошибки «Программа занята другой программой»",
+        "en": "A game downloaded through the torrent (an installer, say) can now be launched while it is seeding: no more \"the program is busy\" error"
+      }
+    ]
   }
 ]
