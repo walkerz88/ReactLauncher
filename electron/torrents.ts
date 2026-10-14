@@ -12,7 +12,7 @@ import { getContentDir } from './content';
  * resume), because WebTorrent's own `pause()` only stops looking for new peers.
  */
 
-type TorrentState = 'metadata' | 'downloading' | 'seeding' | 'paused' | 'error';
+type TorrentState = 'metadata' | 'checking' | 'downloading' | 'seeding' | 'paused' | 'error';
 
 interface TorrentView {
   id: string;
@@ -63,6 +63,8 @@ interface StoredTorrent {
   uploaded: number;
   /** Completion has been announced; a restart re-checks the files and fires `done` again, which is not news. */
   completed?: boolean;
+  /** Last-modified time of every file when the torrent finished. Unchanged files are not re-hashed on the next start. */
+  fileModtimes?: number[];
 }
 
 interface WtWire {
@@ -80,6 +82,8 @@ interface StoreFile {
 }
 
 interface WtTorrent {
+  path: string;
+  files: { path: string }[];
   store?: unknown;
   discovery?: { tracker?: WtTracker } | null;
   infoHash: string;
@@ -101,7 +105,7 @@ interface WtTorrent {
 }
 
 interface WtClient {
-  add: (source: Buffer | string, options: { path: string }) => WtTorrent;
+  add: (source: Buffer | string, options: { path: string; fileModtimes?: number[] }) => WtTorrent;
   remove: (infoHash: string) => Promise<void>;
   destroy: () => Promise<void> | void;
   on: (event: string, listener: (...args: unknown[]) => void) => void;
@@ -315,11 +319,20 @@ const releaseWriteHandles = (torrent: WtTorrent): void => {
   });
 };
 
+const readFileModtimes = async (torrent: WtTorrent): Promise<number[] | null> => {
+  try {
+    return await Promise.all(
+      torrent.files.map(async (file) => (await fs.promises.stat(path.join(torrent.path, file.path))).mtime.getTime()),
+    );
+  } catch {
+    return null;
+  }
+};
+
 const toView = (entry: Entry): TorrentView => {
   const { stored, torrent } = entry;
   const live = !stored.paused && torrent;
   const size = stored.size;
-  const downloaded = live ? bytesOnDisk(torrent) : stored.downloaded;
   const uploaded = live ? torrent.uploaded : stored.uploaded;
 
   let state: TorrentState = 'downloading';
@@ -329,11 +342,14 @@ const toView = (entry: Entry): TorrentView => {
   } else if (stored.paused) {
     state = 'paused';
   } else if (!torrent || !torrent.ready) {
-    state = 'metadata';
+    // The metadata is known but the files on disk are still being hashed.
+    state = torrent && torrent.length > 0 ? 'checking' : 'metadata';
   } else if (torrent.done) {
     state = 'seeding';
   }
 
+  const verifying = state === 'checking' && torrent;
+  const downloaded = verifying ? Math.round(torrent.progress * torrent.length) : live ? bytesOnDisk(torrent) : stored.downloaded;
   const timeRemaining = live ? torrent.timeRemaining : Infinity;
   const seeds = live ? countSeeds(torrent) : 0;
   const swarm = swarmTotals(entry);
@@ -344,7 +360,7 @@ const toView = (entry: Entry): TorrentView => {
     name: stored.name,
     state,
     error: entry.error,
-    progress: live && torrent.ready ? torrent.progress : size > 0 ? Math.min(1, stored.downloaded / size) : 0,
+    progress: verifying || (live && torrent.ready) ? torrent.progress : size > 0 ? Math.min(1, stored.downloaded / size) : 0,
     size,
     downloaded,
     uploaded,
@@ -405,7 +421,10 @@ const startEntry = async (entry: Entry): Promise<void> => {
 
     fs.mkdirSync(entry.stored.dir, { recursive: true });
 
-    const torrent = wt.add(source, { path: entry.stored.dir });
+    const torrent = wt.add(source, {
+      path: entry.stored.dir,
+      fileModtimes: entry.stored.completed ? entry.stored.fileModtimes : undefined,
+    });
     entry.torrent = torrent;
 
     torrent.on('error', (err) => {
@@ -423,6 +442,13 @@ const startEntry = async (entry: Entry): Promise<void> => {
       releaseWriteHandles(torrent);
       syncStoredStats(entry);
       saveStored();
+
+      void readFileModtimes(torrent).then((modtimes) => {
+        if (modtimes) {
+          entry.stored.fileModtimes = modtimes;
+          saveStored();
+        }
+      });
 
       if (firstTime) {
         broadcast('torrents:completed', { id: entry.stored.infoHash, gameId: entry.stored.gameId, name: entry.stored.name });

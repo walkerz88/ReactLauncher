@@ -849,5 +849,26 @@
         "en": "The downloads table fills the window height and the extra space below it is gone"
       }
     ]
+  },
+  {
+    "version": "1.14.11",
+    "title": {
+      "ru": "Быстрый старт докачанных торрентов",
+      "en": "Fast start for finished torrents"
+    },
+    "changes": [
+      {
+        "ru": "Докачанные торренты больше не перепроверяются при каждом запуске, если их файлы не менялись",
+        "en": "Finished torrents are no longer re-checked on every launch if their files have not changed"
+      },
+      {
+        "ru": "Пока файлы проверяются, у торрента показывается статус «Проверка файлов» с прогрессом вместо «Получение данных»",
+        "en": "While the files are being checked, a torrent shows \"Checking files\" with progress instead of \"Fetching metadata\""
+      },
+      {
+        "ru": "При ошибке обновления в уведомлении добавлена подсказка запустить приложение с правами администратора",
+        "en": "A failed update now also suggests running the app as administrator"
+      }
+    ]
   }
 ]

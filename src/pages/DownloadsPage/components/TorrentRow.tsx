@@ -25,7 +25,7 @@ export const TorrentRow: FC<TorrentRowProps> = ({ torrent, gameName, onPause, on
   const { state, progress } = torrent;
   const title = gameName ?? (torrent.name || torrent.id);
   const canResume = state === 'paused' || state === 'error';
-  const active = state === 'downloading' || state === 'metadata' || state === 'seeding';
+  const active = state === 'downloading' || state === 'metadata' || state === 'checking' || state === 'seeding';
 
   const eta =
     torrent.eta === null ? '—' : torrent.eta < 60 ? t('time.lessThanMinute') : formatDuration(torrent.eta, t);

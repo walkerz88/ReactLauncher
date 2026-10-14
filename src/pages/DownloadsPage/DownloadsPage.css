@@ -190,7 +190,8 @@ a.torrent-row__title:hover {
   content: '';
 }
 
-.torrent-row--metadata .torrent-row__state {
+.torrent-row--metadata .torrent-row__state,
+.torrent-row--checking .torrent-row__state {
   --badge-color: var(--color-info);
   --badge-bg: var(--color-info-subtle);
 }

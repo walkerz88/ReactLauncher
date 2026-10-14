@@ -421,7 +421,7 @@ export interface LaunchSettings {
   demoOffered: boolean;
 }
 
-export type TorrentState = 'metadata' | 'downloading' | 'seeding' | 'paused' | 'error';
+export type TorrentState = 'metadata' | 'checking' | 'downloading' | 'seeding' | 'paused' | 'error';
 
 export interface TorrentInfo {
   id: string;
