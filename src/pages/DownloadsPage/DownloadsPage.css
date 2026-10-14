@@ -10,7 +10,60 @@
   padding-bottom: var(--page-padding);
 }
 
+.downloads__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.downloads__header .home-section__title {
+  margin: 0;
+}
+
+.downloads__plus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.downloads__plus:hover,
+.downloads__plus:focus-visible {
+  background-color: var(--color-accent);
+  color: var(--color-accent-text);
+}
+
+.downloads__sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-weight: inherit;
+  white-space: nowrap;
+  color: inherit;
+  cursor: pointer;
+}
+
+.downloads__sort:hover,
+.downloads__sort:focus-visible {
+  color: var(--color-text);
+}
+
 .downloads__table-wrap {
+  flex: 1;
   min-height: 0;
   overflow: auto;
   border: 1px solid var(--color-border);

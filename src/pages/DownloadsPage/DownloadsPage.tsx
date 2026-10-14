@@ -1,5 +1,5 @@
 import { useState, type FC } from 'react';
-import { Plus } from 'lucide-react';
+import { ArrowDown, ArrowUp, Plus } from 'lucide-react';
 
 import { useTranslation } from '@/app/i18n';
 import { useContentStore } from '@/app/store/contentStore';
@@ -26,6 +26,15 @@ const COLUMNS = [
   'peers',
 ] as const;
 
+type Column = (typeof COLUMNS)[number];
+
+interface Sort {
+  column: Column;
+  descending: boolean;
+}
+
+const ICON_SIZE = 14;
+
 export const DownloadsPage: FC = () => {
   const t = useTranslation();
   const torrents = useTorrentsStore((state) => state.torrents);
@@ -33,9 +42,50 @@ export const DownloadsPage: FC = () => {
   const [wizard, setWizard] = useState<{ initialMode?: AddMode } | null>(null);
   const [removing, setRemoving] = useState<TorrentInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [sort, setSort] = useState<Sort | null>(null);
 
   const gameNameOf = (torrent: TorrentInfo): string | null =>
     apps.find((app) => app.id === torrent.gameId)?.name ?? null;
+
+  const sortValue = (torrent: TorrentInfo, column: Column): string | number => {
+    switch (column) {
+      case 'name':
+        return gameNameOf(torrent) ?? torrent.name;
+      case 'status':
+        return t(`downloads.state.${torrent.state}`);
+      case 'progress':
+        return torrent.progress;
+      case 'size':
+        return torrent.size;
+      case 'download':
+        return torrent.downloadSpeed;
+      case 'upload':
+        return torrent.uploadSpeed;
+      case 'eta':
+        return torrent.eta ?? Infinity;
+      case 'seeds':
+        return torrent.seeds;
+      case 'peers':
+        return torrent.peers;
+    }
+  };
+
+  const sortedTorrents = sort
+    ? [...torrents].sort((a, b) => {
+        const first = sortValue(a, sort.column);
+        const second = sortValue(b, sort.column);
+        const order =
+          typeof first === 'string' && typeof second === 'string'
+            ? first.localeCompare(second, undefined, { numeric: true })
+            : Number(first) - Number(second) || 0;
+
+        return sort.descending ? -order : order;
+      })
+    : torrents;
+
+  const toggleSort = (column: Column) => {
+    setSort((current) => (current?.column === column ? { column, descending: !current.descending } : { column, descending: false }));
+  };
 
   const run = async (action: () => Promise<TorrentResult> | undefined) => {
     try {
@@ -51,8 +101,24 @@ export const DownloadsPage: FC = () => {
   const api = window.electronAPI?.torrents;
 
   return (
-    <div className="page page--scroll-pad downloads" data-id="DownloadsPage">
-      <h1 className="home-section__title">{t('downloads.title')}</h1>
+    <div className="page downloads" data-id="DownloadsPage">
+      <div className="downloads__header">
+        <h1 className="home-section__title">{t('downloads.title')}</h1>
+
+        {torrents.length > 0 ? (
+          <Tooltip label={t('addGame.button')}>
+            <button
+              type="button"
+              className="downloads__plus"
+              aria-label={t('addGame.button')}
+              onClick={() => setWizard({ initialMode: 'torrent' })}
+              data-gamepad-focusable
+            >
+              <Plus size={18} />
+            </button>
+          </Tooltip>
+        ) : null}
+      </div>
 
       {error ? <Message type="error">{error}</Message> : null}
 
@@ -77,14 +143,27 @@ export const DownloadsPage: FC = () => {
               <tr>
                 <th scope="col" />
                 {COLUMNS.map((column) => (
-                  <th key={column} scope="col">
-                    {t(`downloads.col.${column}`)}
+                  <th
+                    key={column}
+                    scope="col"
+                    aria-sort={sort?.column === column ? (sort.descending ? 'descending' : 'ascending') : 'none'}
+                  >
+                    <button type="button" className="downloads__sort" onClick={() => toggleSort(column)} data-gamepad-focusable>
+                      {t(`downloads.col.${column}`)}
+                      {sort?.column === column ? (
+                        sort.descending ? (
+                          <ArrowDown size={ICON_SIZE} />
+                        ) : (
+                          <ArrowUp size={ICON_SIZE} />
+                        )
+                      ) : null}
+                    </button>
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {torrents.map((torrent) => (
+              {sortedTorrents.map((torrent) => (
                 <TorrentRow
                   key={torrent.id}
                   torrent={torrent}
