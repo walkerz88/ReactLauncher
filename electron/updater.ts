@@ -48,7 +48,7 @@ export type UpdateCheckResult =
 export type UpdateInstallResult =
   | { status: 'restarting' }
   | { status: 'downloaded'; path: string }
-  | { status: 'error' };
+  | { status: 'error'; reason: string };
 
 export interface UpdateProgress {
   received: number;
@@ -273,6 +273,26 @@ if ($done) {
 Remove-Item -LiteralPath $PSCommandPath -Force -ErrorAction SilentlyContinue
 `;
 
+const describeError = (error: unknown): string => {
+  if (!(error instanceof Error)) {
+    return String(error);
+  }
+
+  const inner = (error as { cause?: unknown }).cause;
+  const cause = inner instanceof Error ? `: ${inner.message}` : '';
+
+  return `${error.message}${cause}`;
+};
+
+const logFailure = (reason: string): void => {
+  try {
+    fs.appendFileSync(path.join(os.tmpdir(), 'react-launcher-update.log'), `${new Date().toISOString()} install failed: ${reason}
+`);
+  } catch {
+    // the log is only a diagnostic aid
+  }
+};
+
 const runPowerShell = (script: string): Promise<void> =>
   new Promise((resolve, reject) => {
     const encoded = Buffer.from(script, 'utf16le').toString('base64');
@@ -304,7 +324,7 @@ async function launchReplacement(oldExe: string, downloaded: string, target: str
 
 async function installUpdate(sender: WebContents): Promise<UpdateInstallResult> {
   if (!pending || installing) {
-    return { status: 'error' };
+    return { status: 'error', reason: installing ? 'already installing' : 'no update found by the last check' };
   }
 
   installing = true;
@@ -340,7 +360,10 @@ async function installUpdate(sender: WebContents): Promise<UpdateInstallResult> 
 
     return { status: 'restarting' };
   } catch (error) {
+    const reason = describeError(error);
+
     console.error(error);
+    logFailure(reason);
 
     try {
       await fs.promises.rm(partial, { force: true });
@@ -348,7 +371,7 @@ async function installUpdate(sender: WebContents): Promise<UpdateInstallResult> 
       // nothing left to clean up
     }
 
-    return { status: 'error' };
+    return { status: 'error', reason };
   } finally {
     installing = false;
   }

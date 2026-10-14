@@ -8,6 +8,8 @@ interface UpdateState {
   update: UpdateInfo | null;
   modalOpen: boolean;
   installing: boolean;
+  /** Why the last install failed, for the error toast. */
+  installError: string | null;
   /** Bytes downloaded and the file size (0 if unknown) while `installing`. */
   progress: { received: number; total: number };
   check: () => Promise<UpdateCheckResult['status']>;
@@ -21,6 +23,7 @@ export const useUpdateStore = create<UpdateState>()((set) => ({
   update: null,
   modalOpen: false,
   installing: false,
+  installError: null,
   progress: { received: 0, total: 0 },
   check: async () => {
     try {
@@ -43,19 +46,19 @@ export const useUpdateStore = create<UpdateState>()((set) => ({
   install: async () => {
     const unsubscribe = window.electronAPI.update.onProgress((progress) => set({ progress }));
 
-    set({ installing: true, progress: { received: 0, total: 0 } });
+    set({ installing: true, installError: null, progress: { received: 0, total: 0 } });
 
     try {
       const result = await window.electronAPI.update.install();
 
       if (result.status !== 'restarting') {
-        set({ installing: false });
+        set({ installing: false, installError: result.status === 'error' ? result.reason : null });
       }
 
       return result.status;
     } catch (err) {
       console.error(err);
-      set({ installing: false });
+      set({ installing: false, installError: err instanceof Error ? err.message : String(err) });
 
       return 'error';
     } finally {

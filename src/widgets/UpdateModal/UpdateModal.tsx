@@ -40,7 +40,9 @@ export const UpdateModal: FC = () => {
     const status = await install();
 
     if (status === 'error') {
-      pushNotification(t('update.installFailed'), 'error');
+      const reason = useUpdateStore.getState().installError;
+
+      pushNotification(reason ? `${t('update.installFailed')}: ${reason}` : t('update.installFailed'), 'error');
     } else if (status === 'downloaded') {
       closeModal();
       pushNotification(t('update.downloaded'));

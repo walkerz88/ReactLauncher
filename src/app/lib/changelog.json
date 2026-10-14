@@ -793,5 +793,18 @@
         "en": "The downloads table fills the screen height and scrolls inside, the control buttons moved to the left"
       }
     ]
+  },
+  {
+    "version": "1.14.7",
+    "title": {
+      "ru": "Причина ошибки обновления",
+      "en": "Update error reason"
+    },
+    "changes": [
+      {
+        "ru": "Если обновление не удалось установить, уведомление показывает причину, и она записывается в журнал во временной папке",
+        "en": "When an update fails to install, the notification shows the reason and it is written to a log in the temp folder"
+      }
+    ]
   }
 ]

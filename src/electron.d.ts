@@ -408,7 +408,7 @@ export type UpdateCheckResult =
 export type UpdateInstallResult =
   | { status: 'restarting' }
   | { status: 'downloaded'; path: string }
-  | { status: 'error' };
+  | { status: 'error'; reason: string };
 
 export interface LaunchSettings {
   /** Start the launcher window in fullscreen. */
