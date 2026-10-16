@@ -904,5 +904,18 @@
         "en": "The Steam trailer download now tries every movie of the game, not just the first one"
       }
     ]
+  },
+  {
+    "version": "1.14.14",
+    "title": {
+      "ru": "Вкладка «Готовые к запуску»",
+      "en": "Ready to launch tab"
+    },
+    "changes": [
+      {
+        "ru": "Вкладка «Готовые к запуску» скрывается, если готовы все игры Галереи — она просто дублировала бы Галерею",
+        "en": "The Ready to launch tab is hidden when every game in the Gallery is ready — it would just duplicate the Gallery"
+      }
+    ]
   }
 ]

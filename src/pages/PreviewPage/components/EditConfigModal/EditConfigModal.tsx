@@ -840,12 +840,9 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
                     onApply={(text) => update('instructionsRu', text)}
                   />
                 }
+                plain
               >
-                <textarea
-                  rows={6}
-                  value={form.instructionsRu}
-                  onChange={(event) => update('instructionsRu', event.target.value)}
-                />
+                <MarkdownEditor value={form.instructionsRu} onChange={(value) => update('instructionsRu', value)} />
               </FormField>
 
               <FormField
@@ -857,12 +854,9 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
                     onApply={(text) => update('instructionsEn', text)}
                   />
                 }
+                plain
               >
-                <textarea
-                  rows={6}
-                  value={form.instructionsEn}
-                  onChange={(event) => update('instructionsEn', event.target.value)}
-                />
+                <MarkdownEditor value={form.instructionsEn} onChange={(value) => update('instructionsEn', value)} />
               </FormField>
             </section>
 

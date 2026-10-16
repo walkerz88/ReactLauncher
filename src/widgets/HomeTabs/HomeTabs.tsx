@@ -35,7 +35,7 @@ export const HomeTabs: FC<HomeTabsProps> = ({ activeTab, onTabChange }) => {
   const recentEnabled = useSectionsStore((state) => state.recentEnabled);
   const galleryCount = useContentStore((state) => state.apps.length);
   const readyCount = useContentStore((state) => state.apps.filter(isReadyToLaunch).length);
-  const hasReady = readyCount > 0;
+  const hasReady = readyCount > 0 && readyCount !== galleryCount;
   const installableEnabled = useSectionsStore((state) => state.installableEnabled);
   const installableCount = useInstallableApps().length;
   const showCounts = useSectionsStore((state) => state.showCounts);

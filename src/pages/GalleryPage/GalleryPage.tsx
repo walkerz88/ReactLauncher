@@ -30,7 +30,7 @@ export const GalleryPage: FC = () => {
   const readyEnabled = useSectionsStore((state) => state.readyEnabled);
   const recentEnabled = useSectionsStore((state) => state.recentEnabled);
   const readyApps = apps.filter(isReadyToLaunch);
-  const hasReady = readyApps.length > 0;
+  const hasReady = readyApps.length > 0 && readyApps.length !== apps.length;
   const installableEnabled = useSectionsStore((state) => state.installableEnabled);
   const installableApps = useInstallableApps();
   const hasInstallable = installableEnabled && installableApps.length > 0;
