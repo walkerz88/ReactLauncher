@@ -166,7 +166,7 @@ export const SearchSelect: FC<SearchSelectProps> = ({
                     aria-pressed={isSelected}
                     onClick={() => toggle(option.value)}
                   >
-                    <span className="search-select__check">{isSelected ? <Check size={12} /> : null}</span>
+                    <span className={`search-select__check${multiple ? ' search-select__check--box' : ''}`}>{isSelected ? <Check size={12} /> : null}</span>
                     {option.label}
                   </button>
                 </li>

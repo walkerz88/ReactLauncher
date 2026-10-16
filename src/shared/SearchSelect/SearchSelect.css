@@ -110,6 +110,15 @@
   height: 14px;
 }
 
+.search-select__check--box {
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
+.search-select__option--selected .search-select__check--box {
+  border-color: var(--color-accent);
+}
+
 .search-select__empty {
   padding: 8px;
   color: var(--color-text-muted);
