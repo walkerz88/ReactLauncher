@@ -266,24 +266,6 @@ export const PreviewPage: FC = () => {
         ) : null}
       </div>
 
-      {app.tags.length > 0 ? (
-        <ul className="app-page__tags">
-          {app.tags.map((tag) => (
-            <li key={tag}>
-              <button
-                type="button"
-                className="app-page__tag"
-                title={t('app.tagOpen').replace('{name}', tag)}
-                onClick={() => openTagInGallery(tag)}
-                data-gamepad-focusable
-              >
-                {tag}
-              </button>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-
       {playtime && (playtime.seconds > 0 || playtime.lastPlayedAt) ? (
         <p className="app-page__playtime">
           {playtime.seconds > 0 ? (
@@ -434,6 +416,24 @@ export const PreviewPage: FC = () => {
           </button>
         </div>
       </div>
+
+      {app.tags.length > 0 ? (
+        <ul className="app-page__tags">
+          {app.tags.map((tag) => (
+            <li key={tag}>
+              <button
+                type="button"
+                className="app-page__tag"
+                title={t('app.tagOpen').replace('{name}', tag)}
+                onClick={() => openTagInGallery(tag)}
+                data-gamepad-focusable
+              >
+                {tag}
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : null}
 
       {app.previewNotes.map((note, index) => {
         const noteText = note.text[locale] ?? note.text.en ?? note.text.ru;
