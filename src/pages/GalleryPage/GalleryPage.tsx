@@ -15,6 +15,10 @@ import './GalleryPage.css';
 /** Survives the page unmounting, so "back" from a game returns to the tab the user came from. */
 let lastActiveTab: HomeTab = 'gallery';
 
+export const showGalleryTab = () => {
+  lastActiveTab = 'gallery';
+};
+
 export const GalleryPage: FC = () => {
   const t = useTranslation();
   const apps = useContentStore((state) => state.apps);

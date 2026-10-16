@@ -917,5 +917,26 @@
         "en": "The Ready to launch tab is hidden when every game in the Gallery is ready — it would just duplicate the Gallery"
       }
     ]
+  },
+  {
+    "version": "1.15.0",
+    "title": {
+      "ru": "Теги и мультивыбор в фильтрах",
+      "en": "Tags and multi-select filters"
+    },
+    "changes": [
+      {
+        "ru": "Теги игр: в настройках игры можно выбрать из существующих или создать новый, теги показаны на странице игры",
+        "en": "Game tags: pick existing ones or create a new one in the game settings; tags are shown on the game page"
+      },
+      {
+        "ru": "Клик по тегу на странице игры открывает Галерею с фильтром по этому тегу",
+        "en": "Clicking a tag on the game page opens the Gallery filtered by that tag"
+      },
+      {
+        "ru": "Фильтр по тегам и фильтр по жанрам — мультивыбор (любой из выбранных); в выпадашки тегов, жанров и серий добавлен поиск",
+        "en": "Tag and genre filters are multi-select (any of the chosen); the tag, genre and series dropdowns now have a search"
+      }
+    ]
   }
 ]

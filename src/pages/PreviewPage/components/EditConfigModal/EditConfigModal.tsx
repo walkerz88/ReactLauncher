@@ -1,7 +1,7 @@
 import { useEffect, useState, type FC } from 'react';
 import type { FormEvent } from 'react';
 import { Reorder } from 'framer-motion';
-import { Info, Loader2, Plus, Wand2 } from 'lucide-react';
+import { Info, Loader2, Plus, Wand2, X } from 'lucide-react';
 
 import { useTranslation } from '@/app/i18n';
 import { GENRE_KEYS } from '@/app/lib/genres';
@@ -12,6 +12,7 @@ import { FormField } from '@/shared/FormField';
 import { MarkdownEditor } from '@/shared/MarkdownEditor';
 import { Modal } from '@/shared/Modal';
 import { PathField } from '@/shared/PathField';
+import { SearchSelect } from '@/shared/SearchSelect';
 import { SteamNoMatchModal } from '@/shared/SteamNoMatchModal';
 import { SteamPickerModal } from '@/shared/SteamPickerModal';
 import { Tooltip } from '@/shared/Tooltip';
@@ -35,6 +36,7 @@ interface FormState {
   name: string;
   genre: string;
   series: string;
+  tags: string[];
   rating: string;
   previewStart: string;
   coverHorizontalPosition: string;
@@ -183,6 +185,7 @@ function configToForm(config: RawAppConfig): FormState {
     name: config.name ?? '',
     genre: config.genre ?? '',
     series: config.series ?? '',
+    tags: config.tags ?? [],
     rating: config.rating != null ? String(config.rating) : '',
     previewStart: config.previewStart != null ? String(config.previewStart) : '',
     coverHorizontalPosition: config.coverHorizontalPosition ?? 'center',
@@ -227,6 +230,9 @@ function formToConfig(form: FormState): RawAppConfig {
   }
   if (form.series.trim()) {
     config.series = form.series.trim();
+  }
+  if (form.tags.length > 0) {
+    config.tags = form.tags;
   }
 
   const rating = Number.parseFloat(form.rating);
@@ -307,6 +313,7 @@ function formToConfig(form: FormState): RawAppConfig {
 /** Full editor for `config.json` — every field the app page can display. */
 export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onClose, onSaved }) => {
   const t = useTranslation();
+  const allTags = useContentStore((state) => state.apps).flatMap((app) => app.tags);
   const trailer = useContentStore((state) => state.apps.find((app) => app.id === appId)?.trailer ?? null);
   const [form, setForm] = useState<FormState | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -673,6 +680,39 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
                   />
                 </FormField>
               </div>
+
+              <FormField label={t('editConfig.tags')} plain>
+                <SearchSelect
+                  options={Array.from(new Set([...allTags, ...form.tags]))
+                    .sort((a, b) => a.localeCompare(b))
+                    .map((tag) => ({ value: tag, label: tag }))}
+                  selected={form.tags}
+                  placeholder={t('editConfig.tagsPlaceholder')}
+                  searchPlaceholder={t('gallery.filter.selectSearch')}
+                  emptyLabel={t('gallery.filter.selectEmpty')}
+                  ariaLabel={t('editConfig.tags')}
+                  createLabel={(name) => t('editConfig.tagsCreate').replace('{name}', name)}
+                  multiple
+                  onChange={(tags) => update('tags', tags)}
+                />
+
+                {form.tags.length > 0 ? (
+                  <ul className="edit-config-modal__tags">
+                    {form.tags.map((tag) => (
+                      <li key={tag} className="edit-config-modal__tag">
+                        {tag}
+                        <button
+                          type="button"
+                          aria-label={t('editConfig.tagRemove').replace('{name}', tag)}
+                          onClick={() => update('tags', form.tags.filter((entry) => entry !== tag))}
+                        >
+                          <X size={12} />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </FormField>
 
               <div className="edit-config-modal__row">
                 <FormField label={t('editConfig.rating')}>

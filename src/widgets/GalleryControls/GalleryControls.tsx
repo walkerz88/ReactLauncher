@@ -4,15 +4,11 @@ import { Search, X } from 'lucide-react';
 import { OTHER_KEY } from '@/app/lib/groupApps';
 import { GALLERY_SORT_MODES, type GallerySortMode } from '@/app/lib/sortApps';
 import { useTranslation } from '@/app/i18n';
+import { SearchSelect } from '@/shared/SearchSelect';
 
 import './GalleryControls.css';
 
 export type GalleryViewMode = 'flat' | 'genre' | 'series';
-
-/** Series names can be long, and an <option> can't be cut off with CSS, so the text is shortened here. */
-const MAX_SERIES_LABEL_LENGTH = 28;
-
-const truncate = (text: string, max: number): string => (text.length > max ? `${text.slice(0, max - 1).trimEnd()}…` : text);
 
 export interface GalleryControlsProps {
   viewMode: GalleryViewMode;
@@ -22,8 +18,12 @@ export interface GalleryControlsProps {
   onSearchQueryChange: (value: string) => void;
   /** Genre i18n keys present in the collection (e.g. `genre.action`), already sorted. */
   genres: string[];
-  genreFilter: string | null;
-  onGenreFilterChange: (value: string | null) => void;
+  genreFilters: string[];
+  onGenreFiltersChange: (value: string[]) => void;
+  /** Tag names present in the collection, already sorted. */
+  tags: string[];
+  tagFilters: string[];
+  onTagFiltersChange: (value: string[]) => void;
   /** Series names present in the collection, already sorted. */
   seriesList: string[];
   seriesFilter: string | null;
@@ -35,8 +35,8 @@ export interface GalleryControlsProps {
 }
 
 /**
- * View-mode switcher (Все / По жанру / По сериям) plus genre/series filter
- * selects, and a quick "reset filters" button. A filter is hidden while its
+ * View-mode switcher (Все / По жанру / По сериям) plus genre/tag/series
+ * filter dropdowns, and a quick "reset filters" button. A filter is hidden while its
  * own axis is the active grouping — grouping already narrows that dimension.
  * Shared by the gallery, favourites and recently-launched pages.
  */
@@ -46,8 +46,11 @@ export const GalleryControls: FC<GalleryControlsProps> = ({
   searchQuery,
   onSearchQueryChange,
   genres,
-  genreFilter,
-  onGenreFilterChange,
+  genreFilters,
+  onGenreFiltersChange,
+  tags,
+  tagFilters,
+  onTagFiltersChange,
   seriesList,
   seriesFilter,
   onSeriesFilterChange,
@@ -56,7 +59,7 @@ export const GalleryControls: FC<GalleryControlsProps> = ({
   onResetFilters,
 }) => {
   const t = useTranslation();
-  const hasActiveFilters = genreFilter != null || seriesFilter != null || searchQuery !== '';
+  const hasActiveFilters = genreFilters.length > 0 || tagFilters.length > 0 || seriesFilter != null || searchQuery !== '';
 
   const viewButton = (mode: GalleryViewMode, label: string) => (
     <button
@@ -114,35 +117,44 @@ export const GalleryControls: FC<GalleryControlsProps> = ({
         </select>
 
         {viewMode !== 'genre' && genres.length > 0 ? (
-          <select
-            className="gallery-controls__select"
-            value={genreFilter ?? ''}
-            aria-label={t('gallery.filter.genre')}
-            onChange={(event) => onGenreFilterChange(event.target.value || null)}
-          >
-            <option value="">{t('gallery.filter.allGenres')}</option>
-            {genres.map((key) => (
-              <option key={key} value={key}>
-                {t(key)}
-              </option>
-            ))}
-          </select>
+          <SearchSelect
+            options={genres.map((key) => ({ value: key, label: t(key) }))}
+            selected={genreFilters}
+            placeholder={t('gallery.filter.allGenres')}
+            searchPlaceholder={t('gallery.filter.selectSearch')}
+            emptyLabel={t('gallery.filter.selectEmpty')}
+            ariaLabel={t('gallery.filter.genre')}
+            multiple
+            onChange={onGenreFiltersChange}
+          />
+        ) : null}
+
+        {tags.length > 0 ? (
+          <SearchSelect
+            options={tags.map((tag) => ({ value: tag, label: tag }))}
+            selected={tagFilters}
+            placeholder={t('gallery.filter.allTags')}
+            searchPlaceholder={t('gallery.filter.selectSearch')}
+            emptyLabel={t('gallery.filter.selectEmpty')}
+            ariaLabel={t('gallery.filter.tags')}
+            multiple
+            onChange={onTagFiltersChange}
+          />
         ) : null}
 
         {viewMode !== 'series' && seriesList.length > 0 ? (
-          <select
-            className="gallery-controls__select"
-            value={seriesFilter ?? ''}
-            aria-label={t('gallery.filter.series')}
-            onChange={(event) => onSeriesFilterChange(event.target.value || null)}
-          >
-            <option value="">{t('gallery.filter.allSeries')}</option>
-            {seriesList.map((value) => (
-              <option key={value} value={value}>
-                {value === OTHER_KEY ? t('gallery.series.other') : truncate(value, MAX_SERIES_LABEL_LENGTH)}
-              </option>
-            ))}
-          </select>
+          <SearchSelect
+            options={seriesList.map((value) => ({
+              value,
+              label: value === OTHER_KEY ? t('gallery.series.other') : value,
+            }))}
+            selected={seriesFilter ? [seriesFilter] : []}
+            placeholder={t('gallery.filter.allSeries')}
+            searchPlaceholder={t('gallery.filter.selectSearch')}
+            emptyLabel={t('gallery.filter.selectEmpty')}
+            ariaLabel={t('gallery.filter.series')}
+            onChange={(value) => onSeriesFilterChange(value[0] ?? null)}
+          />
         ) : null}
 
         {hasActiveFilters ? (

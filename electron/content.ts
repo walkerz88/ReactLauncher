@@ -82,6 +82,8 @@ interface AppConfig {
   genre?: string;
   /** Franchise/series name, shown as-is (not localized). Omit for standalone games. */
   series?: string;
+  /** Free-form labels, shown as-is (not localized). */
+  tags?: unknown;
   /** CSS `object-position` keyword for the hero image; defaults to `center`. */
   coverHorizontalPosition?: string;
   facts?: Array<{ label?: unknown; value?: unknown }>;
@@ -136,6 +138,7 @@ interface ScannedApp {
   previewStart: number | null;
   genre: string | null;
   series: string | null;
+  tags: string[];
   coverHorizontalPosition: CoverPosition;
   facts: AppFact[];
   /** User-defined shortcut buttons, each resolved to an absolute path (or `null` if it doesn't exist). */
@@ -174,6 +177,7 @@ interface ContentAppMeta {
   previewStart: number | null;
   genre: string | null;
   series: string | null;
+  tags: string[];
   coverHorizontalPosition: CoverPosition;
   facts: AppFact[];
   /** User-defined shortcut buttons, in configured order; `[]` if none. */
@@ -239,6 +243,27 @@ function readLocalizedText(value: unknown): LocalizedText | null {
 /** Trim a config string field; `""`/missing/wrong type all read as `null`. */
 function readPlainString(value: unknown): string | null {
   return typeof value === 'string' && value.trim() ? value.trim() : null;
+}
+
+/** Trimmed, de-duplicated (case-insensitively) tag names; anything that isn't a non-empty string is dropped. */
+function readTags(value: unknown): string[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  const seen = new Set<string>();
+
+  return value.flatMap((entry) => {
+    const tag = readPlainString(entry);
+    const key = tag?.toLowerCase();
+
+    if (!tag || !key || seen.has(key)) {
+      return [];
+    }
+    seen.add(key);
+
+    return [tag];
+  });
 }
 
 /** Anything but a recognized keyword falls back to `center`. */
@@ -672,6 +697,7 @@ async function scanApp(root: string, id: string): Promise<ScannedApp> {
     previewStart: readPercent(config.previewStart),
     genre: readPlainString(config.genre),
     series: readPlainString(config.series),
+    tags: readTags(config.tags),
     coverHorizontalPosition: readCoverPosition(config.coverHorizontalPosition),
     facts: readFacts(config.facts),
     customButtons,
@@ -873,6 +899,7 @@ function registerIpc(): void {
         previewStart: appEntry.previewStart,
         genre: appEntry.genre,
         series: appEntry.series,
+        tags: appEntry.tags,
         coverHorizontalPosition: appEntry.coverHorizontalPosition,
         facts: appEntry.facts,
         customButtons: appEntry.customButtons.map((button) => ({ label: button.label, exists: button.abs != null })),

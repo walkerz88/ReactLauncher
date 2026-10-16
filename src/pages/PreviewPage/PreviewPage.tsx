@@ -23,10 +23,13 @@ import { useLocaleStore } from '@/app/store/localeStore';
 import { useNotificationStore } from '@/app/store/notificationStore';
 import { useRecentStore } from '@/app/store/recentStore';
 import { usePlaytimeStore } from '@/app/store/playtimeStore';
+import { useGalleryViewStore } from '@/app/store/galleryViewStore';
 import { useRunningStore } from '@/app/store/runningStore';
+import { useSearchStore } from '@/app/store/searchStore';
 import { useTorrentsStore } from '@/app/store/torrentsStore';
 import { formatPlaytime, formatRelativeTime } from '@/app/lib/format';
 import { useTranslation } from '@/app/i18n';
+import { showGalleryTab } from '@/pages/GalleryPage';
 import { Message } from '@/shared/Message';
 import { RatingBadge } from '@/shared/RatingBadge';
 import { Tooltip } from '@/shared/Tooltip';
@@ -52,6 +55,10 @@ export const PreviewPage: FC = () => {
   const status = useContentStore((state) => state.status);
   const loadApps = useContentStore((state) => state.loadApps);
   const launchApp = useContentStore((state) => state.launchApp);
+
+  const resetFilters = useGalleryViewStore((state) => state.resetFilters);
+  const setTagFilters = useGalleryViewStore((state) => state.setTagFilters);
+  const setSearchQuery = useSearchStore((state) => state.setQuery);
 
   const isFavorite = useFavoritesStore((state) => state.ids.includes(id));
   const toggleFavorite = useFavoritesStore((state) => state.toggle);
@@ -131,6 +138,14 @@ export const PreviewPage: FC = () => {
     app.description?.[locale] ?? app.description?.en ?? app.description?.ru ?? null;
   const instructions =
     app.instructions?.[locale] ?? app.instructions?.en ?? app.instructions?.ru ?? null;
+
+  const openTagInGallery = (tag: string) => {
+    resetFilters('gallery');
+    setTagFilters('gallery', [tag]);
+    setSearchQuery('gallery', '');
+    showGalleryTab();
+    navigate('/');
+  };
 
   const handleInstallClick = async () => {
     setIsLaunching(true);
@@ -250,6 +265,24 @@ export const PreviewPage: FC = () => {
           </span>
         ) : null}
       </div>
+
+      {app.tags.length > 0 ? (
+        <ul className="app-page__tags">
+          {app.tags.map((tag) => (
+            <li key={tag}>
+              <button
+                type="button"
+                className="app-page__tag"
+                title={t('app.tagOpen').replace('{name}', tag)}
+                onClick={() => openTagInGallery(tag)}
+                data-gamepad-focusable
+              >
+                {tag}
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : null}
 
       {playtime && (playtime.seconds > 0 || playtime.lastPlayedAt) ? (
         <p className="app-page__playtime">

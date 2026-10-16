@@ -7,7 +7,8 @@ import type { GalleryViewMode } from "@/widgets/GalleryControls";
 
 interface GalleryViewEntry {
   viewMode: GalleryViewMode;
-  genreFilter: string | null;
+  genreFilters: string[];
+  tagFilters: string[];
   seriesFilter: string | null;
   sortMode: GallerySortMode;
 }
@@ -18,7 +19,8 @@ interface GalleryViewEntry {
 // store changing on every read, which is an infinite render loop (crashes the whole app).
 const DEFAULT_ENTRY: GalleryViewEntry = {
   viewMode: "flat",
-  genreFilter: null,
+  genreFilters: [],
+  tagFilters: [],
   seriesFilter: null,
   sortMode: "rating",
 };
@@ -35,7 +37,8 @@ interface GalleryViewState {
   /** View mode + filters per `AppCollection` instance (gallery, recent, favourites, …). */
   byContext: Record<string, GalleryViewEntry>;
   setViewMode: (context: string, viewMode: GalleryViewMode) => void;
-  setGenreFilter: (context: string, genreFilter: string | null) => void;
+  setGenreFilters: (context: string, genreFilters: string[]) => void;
+  setTagFilters: (context: string, tagFilters: string[]) => void;
   setSeriesFilter: (context: string, seriesFilter: string | null) => void;
   setSortMode: (context: string, sortMode: GallerySortMode) => void;
   resetFilters: (context: string) => void;
@@ -59,11 +62,18 @@ export const useGalleryViewStore = create<GalleryViewState>()(
             [context]: { ...(state.byContext[context] ?? defaultEntryFor(context)), viewMode },
           },
         })),
-      setGenreFilter: (context, genreFilter) =>
+      setGenreFilters: (context, genreFilters) =>
         set((state) => ({
           byContext: {
             ...state.byContext,
-            [context]: { ...(state.byContext[context] ?? defaultEntryFor(context)), genreFilter },
+            [context]: { ...(state.byContext[context] ?? defaultEntryFor(context)), genreFilters },
+          },
+        })),
+      setTagFilters: (context, tagFilters) =>
+        set((state) => ({
+          byContext: {
+            ...state.byContext,
+            [context]: { ...(state.byContext[context] ?? defaultEntryFor(context)), tagFilters },
           },
         })),
       setSeriesFilter: (context, seriesFilter) =>
@@ -86,7 +96,8 @@ export const useGalleryViewStore = create<GalleryViewState>()(
             ...state.byContext,
             [context]: {
               ...(state.byContext[context] ?? defaultEntryFor(context)),
-              genreFilter: null,
+              genreFilters: [],
+              tagFilters: [],
               seriesFilter: null,
             },
           },
@@ -100,13 +111,17 @@ export const useGalleryViewStore = create<GalleryViewState>()(
       // in `getGalleryViewEntry`: that runs inside a store selector, and returning a fresh object from
       // a selector makes React re-render forever.
       merge: (persisted, current) => {
-        const stored = (persisted as { byContext?: Record<string, Partial<GalleryViewEntry>> } | undefined)?.byContext ?? {};
+        const stored =
+          (persisted as { byContext?: Record<string, Partial<GalleryViewEntry> & { genreFilter?: string | null }> } | undefined)
+            ?.byContext ?? {};
         const byContext = Object.fromEntries(
-          Object.entries(stored).map(([context, entry]) => [
+          Object.entries(stored).map(([context, { genreFilter, ...entry }]) => [
             context,
             {
               ...defaultEntryFor(context),
               ...entry,
+              // The genre filter used to be a single value; it is a list now.
+              genreFilters: entry.genreFilters ?? (genreFilter ? [genreFilter] : []),
               // "default" used to be a choice for the "recent" tab; it's gone, so any old entry
               // still carrying it (or anything else no longer valid) falls back to this context's default.
               sortMode: GALLERY_SORT_MODES.find((mode) => mode === entry.sortMode) ?? defaultEntryFor(context).sortMode,

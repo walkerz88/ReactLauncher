@@ -49,6 +49,8 @@ export interface ContentApp {
   genre: string | null;
   /** Franchise/series name (shown as-is, not localized) from `config.json`, or `null`. */
   series: string | null;
+  /** Free-form tags (shown as-is, not localized) from `config.json`; `[]` if none. */
+  tags: string[];
   /** CSS `object-position` keyword for the hero image, from `config.json`; defaults to `center`. */
   coverHorizontalPosition: 'top' | 'center' | 'bottom';
   /** Extra facts (year, developer, …) from `config.json`; `[]` if none. */
@@ -127,6 +129,7 @@ export interface RawAppConfig {
   previewStart?: number;
   genre?: string;
   series?: string;
+  tags?: string[];
   coverHorizontalPosition?: string;
   facts?: Array<{ label: Partial<LocalizedText> | string; value: Partial<LocalizedText> | string }>;
   /** User-defined shortcut buttons, shown next to Play/Install on the app page. */

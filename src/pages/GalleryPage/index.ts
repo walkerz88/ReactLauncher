@@ -1,1 +1,1 @@
-export { GalleryPage } from './GalleryPage';
+export { GalleryPage, showGalleryTab } from './GalleryPage';

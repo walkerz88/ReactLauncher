@@ -26,18 +26,19 @@ export interface AppCollectionProps {
 }
 
 /**
- * View-mode switcher + genre/series filters (`GalleryControls`) driving a
+ * View-mode switcher + genre/tag/series filters (`GalleryControls`) driving a
  * filtered/grouped `AppGrid`. Shared by the gallery, favourites and
  * recently-launched pages so all three browse the library the same way.
  */
 export const AppCollection: FC<AppCollectionProps> = ({ apps, title, contextKey }) => {
   const t = useTranslation();
 
-  const { viewMode, genreFilter, seriesFilter, sortMode } = useGalleryViewStore((state) =>
+  const { viewMode, genreFilters, tagFilters, seriesFilter, sortMode } = useGalleryViewStore((state) =>
     getGalleryViewEntry(state.byContext, contextKey),
   );
   const setViewMode = useGalleryViewStore((state) => state.setViewMode);
-  const setGenreFilter = useGalleryViewStore((state) => state.setGenreFilter);
+  const setGenreFilters = useGalleryViewStore((state) => state.setGenreFilters);
+  const setTagFilters = useGalleryViewStore((state) => state.setTagFilters);
   const setSeriesFilter = useGalleryViewStore((state) => state.setSeriesFilter);
   const setSortMode = useGalleryViewStore((state) => state.setSortMode);
   const playtime = usePlaytimeStore((state) => state.byId);
@@ -56,6 +57,10 @@ export const AppCollection: FC<AppCollectionProps> = ({ apps, title, contextKey 
       ),
     [apps, t],
   );
+  const tags = useMemo(
+    () => Array.from(new Set(apps.flatMap((app) => app.tags))).sort((a, b) => a.localeCompare(b)),
+    [apps],
+  );
   const seriesList = useMemo(() => {
     const named = Array.from(
       new Set(apps.flatMap((app) => (app.series ? [app.series] : []))),
@@ -73,7 +78,7 @@ export const AppCollection: FC<AppCollectionProps> = ({ apps, title, contextKey 
     // already narrows it, and hiding the control while it's still active
     // would look like the filter silently stopped working.
     if (mode === 'genre') {
-      setGenreFilter(contextKey, null);
+      setGenreFilters(contextKey, []);
     }
     if (mode === 'series') {
       setSeriesFilter(contextKey, null);
@@ -89,7 +94,10 @@ export const AppCollection: FC<AppCollectionProps> = ({ apps, title, contextKey 
     if (!matchesSearch(app.name, searchQuery)) {
       return false;
     }
-    if (genreFilter && app.genre !== genreFilter) {
+    if (genreFilters.length > 0 && (!app.genre || !genreFilters.includes(app.genre))) {
+      return false;
+    }
+    if (tagFilters.length > 0 && !app.tags.some((tag) => tagFilters.includes(tag))) {
       return false;
     }
     if (seriesFilter === OTHER_KEY) {
@@ -109,8 +117,11 @@ export const AppCollection: FC<AppCollectionProps> = ({ apps, title, contextKey 
       searchQuery={searchQuery}
       onSearchQueryChange={setSearchQuery}
       genres={genres}
-      genreFilter={genreFilter}
-      onGenreFilterChange={(value) => setGenreFilter(contextKey, value)}
+      genreFilters={genreFilters}
+      onGenreFiltersChange={(value) => setGenreFilters(contextKey, value)}
+      tags={tags}
+      tagFilters={tagFilters}
+      onTagFiltersChange={(value) => setTagFilters(contextKey, value)}
       seriesList={seriesList}
       seriesFilter={seriesFilter}
       onSeriesFilterChange={(value) => setSeriesFilter(contextKey, value)}

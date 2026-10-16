@@ -542,6 +542,45 @@
   cursor: help;
 }
 
+.edit-config-modal__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.edit-config-modal__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 4px 3px 10px;
+  border-radius: 999px;
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.edit-config-modal__tag button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.edit-config-modal__tag button:hover {
+  background-color: var(--color-surface-hover);
+}
+
 .edit-config-modal__row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -659,6 +698,32 @@
   50% {
     opacity: 0.3;
   }
+}
+
+.app-page__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-page__tag {
+  padding: 3px 10px;
+  border: none;
+  border-radius: 999px;
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.app-page__tag:hover {
+  background-color: var(--color-surface-hover);
 }
 
 .app-page__playtime {
