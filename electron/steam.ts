@@ -256,17 +256,23 @@ export async function downloadSteamAssets(
   ]);
 
   let trailer = false;
-  const movieId = wantTrailer ? data?.movies?.[0]?.id : undefined;
+  const trailerPath = path.join(assetsDir, 'trailer.mp4');
+  // Steam serves newer trailers as HLS/DASH only, so the direct mp4 exists just for some movies — try them all.
+  const movieIds = wantTrailer
+    ? (data?.movies ?? []).flatMap((movie) => (typeof movie.id === 'number' ? [movie.id] : []))
+    : [];
 
-  if (typeof movieId === 'number') {
-    const trailerPath = path.join(assetsDir, 'trailer.mp4');
-
+  for (const movieId of movieIds) {
     for (const file of ['movie_max.mp4', 'movie480.mp4']) {
       trailer = await downloadFile(`${CDN_ROOT}/${movieId}/${file}`, trailerPath);
 
       if (trailer) {
         break;
       }
+    }
+
+    if (trailer) {
+      break;
     }
   }
 

@@ -1,0 +1,42 @@
+.markdown-editor .w-md-editor {
+  --color-canvas-default: var(--color-bg);
+  --color-fg-default: var(--color-text);
+  --color-border-default: var(--color-border);
+  --color-neutral-muted: var(--color-surface-hover);
+  --color-accent-fg: var(--color-accent);
+  --md-editor-font-family: inherit;
+  border-radius: 7px;
+  font-size: 14px;
+}
+
+.markdown-editor .w-md-editor-toolbar {
+  border-radius: 7px 7px 0 0;
+}
+
+.markdown-editor .w-md-editor-toolbar li > button {
+  height: 24px;
+  color: var(--color-text-muted);
+}
+
+.markdown-editor .w-md-editor-toolbar svg {
+  width: 14px;
+  height: 14px;
+}
+
+.markdown-editor .w-md-editor-text-input,
+.markdown-editor .w-md-editor-text-pre > code {
+  color: var(--color-text);
+  -webkit-text-fill-color: var(--color-text);
+}
+
+.markdown-editor .w-md-editor-focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+  box-shadow: none;
+}
+
+.markdown-editor__preview {
+  padding: 10px 14px;
+  overflow: auto;
+  color: var(--color-text);
+}

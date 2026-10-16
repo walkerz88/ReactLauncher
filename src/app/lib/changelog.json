@@ -887,5 +887,22 @@
         "en": "The chosen sort in the downloads table and the library sizes table is remembered"
       }
     ]
+  },
+  {
+    "version": "1.14.13",
+    "title": {
+      "ru": "Markdown-редактор описаний",
+      "en": "Markdown description editor"
+    },
+    "changes": [
+      {
+        "ru": "Поля описания в редактировании конфига и в мастере добавления игры теперь с панелью форматирования Markdown и переключателем «Правка / Просмотр»",
+        "en": "The description fields in the config editor and the add-game wizard now have a Markdown formatting toolbar and an Edit / Preview switch"
+      },
+      {
+        "ru": "Загрузка трейлера из Steam перебирает все ролики игры, а не только первый",
+        "en": "The Steam trailer download now tries every movie of the game, not just the first one"
+      }
+    ]
   }
 ]

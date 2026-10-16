@@ -3,6 +3,7 @@ import type { FC } from 'react';
 import { useTranslation } from '@/app/i18n';
 import { GENRE_KEYS } from '@/app/lib/genres';
 import { FormField } from '@/shared/FormField';
+import { MarkdownEditor } from '@/shared/MarkdownEditor';
 import { Message } from '@/shared/Message';
 
 import type { BasicsDraft } from '../draft';
@@ -57,20 +58,12 @@ export const BasicsStep: FC<BasicsStepProps> = ({ basics, onChange }) => {
         />
       </FormField>
 
-      <FormField label={t('editConfig.descriptionRu')}>
-        <textarea
-          rows={3}
-          value={basics.descriptionRu}
-          onChange={(event) => onChange({ descriptionRu: event.target.value })}
-        />
+      <FormField label={t('editConfig.descriptionRu')} plain>
+        <MarkdownEditor value={basics.descriptionRu} onChange={(value) => onChange({ descriptionRu: value })} />
       </FormField>
 
-      <FormField label={t('editConfig.descriptionEn')}>
-        <textarea
-          rows={3}
-          value={basics.descriptionEn}
-          onChange={(event) => onChange({ descriptionEn: event.target.value })}
-        />
+      <FormField label={t('editConfig.descriptionEn')} plain>
+        <MarkdownEditor value={basics.descriptionEn} onChange={(value) => onChange({ descriptionEn: value })} />
       </FormField>
     </div>
   );

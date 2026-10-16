@@ -9,6 +9,7 @@ import { useContentStore } from '@/app/store/contentStore';
 import { useNotificationStore } from '@/app/store/notificationStore';
 import { BulkFillModal, type FillFields } from '@/shared/BulkFillModal';
 import { FormField } from '@/shared/FormField';
+import { MarkdownEditor } from '@/shared/MarkdownEditor';
 import { Modal } from '@/shared/Modal';
 import { PathField } from '@/shared/PathField';
 import { SteamNoMatchModal } from '@/shared/SteamNoMatchModal';
@@ -802,12 +803,9 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
                     onApply={(text) => update('descriptionRu', text)}
                   />
                 }
+                plain
               >
-                <textarea
-                  rows={4}
-                  value={form.descriptionRu}
-                  onChange={(event) => update('descriptionRu', event.target.value)}
-                />
+                <MarkdownEditor value={form.descriptionRu} onChange={(value) => update('descriptionRu', value)} />
               </FormField>
 
               <FormField
@@ -819,12 +817,9 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
                     onApply={(text) => update('descriptionEn', text)}
                   />
                 }
+                plain
               >
-                <textarea
-                  rows={4}
-                  value={form.descriptionEn}
-                  onChange={(event) => update('descriptionEn', event.target.value)}
-                />
+                <MarkdownEditor value={form.descriptionEn} onChange={(value) => update('descriptionEn', value)} />
               </FormField>
             </section>
 
