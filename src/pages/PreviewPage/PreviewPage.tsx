@@ -6,8 +6,6 @@ import remarkGfm from 'remark-gfm';
 import {
   ArrowLeft,
   BookOpen,
-  ChevronLeft,
-  ChevronRight,
   Download,
   Gift,
   Heart,
@@ -32,7 +30,10 @@ import { useTranslation } from '@/app/i18n';
 import { showGalleryTab } from '@/pages/GalleryPage';
 import { Message } from '@/shared/Message';
 import { RatingBadge } from '@/shared/RatingBadge';
+import { Tag } from '@/shared/Tag';
 import { Tooltip } from '@/shared/Tooltip';
+import { Button } from '@/shared/Button';
+import { IconButton } from '@/shared/IconButton';
 
 import { BackupsModal } from './components/BackupsModal';
 import { DeleteGameModal, type DeleteScope } from './components/DeleteGameModal';
@@ -81,9 +82,6 @@ export const PreviewPage: FC = () => {
   }, [status, loadApps]);
 
   const app = apps.find((entry) => entry.id === id);
-  const appIndex = apps.findIndex((entry) => entry.id === id);
-  const prevApp = appIndex > 0 ? apps[appIndex - 1] : null;
-  const nextApp = appIndex >= 0 && appIndex < apps.length - 1 ? apps[appIndex + 1] : null;
 
   useEffect(() => {
     if (app) {
@@ -256,13 +254,28 @@ export const PreviewPage: FC = () => {
       </div>
 
       <div className="app-page__title-row">
-        <h1 className="app-page__title">{app.name}</h1>
-        {app.rating != null ? <RatingBadge rating={app.rating} size="md" /> : null}
-        {isRunning ? (
-          <span className="app-page__running">
-            <span className="app-page__running-dot" aria-hidden="true" />
-            {t('app.running')}
-          </span>
+        <div className="app-page__title-group">
+          <h1 className="app-page__title">{app.name}</h1>
+          {app.rating != null ? <RatingBadge rating={app.rating} size="md" /> : null}
+          {isRunning ? (
+            <span className="app-page__running">
+              <span className="app-page__running-dot" aria-hidden="true" />
+              {t('app.running')}
+            </span>
+          ) : null}
+        </div>
+        {app.tags.length > 0 ? (
+          <ul className="app-page__tags">
+            {app.tags.map((tag) => (
+              <li key={tag}>
+                <Tag
+                  label={tag}
+                  title={t('app.tagOpen').replace('{name}', tag)}
+                  onClick={() => openTagInGallery(tag)}
+                />
+              </li>
+            ))}
+          </ul>
         ) : null}
       </div>
 
@@ -283,33 +296,33 @@ export const PreviewPage: FC = () => {
 
       <div className="app-page__actions">
         {isRunning ? (
-          <button
+          <Button
             ref={playButtonRef}
             type="button"
-            className="btn btn--danger"
+            variant="danger"
             onClick={() => void handleStopClick()}
             data-gamepad-focusable
           >
             <Square size={18} />
             {t('app.stop')}
-          </button>
+          </Button>
         ) : showInstallPrimary ? (
-          <button
+          <Button
             ref={playButtonRef}
             type="button"
-            className="btn btn--accent"
+            variant="accent"
             onClick={handleInstallClick}
             disabled={isLaunching}
             data-gamepad-focusable
           >
             {isLaunching ? <Loader2 size={18} className="spin" /> : <Download size={18} />}
             {t('app.installLocally')}
-          </button>
+          </Button>
         ) : (
-          <button
+          <Button
             ref={playButtonRef}
             type="button"
-            className="btn btn--accent"
+            variant="accent"
             onClick={handlePlayClick}
             disabled={!app.hasExec || isLaunching}
             // Kept as a native `title`, not the `Tooltip` component: a `disabled` button doesn't
@@ -319,56 +332,52 @@ export const PreviewPage: FC = () => {
           >
             {isLaunching ? <Loader2 size={18} className="spin" /> : <Play size={18} />}
             {playLabel}
-          </button>
+          </Button>
         )}
 
         {app.customButtons.map((button, index) =>
           button.exists ? (
-            <button
+            <Button
               key={index}
               type="button"
-              className="btn"
               onClick={() => void window.electronAPI?.content?.openCustomButton(app.id, index)}
               data-gamepad-focusable
             >
               {button.label[locale] ?? button.label.en ?? button.label.ru}
-            </button>
+            </Button>
           ) : null,
         )}
 
         {app.hasSettings ? (
-          <button
+          <Button
             type="button"
-            className="btn"
             onClick={() => void window.electronAPI?.content?.openSettings(app.id)}
             data-gamepad-focusable
           >
             {t('app.externalSettings')}
-          </button>
+          </Button>
         ) : null}
 
         {instructions ? (
-          <button
+          <Button
             type="button"
-            className="btn"
             onClick={() => setShowInstructions(true)}
             data-gamepad-focusable
           >
             <BookOpen size={18} />
             {t('app.instructions')}
-          </button>
+          </Button>
         ) : null}
 
         {app.hasBonusContent ? (
-          <button
+          <Button
             type="button"
-            className="btn"
             onClick={() => void window.electronAPI?.content?.openBonus(app.id)}
             data-gamepad-focusable
           >
             <Gift size={18} />
             {t('app.bonusContent')}
-          </button>
+          </Button>
         ) : null}
 
         <GameSettingsMenu
@@ -381,59 +390,16 @@ export const PreviewPage: FC = () => {
         />
 
         <Tooltip label={isFavorite ? t('app.favoriteRemove') : t('app.favoriteAdd')}>
-          <button
+          <IconButton
             type="button"
-            className="icon-btn"
             aria-pressed={isFavorite}
             onClick={() => toggleFavorite(app.id)}
             data-gamepad-focusable
           >
             <Heart size={18} fill={isFavorite ? 'currentColor' : 'none'} />
-          </button>
+          </IconButton>
         </Tooltip>
-
-        <div className="app-page__nav">
-          <button
-            type="button"
-            className="icon-btn"
-            disabled={!prevApp}
-            aria-label={t('app.previous')}
-            onClick={() => prevApp && navigate(`/app/${encodeURIComponent(prevApp.id)}`)}
-            data-gamepad-focusable
-          >
-            <ChevronLeft size={18} />
-          </button>
-
-          <button
-            type="button"
-            className="icon-btn"
-            disabled={!nextApp}
-            aria-label={t('app.next')}
-            onClick={() => nextApp && navigate(`/app/${encodeURIComponent(nextApp.id)}`)}
-            data-gamepad-focusable
-          >
-            <ChevronRight size={18} />
-          </button>
-        </div>
       </div>
-
-      {app.tags.length > 0 ? (
-        <ul className="app-page__tags">
-          {app.tags.map((tag) => (
-            <li key={tag}>
-              <button
-                type="button"
-                className="app-page__tag"
-                title={t('app.tagOpen').replace('{name}', tag)}
-                onClick={() => openTagInGallery(tag)}
-                data-gamepad-focusable
-              >
-                {tag}
-              </button>
-            </li>
-          ))}
-        </ul>
-      ) : null}
 
       {app.previewNotes.map((note, index) => {
         const noteText = note.text[locale] ?? note.text.en ?? note.text.ru;

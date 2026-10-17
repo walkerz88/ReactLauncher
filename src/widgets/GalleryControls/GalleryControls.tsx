@@ -103,18 +103,16 @@ export const GalleryControls: FC<GalleryControlsProps> = ({
           ) : null}
         </div>
 
-        <select
-          className="gallery-controls__select"
-          value={sortMode}
-          aria-label={t('gallery.sort.label')}
-          onChange={(event) => onSortModeChange(event.target.value as GallerySortMode)}
-        >
-          {GALLERY_SORT_MODES.map((mode) => (
-            <option key={mode} value={mode}>
-              {t(`gallery.sort.${mode}`)}
-            </option>
-          ))}
-        </select>
+        <SearchSelect
+          options={GALLERY_SORT_MODES.map((mode) => ({ value: mode, label: t(`gallery.sort.${mode}`) }))}
+          selected={[sortMode]}
+          placeholder={t('gallery.sort.label')}
+          searchPlaceholder={t('gallery.filter.selectSearch')}
+          emptyLabel={t('gallery.filter.selectEmpty')}
+          ariaLabel={t('gallery.sort.label')}
+          searchable={false}
+          onChange={([mode]) => onSortModeChange(mode as GallerySortMode)}
+        />
 
         {viewMode !== 'genre' && genres.length > 0 ? (
           <SearchSelect
@@ -153,6 +151,7 @@ export const GalleryControls: FC<GalleryControlsProps> = ({
             searchPlaceholder={t('gallery.filter.selectSearch')}
             emptyLabel={t('gallery.filter.selectEmpty')}
             ariaLabel={t('gallery.filter.series')}
+            clearable
             onChange={(value) => onSeriesFilterChange(value[0] ?? null)}
           />
         ) : null}

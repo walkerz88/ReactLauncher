@@ -4,6 +4,7 @@ import { Search } from 'lucide-react';
 import { useTranslation } from '@/app/i18n';
 import { Message } from '@/shared/Message';
 import type { SteamSearchResult } from '@/electron';
+import { Button } from '@/shared/Button';
 
 import type { BasicsDraft } from '../draft';
 
@@ -66,16 +67,16 @@ export const SteamSearch: FC<SteamSearchProps> = ({ query, steamAppId, onImport 
 
   return (
     <div className="add-game__steam" data-id="SteamSearch">
-      <button
+      <Button
         type="button"
-        className="btn add-game__action"
+        className="add-game__action"
         disabled={busy || !query.trim()}
         onClick={() => void search()}
         data-gamepad-focusable
       >
         <Search size={16} />
         {busy ? t('addGame.steam.loading') : t('addGame.steam.search')}
-      </button>
+      </Button>
 
       {results?.length === 0 ? <Message type="warning">{t('addGame.steam.noResults')}</Message> : null}
 

@@ -6,6 +6,8 @@ import { useNotificationStore } from '@/app/store/notificationStore';
 import { FormField } from '@/shared/FormField';
 import { Modal } from '@/shared/Modal';
 import { Tooltip } from '@/shared/Tooltip';
+import { Button } from '@/shared/Button';
+import { IconButton } from '@/shared/IconButton';
 
 import './TranslateButton.css';
 
@@ -53,21 +55,21 @@ export const TranslateButton: FC<TranslateButtonProps> = ({ source, target, onAp
 
   const footer = (
     <>
-      <button type="button" className="btn" onClick={() => setResult(null)} data-gamepad-focusable>
+      <Button type="button" onClick={() => setResult(null)} data-gamepad-focusable>
         {t('translate.cancel')}
-      </button>
-      <button type="button" className="btn btn--accent" onClick={handleApply} data-gamepad-focusable>
+      </Button>
+      <Button type="button" variant="accent" onClick={handleApply} data-gamepad-focusable>
         {t('translate.apply')}
-      </button>
+      </Button>
     </>
   );
 
   return (
     <>
       <Tooltip label={t('translate.button')}>
-        <button
+        <IconButton
           type="button"
-          className="icon-btn translate-button"
+          className="translate-button"
           aria-label={t('translate.button')}
           disabled={busy || !source.trim()}
           onClick={() => void handleTranslate()}
@@ -75,7 +77,7 @@ export const TranslateButton: FC<TranslateButtonProps> = ({ source, target, onAp
           data-gamepad-focusable
         >
           {busy ? <Loader2 size={14} className="translate-button__spin" /> : <Languages size={14} />}
-        </button>
+        </IconButton>
       </Tooltip>
 
       {result != null ? (

@@ -12,6 +12,7 @@ import {
 import { FormField } from '@/shared/FormField';
 import { Modal } from '@/shared/Modal';
 import { ToggleGroup, type ToggleGroupOption } from '@/shared/ToggleGroup';
+import { Button } from '@/shared/Button';
 
 import { ThemePreview } from './ThemePreview';
 
@@ -55,12 +56,12 @@ export const ThemeEditor: FC<ThemeEditorProps> = ({ initial, isEditing, onSave, 
 
   const footer = (
     <>
-      <button type="button" className="btn" onClick={onClose} data-gamepad-focusable>
+      <Button type="button" onClick={onClose} data-gamepad-focusable>
         {t('themeEditor.cancel')}
-      </button>
-      <button type="button" className="btn btn--accent" disabled={!trimmedName} onClick={save} data-gamepad-focusable>
+      </Button>
+      <Button type="button" variant="accent" disabled={!trimmedName} onClick={save} data-gamepad-focusable>
         {t('themeEditor.save')}
-      </button>
+      </Button>
     </>
   );
 

@@ -1,7 +1,7 @@
 import { useEffect, useState, type FC } from 'react';
 import type { FormEvent } from 'react';
 import { Reorder } from 'framer-motion';
-import { Info, Loader2, Plus, Wand2, X } from 'lucide-react';
+import { Info, Loader2, Plus, Wand2 } from 'lucide-react';
 
 import { useTranslation } from '@/app/i18n';
 import { GENRE_KEYS } from '@/app/lib/genres';
@@ -15,9 +15,11 @@ import { PathField } from '@/shared/PathField';
 import { SearchSelect } from '@/shared/SearchSelect';
 import { SteamNoMatchModal } from '@/shared/SteamNoMatchModal';
 import { SteamPickerModal } from '@/shared/SteamPickerModal';
+import { Tag } from '@/shared/Tag';
 import { Tooltip } from '@/shared/Tooltip';
 import { TranslateButton } from '@/shared/TranslateButton';
 import type { PathField as PathFieldName, RawAppConfig, SteamSearchResult } from '@/electron';
+import { Button } from '@/shared/Button';
 
 import { CustomButtonRow, type CustomButtonRowValue } from './components/CustomButtonRow';
 import { FactRow, type FactRowValue } from './components/FactRow';
@@ -612,28 +614,27 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
 
   const footer = (
     <>
-      <button type="button" className="btn edit-config-modal__cancel" onClick={onClose} data-gamepad-focusable>
+      <Button type="button" className="edit-config-modal__cancel" onClick={onClose} data-gamepad-focusable>
         {t('editConfig.cancel')}
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
-        className="btn"
         onClick={() => setShowAutoFillModal(true)}
         disabled={!form || saving || autoFilling}
         data-gamepad-focusable
       >
         {autoFilling ? <Loader2 size={14} className="edit-config-modal__spin" /> : <Wand2 size={14} />}
         {autoFilling ? t('editConfig.autoFilling') : t('editConfig.autoFill')}
-      </button>
-      <button
+      </Button>
+      <Button
         type="submit"
         form="edit-config-form"
-        className="btn btn--accent"
+        variant="accent"
         disabled={!form || saving}
         data-gamepad-focusable
       >
         {saving ? t('editConfig.saving') : t('editConfig.save')}
-      </button>
+      </Button>
     </>
   );
 
@@ -661,15 +662,17 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
               </FormField>
 
               <div className="edit-config-modal__row">
-                <FormField label={t('editConfig.genre')}>
-                  <select value={form.genre} onChange={(event) => update('genre', event.target.value)}>
-                    <option value="">{t('editConfig.genreNone')}</option>
-                    {GENRE_KEYS.map((key) => (
-                      <option key={key} value={key}>
-                        {t(key)}
-                      </option>
-                    ))}
-                  </select>
+                <FormField label={t('editConfig.genre')} plain>
+                  <SearchSelect
+                    options={GENRE_KEYS.map((key) => ({ value: key, label: t(key) }))}
+                    selected={form.genre ? [form.genre] : []}
+                    placeholder={t('editConfig.genreNone')}
+                    searchPlaceholder={t('gallery.filter.selectSearch')}
+                    emptyLabel={t('gallery.filter.selectEmpty')}
+                    ariaLabel={t('editConfig.genre')}
+                    clearable
+                    onChange={([genre]) => update('genre', genre ?? '')}
+                  />
                 </FormField>
 
                 <FormField label={t('editConfig.series')}>
@@ -699,15 +702,12 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
                 {form.tags.length > 0 ? (
                   <ul className="edit-config-modal__tags">
                     {form.tags.map((tag) => (
-                      <li key={tag} className="edit-config-modal__tag">
-                        {tag}
-                        <button
-                          type="button"
-                          aria-label={t('editConfig.tagRemove').replace('{name}', tag)}
-                          onClick={() => update('tags', form.tags.filter((entry) => entry !== tag))}
-                        >
-                          <X size={12} />
-                        </button>
+                      <li key={tag}>
+                        <Tag
+                          label={tag}
+                          removeLabel={t('editConfig.tagRemove').replace('{name}', tag)}
+                          onRemove={() => update('tags', form.tags.filter((entry) => entry !== tag))}
+                        />
                       </li>
                     ))}
                   </ul>
@@ -726,15 +726,21 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
                   />
                 </FormField>
 
-                <FormField label={t('editConfig.coverPosition')}>
-                  <select
-                    value={form.coverHorizontalPosition}
-                    onChange={(event) => update('coverHorizontalPosition', event.target.value)}
-                  >
-                    <option value="top">{t('editConfig.coverPositionTop')}</option>
-                    <option value="center">{t('editConfig.coverPositionCenter')}</option>
-                    <option value="bottom">{t('editConfig.coverPositionBottom')}</option>
-                  </select>
+                <FormField label={t('editConfig.coverPosition')} plain>
+                  <SearchSelect
+                    options={[
+                      { value: 'top', label: t('editConfig.coverPositionTop') },
+                      { value: 'center', label: t('editConfig.coverPositionCenter') },
+                      { value: 'bottom', label: t('editConfig.coverPositionBottom') },
+                    ]}
+                    selected={[form.coverHorizontalPosition]}
+                    placeholder={t('editConfig.coverPosition')}
+                    searchPlaceholder={t('gallery.filter.selectSearch')}
+                    emptyLabel={t('gallery.filter.selectEmpty')}
+                    ariaLabel={t('editConfig.coverPosition')}
+                    searchable={false}
+                    onChange={([position]) => update('coverHorizontalPosition', position)}
+                  />
                 </FormField>
               </div>
 
@@ -820,10 +826,10 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
                 ))}
               </Reorder.Group>
 
-              <button type="button" className="btn" onClick={addCustomButton} data-gamepad-focusable>
+              <Button type="button" onClick={addCustomButton} data-gamepad-focusable>
                 <Plus size={16} />
                 {t('editConfig.customButtonAdd')}
-              </button>
+              </Button>
             </section>
 
             <section className="edit-config-modal__section">
@@ -920,10 +926,10 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
                 ))}
               </Reorder.Group>
 
-              <button type="button" className="btn" onClick={addNote} data-gamepad-focusable>
+              <Button type="button" onClick={addNote} data-gamepad-focusable>
                 <Plus size={16} />
                 {t('editConfig.noteAdd')}
-              </button>
+              </Button>
             </section>
 
             <section className="edit-config-modal__section">
@@ -946,10 +952,10 @@ export const EditConfigModal: FC<EditConfigModalProps> = ({ appId, appName, onCl
                 ))}
               </Reorder.Group>
 
-              <button type="button" className="btn" onClick={addFact} data-gamepad-focusable>
+              <Button type="button" onClick={addFact} data-gamepad-focusable>
                 <Plus size={16} />
                 {t('editConfig.factAdd')}
-              </button>
+              </Button>
             </section>
           </form>
         )}

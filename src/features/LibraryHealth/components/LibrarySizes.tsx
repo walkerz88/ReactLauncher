@@ -10,6 +10,7 @@ import { HorizontalBarChart, type HorizontalBarChartRow } from '@/shared/Horizon
 import { RatingBadge } from '@/shared/RatingBadge';
 import { Tooltip } from '@/shared/Tooltip';
 import type { AppSizes, ContentApp } from '@/electron';
+import { Button } from '@/shared/Button';
 
 import { DiskSpaceSummary } from './DiskSpaceSummary';
 import { FieldStatusIcon } from './FieldStatusIcon';
@@ -200,9 +201,9 @@ export const LibrarySizes: FC<LibrarySizesProps> = ({ apps }) => {
           <DiskSpaceSummary reloadKey={diskReloadKey} />
 
           <div className="library-health__sizes-loading">
-            <button
+            <Button
               type="button"
-              className="btn btn--small library-health__scan-button"
+              small className="library-health__scan-button"
               onClick={handleRescan}
               disabled={scanning}
               data-gamepad-focusable
@@ -218,7 +219,7 @@ export const LibrarySizes: FC<LibrarySizesProps> = ({ apps }) => {
                   t('health.sizes.scan')
                 )}
               </span>
-            </button>
+            </Button>
           </div>
         </div>
       </div>

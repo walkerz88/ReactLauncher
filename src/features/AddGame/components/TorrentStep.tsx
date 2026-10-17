@@ -5,6 +5,8 @@ import { useTranslation } from '@/app/i18n';
 import { formatFileSize } from '@/app/lib/format';
 import { FormField } from '@/shared/FormField';
 import { Message } from '@/shared/Message';
+import { Button } from '@/shared/Button';
+import { IconButton } from '@/shared/IconButton';
 
 import { toTorrentSource, type TorrentDraft } from '../draft';
 
@@ -89,27 +91,26 @@ export const TorrentStep: FC<TorrentStepProps> = ({ torrent, onChange, onSuggest
         <div className="add-game__file-chip">
           <FileDown size={18} />
           <span className="add-game__file-name">{file.name}</span>
-          <button
+          <IconButton
             type="button"
-            className="icon-btn"
             aria-label={t('addGame.torrent.removeFile')}
             onClick={() => onChange({ file: null })}
             data-gamepad-focusable
           >
             <X size={16} />
-          </button>
+          </IconButton>
         </div>
       ) : (
-        <button
+        <Button
           type="button"
-          className="btn add-game__action"
+          className="add-game__action"
           onClick={() => void pickFile()}
           autoFocus
           data-gamepad-focusable
         >
           <FileDown size={16} />
           {t('addGame.torrent.pickFile')}
-        </button>
+        </Button>
       )}
 
       <div className="add-game__or">{t('addGame.torrent.or')}</div>

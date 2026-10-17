@@ -4,6 +4,7 @@ import { File, FolderOpen } from 'lucide-react';
 import { useTranslation } from '@/app/i18n';
 import { FormField } from '@/shared/FormField';
 import { Tooltip } from '@/shared/Tooltip';
+import { IconButton } from '@/shared/IconButton';
 
 import './PathField.css';
 
@@ -33,28 +34,26 @@ export const PathField: FC<PathFieldProps> = ({ label, placeholder, value, onCha
         />
         {onBrowse ? (
           <Tooltip label={t('editConfig.browseFile')}>
-            <button
+            <IconButton
               type="button"
-              className="icon-btn"
               aria-label={t('editConfig.browseFile')}
               onClick={onBrowse}
               data-gamepad-focusable
             >
               <File size={16} />
-            </button>
+            </IconButton>
           </Tooltip>
         ) : null}
         {onBrowseFolder ? (
           <Tooltip label={t('editConfig.browseFolder')}>
-            <button
+            <IconButton
               type="button"
-              className="icon-btn"
               aria-label={t('editConfig.browseFolder')}
               onClick={onBrowseFolder}
               data-gamepad-focusable
             >
               <FolderOpen size={16} />
-            </button>
+            </IconButton>
           </Tooltip>
         ) : null}
       </div>

@@ -4,6 +4,7 @@ import { Loader2 } from 'lucide-react';
 import { useTranslation } from '@/app/i18n';
 import { FormField } from '@/shared/FormField';
 import { Modal } from '@/shared/Modal';
+import { Button } from '@/shared/Button';
 
 import './SteamNoMatchModal.css';
 
@@ -35,19 +36,19 @@ export const SteamNoMatchModal: FC<SteamNoMatchModalProps> = ({ initialName, bus
 
   const footer = (
     <>
-      <button type="button" className="btn" onClick={onSkip} disabled={busy} data-gamepad-focusable>
+      <Button type="button" onClick={onSkip} disabled={busy} data-gamepad-focusable>
         {t('steamNoMatch.skip')}
-      </button>
-      <button
+      </Button>
+      <Button
         type="submit"
         form="steam-no-match-form"
-        className="btn btn--accent"
+        variant="accent"
         disabled={!name.trim() || busy}
         data-gamepad-focusable
       >
         {busy ? <Loader2 size={14} className="steam-no-match-modal__spin" /> : null}
         {t('steamNoMatch.continue')}
-      </button>
+      </Button>
     </>
   );
 

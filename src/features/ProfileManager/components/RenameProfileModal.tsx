@@ -5,6 +5,7 @@ import { MAX_PROFILE_NAME_LENGTH, useProfileStore, type Profile } from '@/app/st
 import { FormField } from '@/shared/FormField';
 import { Message } from '@/shared/Message';
 import { Modal } from '@/shared/Modal';
+import { Button } from '@/shared/Button';
 
 export interface RenameProfileModalProps {
   profile: Profile;
@@ -34,18 +35,18 @@ export const RenameProfileModal: FC<RenameProfileModalProps> = ({ profile, onClo
 
   const footer = (
     <>
-      <button type="button" className="btn" onClick={onClose} data-gamepad-focusable>
+      <Button type="button" onClick={onClose} data-gamepad-focusable>
         {t('profile.cancel')}
-      </button>
-      <button
+      </Button>
+      <Button
         type="submit"
         form="rename-profile-form"
-        className="btn btn--accent"
+        variant="accent"
         disabled={!trimmedName || isTaken}
         data-gamepad-focusable
       >
         {t('profile.rename')}
-      </button>
+      </Button>
     </>
   );
 

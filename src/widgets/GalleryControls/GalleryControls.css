@@ -100,18 +100,6 @@
   color: var(--color-text);
 }
 
-.gallery-controls__select {
-  height: 34px;
-  padding: 0 10px;
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  background-color: var(--color-surface);
-  color: var(--color-text);
-  font: inherit;
-  font-size: 13px;
-  cursor: pointer;
-}
-
 .gallery-controls__reset {
   display: inline-flex;
   align-items: center;

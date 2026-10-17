@@ -3,6 +3,7 @@ import type { FC } from 'react';
 import { useTranslation } from '@/app/i18n';
 import type { TorrentInfo } from '@/electron';
 import { Modal } from '@/shared/Modal';
+import { Button } from '@/shared/Button';
 
 export interface RemoveTorrentModalProps {
   torrent: TorrentInfo;
@@ -17,15 +18,15 @@ export const RemoveTorrentModal: FC<RemoveTorrentModalProps> = ({ torrent, title
 
   const footer = (
     <>
-      <button type="button" className="btn" autoFocus onClick={onCancel} data-gamepad-focusable>
+      <Button type="button" autoFocus onClick={onCancel} data-gamepad-focusable>
         {t('addGame.cancel')}
-      </button>
-      <button type="button" className="btn remove-torrent__button" onClick={() => onRemove(false)} data-gamepad-focusable>
+      </Button>
+      <Button type="button" className="remove-torrent__button" onClick={() => onRemove(false)} data-gamepad-focusable>
         {t('downloads.removeKeep')}
-      </button>
-      <button type="button" className="btn btn--danger remove-torrent__button" onClick={() => onRemove(true)} data-gamepad-focusable>
+      </Button>
+      <Button type="button" variant="danger" className="remove-torrent__button" onClick={() => onRemove(true)} data-gamepad-focusable>
         {t('downloads.removeFiles')}
-      </button>
+      </Button>
     </>
   );
 

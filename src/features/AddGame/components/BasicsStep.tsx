@@ -5,6 +5,7 @@ import { GENRE_KEYS } from '@/app/lib/genres';
 import { FormField } from '@/shared/FormField';
 import { MarkdownEditor } from '@/shared/MarkdownEditor';
 import { Message } from '@/shared/Message';
+import { SearchSelect } from '@/shared/SearchSelect';
 
 import type { BasicsDraft } from '../draft';
 
@@ -31,15 +32,17 @@ export const BasicsStep: FC<BasicsStepProps> = ({ basics, onChange }) => {
       <SteamSearch query={basics.name} steamAppId={basics.steamAppId} onImport={onChange} />
 
       <div className="add-game__row">
-        <FormField label={t('editConfig.genre')}>
-          <select value={basics.genre} onChange={(event) => onChange({ genre: event.target.value })}>
-            <option value="">{t('editConfig.genreNone')}</option>
-            {GENRE_KEYS.map((key) => (
-              <option key={key} value={key}>
-                {t(key)}
-              </option>
-            ))}
-          </select>
+        <FormField label={t('editConfig.genre')} plain>
+          <SearchSelect
+            options={GENRE_KEYS.map((key) => ({ value: key, label: t(key) }))}
+            selected={basics.genre ? [basics.genre] : []}
+            placeholder={t('editConfig.genreNone')}
+            searchPlaceholder={t('gallery.filter.selectSearch')}
+            emptyLabel={t('gallery.filter.selectEmpty')}
+            ariaLabel={t('editConfig.genre')}
+            clearable
+            onChange={([genre]) => onChange({ genre: genre ?? '' })}
+          />
         </FormField>
 
         <FormField label={t('editConfig.series')}>

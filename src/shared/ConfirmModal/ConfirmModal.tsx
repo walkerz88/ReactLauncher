@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 
 import { Modal } from '@/shared/Modal';
+import { Button } from '@/shared/Button';
 
 import './ConfirmModal.css';
 
@@ -27,17 +28,17 @@ export const ConfirmModal: FC<ConfirmModalProps> = ({
 }) => {
   const footer = (
     <>
-      <button type="button" className="btn" autoFocus onClick={onCancel} data-gamepad-focusable>
+      <Button type="button" autoFocus onClick={onCancel} data-gamepad-focusable>
         {cancelLabel}
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
-        className={['btn', danger ? 'btn--danger' : 'btn--accent'].join(' ')}
+        variant={danger ? 'danger' : 'accent'}
         onClick={onConfirm}
         data-gamepad-focusable
       >
         {confirmLabel}
-      </button>
+      </Button>
     </>
   );
 

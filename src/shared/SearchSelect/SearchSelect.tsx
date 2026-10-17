@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState, type FC, type KeyboardEvent } from 'react';
-import { Check, ChevronDown, Plus, Search } from 'lucide-react';
+import { useEffect, useLayoutEffect, useRef, useState, type FC, type KeyboardEvent } from 'react';
+import { Check, ChevronDown, Plus, Search, X } from 'lucide-react';
 
+import { useTranslation } from '@/app/i18n';
 import { matchesSearch } from '@/app/lib/searchMatch';
 
 import './SearchSelect.css';
@@ -22,6 +23,10 @@ export interface SearchSelectProps {
   /** Lets the user add a value that is not in `options`; receives the typed text for the button label. */
   createLabel?: (query: string) => string;
   multiple?: boolean;
+  /** Single-select only: the value can be emptied (by the clear button or by picking the selected option again). */
+  clearable?: boolean;
+  /** Shows the search field; `true` unless turned off for short lists. */
+  searchable?: boolean;
   onChange: (selected: string[]) => void;
 }
 
@@ -34,12 +39,17 @@ export const SearchSelect: FC<SearchSelectProps> = ({
   ariaLabel,
   createLabel,
   multiple,
+  clearable,
+  searchable = true,
   onChange,
 }) => {
+  const t = useTranslation();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
+  const [alignEnd, setAlignEnd] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   const trimmed = query.trim();
   const visible = options.filter((option) => matchesSearch(option.label, query));
@@ -48,6 +58,8 @@ export const SearchSelect: FC<SearchSelectProps> = ({
     trimmed !== '' &&
     !options.some((option) => option.label.toLowerCase() === trimmed.toLowerCase()) &&
     !selected.some((value) => value.toLowerCase() === trimmed.toLowerCase());
+
+  const canClear = selected.length > 0 && (multiple || clearable);
 
   const labelOf = (value: string) => options.find((option) => option.value === value)?.label ?? value;
   const summary =
@@ -69,7 +81,7 @@ export const SearchSelect: FC<SearchSelectProps> = ({
       return;
     }
 
-    onChange(selected.includes(value) ? [] : [value]);
+    onChange(selected.includes(value) ? (clearable ? [] : selected) : [value]);
     close();
   };
 
@@ -99,6 +111,21 @@ export const SearchSelect: FC<SearchSelectProps> = ({
     }
   };
 
+  useLayoutEffect(() => {
+    const panel = panelRef.current;
+    const root = rootRef.current;
+
+    if (!open || !panel || !root) {
+      setAlignEnd(false);
+
+      return;
+    }
+
+    const panelLeft = root.getBoundingClientRect().left;
+
+    setAlignEnd(panelLeft + panel.offsetWidth > document.documentElement.clientWidth);
+  }, [open, query, selected.length]);
+
   useEffect(() => {
     if (!open) {
       return undefined;
@@ -121,7 +148,7 @@ export const SearchSelect: FC<SearchSelectProps> = ({
     <div className="search-select" ref={rootRef} data-id="SearchSelect">
       <button
         type="button"
-        className={`search-select__control${selected.length > 0 ? ' search-select__control--active' : ''}`}
+        className={`search-select__control${canClear ? ' search-select__control--clearable' : ''}`}
         aria-label={ariaLabel}
         aria-expanded={open}
         onClick={() => (open ? close() : setOpen(true))}
@@ -130,20 +157,36 @@ export const SearchSelect: FC<SearchSelectProps> = ({
         <ChevronDown size={14} aria-hidden="true" />
       </button>
 
+      {canClear ? (
+        <button
+          type="button"
+          className="search-select__clear"
+          aria-label={t('gallery.filter.selectClear')}
+          onClick={() => {
+            onChange([]);
+            close();
+          }}
+        >
+          <X size={12} />
+        </button>
+      ) : null}
+
       {open ? (
-        <div className="search-select__panel">
-          <div className="search-select__search">
-            <Search size={14} aria-hidden="true" />
-            <input
-              ref={searchRef}
-              type="text"
-              value={query}
-              placeholder={searchPlaceholder}
-              aria-label={searchPlaceholder}
-              onChange={(event) => setQuery(event.target.value)}
-              onKeyDown={handleSearchKeyDown}
-            />
-          </div>
+        <div ref={panelRef} className={`search-select__panel${alignEnd ? ' search-select__panel--end' : ''}`}>
+          {searchable ? (
+            <div className="search-select__search">
+              <Search size={14} aria-hidden="true" />
+              <input
+                ref={searchRef}
+                type="text"
+                value={query}
+                placeholder={searchPlaceholder}
+                aria-label={searchPlaceholder}
+                onChange={(event) => setQuery(event.target.value)}
+                onKeyDown={handleSearchKeyDown}
+              />
+            </div>
+          ) : null}
 
           <ul className="search-select__list">
             {canCreate ? (
@@ -166,7 +209,7 @@ export const SearchSelect: FC<SearchSelectProps> = ({
                     aria-pressed={isSelected}
                     onClick={() => toggle(option.value)}
                   >
-                    <span className={`search-select__check${multiple ? ' search-select__check--box' : ''}`}>{isSelected ? <Check size={12} /> : null}</span>
+                    <span className={`search-select__check${multiple ? '' : ' search-select__check--radio'}`}>{isSelected ? multiple ? <Check size={12} /> : <span className="search-select__dot" /> : null}</span>
                     {option.label}
                   </button>
                 </li>

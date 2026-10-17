@@ -2,6 +2,7 @@ import type { FC } from 'react';
 
 import { useTranslation } from '@/app/i18n';
 import { Modal } from '@/shared/Modal';
+import { Button } from '@/shared/Button';
 
 export type DeleteScope = 'data' | 'library';
 
@@ -21,22 +22,22 @@ export const DeleteGameModal: FC<DeleteGameModalProps> = ({ appName, hasData, ha
 
   const footer = (
     <>
-      <button type="button" className="btn" autoFocus onClick={onCancel} data-gamepad-focusable>
+      <Button type="button" autoFocus onClick={onCancel} data-gamepad-focusable>
         {t('app.deleteCancel')}
-      </button>
+      </Button>
       {hasData ? (
-        <button type="button" className="btn delete-game__button" onClick={() => onDelete('data')} data-gamepad-focusable>
+        <Button type="button" className="delete-game__button" onClick={() => onDelete('data')} data-gamepad-focusable>
           {t('app.deleteData')}
-        </button>
+        </Button>
       ) : null}
-      <button
+      <Button
         type="button"
-        className="btn btn--danger delete-game__button"
+        variant="danger" className="delete-game__button"
         onClick={() => onDelete('library')}
         data-gamepad-focusable
       >
         {t('app.deleteLibrary')}
-      </button>
+      </Button>
     </>
   );
 

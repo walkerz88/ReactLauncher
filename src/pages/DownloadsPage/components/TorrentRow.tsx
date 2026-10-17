@@ -7,6 +7,7 @@ import { formatDuration, formatSpeed, formatSwarm, formatTransferred } from '@/a
 import type { TorrentInfo } from '@/electron';
 import { ProgressBar } from '@/shared/ProgressBar';
 import { Tooltip } from '@/shared/Tooltip';
+import { IconButton } from '@/shared/IconButton';
 
 export interface TorrentRowProps {
   torrent: TorrentInfo;
@@ -36,52 +37,49 @@ export const TorrentRow: FC<TorrentRowProps> = ({ torrent, gameName, onPause, on
         <div className="torrent-row__buttons">
           {canResume ? (
             <Tooltip label={t('downloads.resume')}>
-              <button
+              <IconButton
                 type="button"
-                className="icon-btn"
                 aria-label={t('downloads.resume')}
                 onClick={() => onResume(torrent.id)}
                 data-gamepad-focusable
               >
                 <Play size={ICON_SIZE} />
-              </button>
+              </IconButton>
             </Tooltip>
           ) : (
             <Tooltip label={t('downloads.pause')}>
-              <button
+              <IconButton
                 type="button"
-                className="icon-btn"
                 aria-label={t('downloads.pause')}
                 onClick={() => onPause(torrent.id)}
                 data-gamepad-focusable
               >
                 <Pause size={ICON_SIZE} />
-              </button>
+              </IconButton>
             </Tooltip>
           )}
 
           <Tooltip label={t('downloads.openFolder')}>
-            <button
+            <IconButton
               type="button"
-              className="icon-btn"
               aria-label={t('downloads.openFolder')}
               onClick={() => onOpenFolder(torrent.id)}
               data-gamepad-focusable
             >
               <FolderOpen size={ICON_SIZE} />
-            </button>
+            </IconButton>
           </Tooltip>
 
           <Tooltip label={t('downloads.remove')}>
-            <button
+            <IconButton
               type="button"
-              className="icon-btn torrent-row__remove"
+              className="torrent-row__remove"
               aria-label={t('downloads.remove')}
               onClick={() => onRemove(torrent)}
               data-gamepad-focusable
             >
               <Trash2 size={ICON_SIZE} />
-            </button>
+            </IconButton>
           </Tooltip>
         </div>
       </td>

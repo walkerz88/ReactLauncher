@@ -4,6 +4,7 @@ import { Globe, Link2, Mail, Tag, User } from 'lucide-react';
 import { useTranslation } from '@/app/i18n';
 import { useNotificationStore } from '@/app/store/notificationStore';
 import { useUpdateStore } from '@/app/store/updateStore';
+import { Button } from '@/shared/Button';
 
 import { AboutChangelog } from './components/AboutChangelog';
 import { AboutFactRow } from './components/AboutFactRow';
@@ -69,15 +70,15 @@ export const AboutSection: FC = () => {
           <div className="about-section__app-version">{t('settings.about.version')} {BUILD_VERSION}</div>
         </div>
         {updatesEnabled ? (
-          <button
+          <Button
             type="button"
-            className="btn about-section__check-updates"
+            className="about-section__check-updates"
             disabled={checking}
             onClick={handleCheckUpdates}
             data-gamepad-focusable
           >
             {checking ? t('settings.about.checkingUpdates') : t('settings.about.checkUpdates')}
-          </button>
+          </Button>
         ) : null}
       </div>
 

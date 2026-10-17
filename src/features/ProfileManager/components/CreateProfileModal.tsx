@@ -5,6 +5,7 @@ import { MAX_PROFILE_NAME_LENGTH, useProfileStore } from '@/app/store/profileSto
 import { FormField } from '@/shared/FormField';
 import { Message } from '@/shared/Message';
 import { Modal } from '@/shared/Modal';
+import { Button } from '@/shared/Button';
 
 export interface CreateProfileModalProps {
   onClose: () => void;
@@ -31,18 +32,18 @@ export const CreateProfileModal: FC<CreateProfileModalProps> = ({ onClose }) => 
 
   const footer = (
     <>
-      <button type="button" className="btn" onClick={onClose} data-gamepad-focusable>
+      <Button type="button" onClick={onClose} data-gamepad-focusable>
         {t('profile.cancel')}
-      </button>
-      <button
+      </Button>
+      <Button
         type="submit"
         form="create-profile-form"
-        className="btn btn--accent"
+        variant="accent"
         disabled={!trimmedName || isTaken}
         data-gamepad-focusable
       >
         {t('profile.submit')}
-      </button>
+      </Button>
     </>
   );
 

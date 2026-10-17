@@ -3,6 +3,7 @@ import type { FC } from 'react';
 import { useTranslation } from '@/app/i18n';
 import { Modal } from '@/shared/Modal';
 import type { SteamSearchResult } from '@/electron';
+import { Button } from '@/shared/Button';
 
 import './SteamPickerModal.css';
 
@@ -23,9 +24,9 @@ export const SteamPickerModal: FC<SteamPickerModalProps> = ({ results, busy, tit
   const resolvedTitle = title ?? t('steamPicker.title');
 
   const footer = (
-    <button type="button" className="btn" onClick={onClose} disabled={busy} data-gamepad-focusable>
+    <Button type="button" onClick={onClose} disabled={busy} data-gamepad-focusable>
       {t('steamPicker.cancel')}
-    </button>
+    </Button>
   );
 
   return (

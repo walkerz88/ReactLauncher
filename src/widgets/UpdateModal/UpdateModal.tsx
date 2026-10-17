@@ -5,6 +5,7 @@ import { useLocaleStore } from '@/app/store/localeStore';
 import { useNotificationStore } from '@/app/store/notificationStore';
 import { useUpdateStore } from '@/app/store/updateStore';
 import { Modal } from '@/shared/Modal';
+import { Button } from '@/shared/Button';
 
 import './UpdateModal.css';
 
@@ -52,16 +53,16 @@ export const UpdateModal: FC = () => {
 
   const footer = (
     <>
-      <button
+      <Button
         type="button"
-        className="btn btn--accent"
+        variant="accent"
         disabled={installing}
         autoFocus
         onClick={handleInstall}
         data-gamepad-focusable
       >
         {installing ? t('update.installing') : t('update.install')}
-      </button>
+      </Button>
     </>
   );
 

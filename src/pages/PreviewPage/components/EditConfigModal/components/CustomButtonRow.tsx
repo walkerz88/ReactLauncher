@@ -5,6 +5,7 @@ import { File, FolderOpen, GripVertical, Trash2 } from 'lucide-react';
 import { useTranslation } from '@/app/i18n';
 import { FormField } from '@/shared/FormField';
 import { Tooltip } from '@/shared/Tooltip';
+import { IconButton } from '@/shared/IconButton';
 
 export interface CustomButtonRowValue {
   /** Stable identity for `Reorder.Item`/React keys — unrelated to on-disk order. */
@@ -76,37 +77,34 @@ export const CustomButtonRow: FC<CustomButtonRowProps> = ({ button, onChange, on
                 onChange={(event) => onChange({ path: event.target.value })}
               />
               <Tooltip label={t('editConfig.browseFile')}>
-                <button
+                <IconButton
                   type="button"
-                  className="icon-btn"
                   aria-label={t('editConfig.browseFile')}
                   onClick={() => onBrowse('file')}
                   data-gamepad-focusable
                 >
                   <File size={16} />
-                </button>
+                </IconButton>
               </Tooltip>
               <Tooltip label={t('editConfig.browseFolder')}>
-                <button
+                <IconButton
                   type="button"
-                  className="icon-btn"
                   aria-label={t('editConfig.browseFolder')}
                   onClick={() => onBrowse('folder')}
                   data-gamepad-focusable
                 >
                   <FolderOpen size={16} />
-                </button>
+                </IconButton>
               </Tooltip>
               <Tooltip label={t('editConfig.customButtonRemove')}>
-                <button
+                <IconButton
                   type="button"
-                  className="icon-btn"
                   aria-label={t('editConfig.customButtonRemove')}
                   onClick={onRemove}
                   data-gamepad-focusable
                 >
                   <Trash2 size={16} />
-                </button>
+                </IconButton>
               </Tooltip>
             </div>
           </FormField>

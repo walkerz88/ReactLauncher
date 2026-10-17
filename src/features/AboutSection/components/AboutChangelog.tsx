@@ -3,6 +3,7 @@ import { useState, type FC } from 'react';
 import { useTranslation } from '@/app/i18n';
 import { useLocaleStore } from '@/app/store/localeStore';
 import changelogData from '@/app/lib/changelog.json';
+import { Button } from '@/shared/Button';
 
 interface ChangelogText {
   ru: string;
@@ -52,14 +53,14 @@ export const AboutChangelog: FC = () => {
       </div>
 
       {hasMore ? (
-        <button
+        <Button
           type="button"
-          className="btn btn--small about-section__changelog-more"
+          small className="about-section__changelog-more"
           onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
           data-gamepad-focusable
         >
           {t('settings.about.changelogMore')}
-        </button>
+        </Button>
       ) : null}
     </section>
   );

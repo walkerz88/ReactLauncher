@@ -1,0 +1,43 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent);
+  font-size: 12px;
+  font-weight: 600;
+  transition: background-color 0.15s ease;
+}
+
+.tag--removable {
+  padding-right: 4px;
+}
+
+.tag--clickable:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.tag__label,
+.tag__remove {
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.tag__remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+}
+
+.tag__remove:hover {
+  background-color: var(--color-surface-hover);
+}

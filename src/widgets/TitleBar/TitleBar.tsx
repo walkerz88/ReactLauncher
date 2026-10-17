@@ -1,8 +1,9 @@
 import { useEffect, useState, type FC } from 'react';
-import { Minus, Square, X } from 'lucide-react';
+import { Copy, Minus, Square, X } from 'lucide-react';
 
 import { useFullscreenState } from '@/app/hooks/useFullscreenState';
 import { useTranslation } from '@/app/i18n';
+import { ExitConfirmModal } from '@/shared/ExitConfirmModal';
 
 import './TitleBar.css';
 
@@ -15,6 +16,7 @@ export const TitleBar: FC = () => {
   const t = useTranslation();
   const isFullscreen = useFullscreenState();
   const [isMaximized, setIsMaximized] = useState(false);
+  const [confirmingExit, setConfirmingExit] = useState(false);
 
   useEffect(() => {
     const api = window.electronAPI?.window;
@@ -46,10 +48,6 @@ export const TitleBar: FC = () => {
     void window.electronAPI?.window?.toggleMaximize();
   };
 
-  const handleClose = () => {
-    void window.electronAPI?.window?.close();
-  };
-
   const maximizeLabel = isMaximized ? t('window.restore') : t('window.maximize');
 
   return (
@@ -59,17 +57,19 @@ export const TitleBar: FC = () => {
           <Minus size={16} />
         </button>
         <button type="button" className="title-bar__btn" onClick={handleToggleMaximize} aria-label={maximizeLabel}>
-          <Square size={13} />
+          {isMaximized ? <Copy size={13} /> : <Square size={13} />}
         </button>
         <button
           type="button"
           className="title-bar__btn title-bar__btn--close"
-          onClick={handleClose}
+          onClick={() => setConfirmingExit(true)}
           aria-label={t('window.close')}
         >
           <X size={16} />
         </button>
       </div>
+
+      {confirmingExit ? <ExitConfirmModal onCancel={() => setConfirmingExit(false)} /> : null}
     </div>
   );
 };

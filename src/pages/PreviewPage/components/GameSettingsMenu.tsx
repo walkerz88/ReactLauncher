@@ -3,6 +3,7 @@ import { Settings } from 'lucide-react';
 
 import { useTranslation } from '@/app/i18n';
 import { Tooltip } from '@/shared/Tooltip';
+import { IconButton } from '@/shared/IconButton';
 
 export interface GameSettingsMenuProps {
   appId: string;
@@ -79,16 +80,15 @@ export const GameSettingsMenu: FC<GameSettingsMenuProps> = ({
   return (
     <div className="game-settings-menu" ref={rootRef} data-id="GameSettingsMenu">
       <Tooltip label={t('app.installerMenu')}>
-        <button
+        <IconButton
           type="button"
-          className="icon-btn"
           aria-haspopup="menu"
           aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
           data-gamepad-focusable
         >
           <Settings size={18} />
-        </button>
+        </IconButton>
       </Tooltip>
 
       {open ? (

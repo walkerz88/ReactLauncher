@@ -3,6 +3,7 @@ import { Pause, Play, RotateCcw } from 'lucide-react';
 
 import { useTranslation } from '@/app/i18n';
 import { Tooltip } from '@/shared/Tooltip';
+import { IconButton } from '@/shared/IconButton';
 
 export interface TrailerStartPickerProps {
   /** `content://` URL of the game's trailer, or `null` if it has none (the slider then works without a preview). */
@@ -78,14 +79,13 @@ export const TrailerStartPicker: FC<TrailerStartPickerProps> = ({ trailerSrc, va
         <span className="trailer-start__value">{percent}%</span>
         {value.trim() ? (
           <Tooltip label={t('editConfig.previewStartReset')}>
-            <button
+            <IconButton
               type="button"
-              className="icon-btn"
               aria-label={t('editConfig.previewStartReset')}
               onClick={() => onChange('')}
             >
               <RotateCcw size={16} />
-            </button>
+            </IconButton>
           </Tooltip>
         ) : null}
       </div>
@@ -116,14 +116,13 @@ export const TrailerStartPicker: FC<TrailerStartPickerProps> = ({ trailerSrc, va
             onEnded={(event) => void restartFromStart(event.currentTarget)}
           />
           <div className="trailer-start__controls">
-            <button
+            <IconButton
               type="button"
-              className="icon-btn"
               aria-label={playing ? t('editConfig.previewPause') : t('editConfig.previewPlay')}
               onClick={() => void togglePlay()}
             >
               {playing ? <Pause size={18} /> : <Play size={18} />}
-            </button>
+            </IconButton>
             <span className="trailer-start__time">
               {formatClock(startTime)} / {formatClock(duration)}
             </span>

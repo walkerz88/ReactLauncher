@@ -8,6 +8,8 @@ import { Message } from '@/shared/Message';
 import { Modal } from '@/shared/Modal';
 import { Tooltip } from '@/shared/Tooltip';
 import type { BackupEntry, BackupResult } from '@/electron';
+import { Button } from '@/shared/Button';
+import { IconButton } from '@/shared/IconButton';
 
 export interface BackupsModalProps {
   appId: string;
@@ -70,20 +72,20 @@ export const BackupsModal: FC<BackupsModalProps> = ({ appId, appName, onClose })
         <p className="backups-modal__intro">{t('backups.intro')}</p>
 
         <div className="backups-modal__toolbar">
-          <button
+          <Button
             type="button"
-            className="btn btn--accent"
+            variant="accent"
             disabled={busy}
             onClick={() => void run(() => content.backupCreate(appId))}
             data-gamepad-focusable
           >
             <Save size={16} />
             {busy && !pending ? t('backups.creating') : t('backups.create')}
-          </button>
-          <button type="button" className="btn" onClick={() => void content.backupOpen(appId)} data-gamepad-focusable>
+          </Button>
+          <Button type="button" onClick={() => void content.backupOpen(appId)} data-gamepad-focusable>
             <FolderOpen size={16} />
             {t('backups.openFolder')}
-          </button>
+          </Button>
         </div>
 
         {error ? <Message type="error">{error}</Message> : null}
@@ -109,9 +111,9 @@ export const BackupsModal: FC<BackupsModalProps> = ({ appId, appName, onClose })
                   {isPending ? (
                     <div className="backups-modal__confirm">
                       <span>{t(pending.kind === 'restore' ? 'backups.confirmRestore' : 'backups.confirmDelete')}</span>
-                      <button
+                      <Button
                         type="button"
-                        className="btn btn--accent"
+                        variant="accent"
                         disabled={busy}
                         onClick={() =>
                           void run(() =>
@@ -123,35 +125,33 @@ export const BackupsModal: FC<BackupsModalProps> = ({ appId, appName, onClose })
                         data-gamepad-focusable
                       >
                         {t('backups.yes')}
-                      </button>
-                      <button type="button" className="btn" onClick={() => setPending(null)} data-gamepad-focusable>
+                      </Button>
+                      <Button type="button" onClick={() => setPending(null)} data-gamepad-focusable>
                         {t('backups.no')}
-                      </button>
+                      </Button>
                     </div>
                   ) : (
                     <div className="backups-modal__actions">
                       <Tooltip label={t('backups.restore')}>
-                        <button
+                        <IconButton
                           type="button"
-                          className="icon-btn"
                           aria-label={t('backups.restore')}
                           disabled={busy}
                           onClick={() => setPending({ kind: 'restore', name: backup.name })}
                           data-gamepad-focusable
                         >
                           <RotateCcw size={16} />
-                        </button>
+                        </IconButton>
                       </Tooltip>
-                      <button
+                      <IconButton
                         type="button"
-                        className="icon-btn"
                         aria-label={t('backups.delete')}
                         disabled={busy}
                         onClick={() => setPending({ kind: 'delete', name: backup.name })}
                         data-gamepad-focusable
                       >
                         <Trash2 size={16} />
-                      </button>
+                      </IconButton>
                     </div>
                   )}
                 </li>

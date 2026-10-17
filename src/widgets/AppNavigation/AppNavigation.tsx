@@ -10,7 +10,7 @@ import { useSectionsStore } from '@/app/store/sectionsStore';
 import { useTorrentsStore } from '@/app/store/torrentsStore';
 import { useTranslation } from '@/app/i18n';
 import { AddGameButton } from '@/features/AddGame';
-import { ConfirmModal } from '@/shared/ConfirmModal';
+import { ExitConfirmModal } from '@/shared/ExitConfirmModal';
 import { Tooltip } from '@/shared/Tooltip';
 
 import './AppNavigation.css';
@@ -47,10 +47,6 @@ export const AppNavigation: FC = () => {
 
   const toggleFullscreen = () => {
     void window.electronAPI?.window?.toggleFullscreen();
-  };
-
-  const handleExit = () => {
-    window.electronAPI?.quit();
   };
 
   const fullscreenLabel = isFullscreen ? t('nav.windowed') : t('nav.fullscreen');
@@ -133,17 +129,7 @@ export const AppNavigation: FC = () => {
         </button>
       </Tooltip>
 
-      {confirmingExit ? (
-        <ConfirmModal
-          title={t('nav.exitTitle')}
-          message={t('nav.exitConfirm')}
-          confirmLabel={t('nav.exit')}
-          cancelLabel={t('nav.exitCancel')}
-          danger
-          onConfirm={handleExit}
-          onCancel={() => setConfirmingExit(false)}
-        />
-      ) : null}
+      {confirmingExit ? <ExitConfirmModal onCancel={() => setConfirmingExit(false)} /> : null}
     </nav>
   );
 };

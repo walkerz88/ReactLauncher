@@ -11,6 +11,7 @@ import { BulkFillModal, type FillFields } from '@/shared/BulkFillModal';
 import { SteamNoMatchModal } from '@/shared/SteamNoMatchModal';
 import { SteamPickerModal } from '@/shared/SteamPickerModal';
 import { TristateCheckbox } from '@/shared/TristateCheckbox';
+import { Button } from '@/shared/Button';
 
 import { FieldStatusIcon } from './components/FieldStatusIcon';
 import { LibrarySizes } from './components/LibrarySizes';
@@ -344,26 +345,26 @@ export const LibraryHealth: FC = () => {
             <span className="library-health__action-count">
               {t('health.selectedCount').replace('{count}', String(selected.size))}
             </span>
-            <button
+            <Button
               type="button"
-              className="btn btn--accent btn--small"
+              variant="accent" small
               onClick={() => setModalOpen(true)}
               disabled={running}
               data-gamepad-focusable
             >
               {running ? <Loader2 size={14} className="library-health__spin" /> : <Wand2 size={14} />}
               {t('health.fillSelected')}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
-              className="btn btn--small"
+              small
               onClick={() => void handleTranslateMissing()}
               disabled={running}
               data-gamepad-focusable
             >
               <Languages size={14} />
               {t('health.translateMissing')}
-            </button>
+            </Button>
           </div>
         </div>
       ) : null}

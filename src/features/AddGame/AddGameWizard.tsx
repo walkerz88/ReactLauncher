@@ -9,6 +9,7 @@ import { useSectionsStore } from '@/app/store/sectionsStore';
 import { Message } from '@/shared/Message';
 import { Modal } from '@/shared/Modal';
 import type { PathField as PathFieldName } from '@/electron';
+import { Button } from '@/shared/Button';
 
 import { BasicsStep } from './components/BasicsStep';
 import { DownloadDirStep } from './components/DownloadDirStep';
@@ -278,9 +279,9 @@ export const AddGameWizard: FC<AddGameWizardProps> = ({ initialMode, onClose }) 
   };
 
   const cancelButton = (
-    <button type="button" className="btn add-game__cancel" onClick={onClose} data-gamepad-focusable>
+    <Button type="button" className="add-game__cancel" onClick={onClose} data-gamepad-focusable>
       {t('addGame.cancel')}
-    </button>
+    </Button>
   );
 
   const footer =
@@ -290,18 +291,18 @@ export const AddGameWizard: FC<AddGameWizardProps> = ({ initialMode, onClose }) 
       <>
         {cancelButton}
         {step === 'files' ? (
-          <button type="button" className="btn" onClick={() => void openFolder()} data-gamepad-focusable>
+          <Button type="button" onClick={() => void openFolder()} data-gamepad-focusable>
             <FolderOpen size={16} />
             {t('addGame.files.open')}
-          </button>
+          </Button>
         ) : stepIndex > 0 || (torrentEnabled && !initialMode) ? (
-          <button type="button" className="btn" disabled={busy} onClick={goBack} data-gamepad-focusable>
+          <Button type="button" disabled={busy} onClick={goBack} data-gamepad-focusable>
             {t('addGame.back')}
-          </button>
+          </Button>
         ) : null}
-        <button
+        <Button
           type="button"
-          className="btn btn--accent"
+          variant="accent"
           disabled={!canGoNext || busy}
           onClick={() => void handleNext()}
           data-gamepad-focusable
@@ -315,7 +316,7 @@ export const AddGameWizard: FC<AddGameWizardProps> = ({ initialMode, onClose }) 
               : busy && step === 'download'
                 ? t('addGame.download.starting')
                 : t('addGame.next')}
-        </button>
+        </Button>
       </>
     );
 

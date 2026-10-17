@@ -4,9 +4,11 @@ import { GripVertical, Trash2 } from 'lucide-react';
 
 import { useTranslation } from '@/app/i18n';
 import { FormField } from '@/shared/FormField';
+import { SearchSelect } from '@/shared/SearchSelect';
 import { Tooltip } from '@/shared/Tooltip';
 import { TranslateButton } from '@/shared/TranslateButton';
 import type { PreviewNoteType } from '@/electron';
+import { IconButton } from '@/shared/IconButton';
 
 export interface NoteRowValue {
   /** Stable identity for `Reorder.Item`/React keys — unrelated to on-disk order. */
@@ -50,14 +52,20 @@ export const NoteRow: FC<NoteRowProps> = ({ note, onChange, onRemove }) => {
       </Tooltip>
 
       <div className="edit-config-modal__note-fields">
-        <FormField label={t('editConfig.noteType')}>
-          <select value={note.type} onChange={(event) => onChange({ type: event.target.value as PreviewNoteType })}>
-            {NOTE_TYPES.map((type) => (
-              <option key={type} value={type}>
-                {t(`editConfig.noteType${type[0].toUpperCase()}${type.slice(1)}`)}
-              </option>
-            ))}
-          </select>
+        <FormField label={t('editConfig.noteType')} plain>
+          <SearchSelect
+            options={NOTE_TYPES.map((type) => ({
+              value: type,
+              label: t(`editConfig.noteType${type[0].toUpperCase()}${type.slice(1)}`),
+            }))}
+            selected={[note.type]}
+            placeholder={t('editConfig.noteType')}
+            searchPlaceholder={t('gallery.filter.selectSearch')}
+            emptyLabel={t('gallery.filter.selectEmpty')}
+            ariaLabel={t('editConfig.noteType')}
+            searchable={false}
+            onChange={([type]) => onChange({ type: type as PreviewNoteType })}
+          />
         </FormField>
 
         <FormField
@@ -75,9 +83,9 @@ export const NoteRow: FC<NoteRowProps> = ({ note, onChange, onRemove }) => {
         </FormField>
       </div>
 
-      <button type="button" className="icon-btn" aria-label={t('editConfig.noteRemove')} onClick={onRemove} data-gamepad-focusable>
+      <IconButton type="button" aria-label={t('editConfig.noteRemove')} onClick={onRemove} data-gamepad-focusable>
         <Trash2 size={16} />
-      </button>
+      </IconButton>
     </Reorder.Item>
   );
 };

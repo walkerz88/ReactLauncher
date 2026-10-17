@@ -6,6 +6,7 @@ import { useTranslation } from '@/app/i18n';
 import { FormField } from '@/shared/FormField';
 import { Tooltip } from '@/shared/Tooltip';
 import { TranslateButton } from '@/shared/TranslateButton';
+import { IconButton } from '@/shared/IconButton';
 
 export interface FactRowValue {
   /** Stable identity for `Reorder.Item`/React keys — unrelated to on-disk order. */
@@ -101,9 +102,9 @@ export const FactRow: FC<FactRowProps> = ({ fact, onChange, onRemove }) => {
         </FormField>
       </div>
 
-      <button type="button" className="icon-btn" aria-label={t('editConfig.factRemove')} onClick={onRemove} data-gamepad-focusable>
+      <IconButton type="button" aria-label={t('editConfig.factRemove')} onClick={onRemove} data-gamepad-focusable>
         <Trash2 size={16} />
-      </button>
+      </IconButton>
     </Reorder.Item>
   );
 };

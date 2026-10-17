@@ -10,6 +10,7 @@ import type { DemoProgress } from '@/electron';
 import { Message } from '@/shared/Message';
 import { Modal } from '@/shared/Modal';
 import { ProgressBar } from '@/shared/ProgressBar';
+import { Button } from '@/shared/Button';
 
 import './DemoOffer.css';
 
@@ -125,17 +126,17 @@ export const DemoOffer: FC = () => {
   const percent = Math.floor(ratio * 100);
 
   const footer = busy ? (
-    <button type="button" className="btn" disabled={extracting} onClick={cancel} data-gamepad-focusable>
+    <Button type="button" disabled={extracting} onClick={cancel} data-gamepad-focusable>
       {t('demo.cancel')}
-    </button>
+    </Button>
   ) : (
     <>
-      <button type="button" className="btn" onClick={later} data-gamepad-focusable>
+      <Button type="button" onClick={later} data-gamepad-focusable>
         {phase === 'error' ? t('demo.close') : t('demo.later')}
-      </button>
-      <button type="button" className="btn btn--accent" autoFocus onClick={() => void start()} data-gamepad-focusable>
+      </Button>
+      <Button type="button" variant="accent" autoFocus onClick={() => void start()} data-gamepad-focusable>
         {phase === 'error' ? t('demo.retry') : t('demo.accept')}
-      </button>
+      </Button>
     </>
   );
 

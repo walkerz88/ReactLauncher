@@ -3,6 +3,7 @@ import { AlertCircle, CheckCircle2, Download } from 'lucide-react';
 
 import { useTranslation } from '@/app/i18n';
 import { useNotificationStore } from '@/app/store/notificationStore';
+import { Button } from '@/shared/Button';
 
 import './NotificationToasts.css';
 
@@ -23,17 +24,17 @@ export const NotificationToasts: FC = () => {
               <span className="notification-toast__caption">{t('update.toastCaption')}</span>
               <span className="notification-toast__text">{notification.message}</span>
               <div className="notification-toast__actions">
-                <button
+                <Button
                   type="button"
-                  className="btn btn--small"
+                  small
                   onClick={() => dismissNotification(notification.id)}
                   data-gamepad-focusable
                 >
                   {t('update.close')}
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
-                  className="btn btn--small btn--accent"
+                  small variant="accent"
                   onClick={() => {
                     dismissNotification(notification.id);
                     notification.onClick?.();
@@ -41,7 +42,7 @@ export const NotificationToasts: FC = () => {
                   data-gamepad-focusable
                 >
                   {t('update.details')}
-                </button>
+                </Button>
               </div>
             </div>
           </div>

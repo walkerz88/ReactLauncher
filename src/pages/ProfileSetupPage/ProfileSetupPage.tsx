@@ -3,6 +3,7 @@ import { useState, type FC, type FormEvent } from 'react';
 import { useTranslation } from '@/app/i18n';
 import { MAX_PROFILE_NAME_LENGTH, useProfileStore } from '@/app/store/profileStore';
 import { Message } from '@/shared/Message';
+import { Button } from '@/shared/Button';
 
 import './ProfileSetupPage.css';
 
@@ -44,14 +45,14 @@ export const ProfileSetupPage: FC = () => {
         onChange={(event) => setName(event.target.value)}
       />
 
-      <button
+      <Button
         type="submit"
-        className="btn btn--accent profile-setup__submit"
+        variant="accent" className="profile-setup__submit"
         disabled={!trimmedName || isCreating}
         data-gamepad-focusable
       >
         {t('profile.submit')}
-      </button>
+      </Button>
 
       {failed ? <Message type="error">{t('profile.createFailed')}</Message> : null}
     </form>

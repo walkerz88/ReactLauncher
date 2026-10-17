@@ -4,6 +4,7 @@ import { FolderOpen, RotateCcw } from 'lucide-react';
 import { useTranslation } from '@/app/i18n';
 import { FormField } from '@/shared/FormField';
 import { Message } from '@/shared/Message';
+import { Button } from '@/shared/Button';
 
 export interface DownloadDirStepProps {
   gameId: string;
@@ -67,20 +68,19 @@ export const DownloadDirStep: FC<DownloadDirStepProps> = ({ gameId, downloadDir,
       </FormField>
 
       <div className="add-game__download-actions">
-        <button type="button" className="btn" disabled={locked} onClick={() => void pickFolder()} data-gamepad-focusable>
+        <Button type="button" disabled={locked} onClick={() => void pickFolder()} data-gamepad-focusable>
           <FolderOpen size={16} />
           {t('addGame.download.choose')}
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
-          className="btn"
           disabled={locked || downloadDir === null}
           onClick={() => onChange(null)}
           data-gamepad-focusable
         >
           <RotateCcw size={16} />
           {t('addGame.download.reset')}
-        </button>
+        </Button>
       </div>
 
       {locked ? <Message type="info">{t('addGame.download.locked')}</Message> : null}

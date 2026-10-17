@@ -4,6 +4,7 @@ import { Loader2 } from 'lucide-react';
 import { useTranslation } from '@/app/i18n';
 import { Modal } from '@/shared/Modal';
 import { TristateCheckbox } from '@/shared/TristateCheckbox';
+import { Button } from '@/shared/Button';
 
 import './BulkFillModal.css';
 
@@ -73,19 +74,19 @@ export const BulkFillModal: FC<BulkFillModalProps> = ({ count, onClose, onConfir
 
   const footer = (
     <>
-      <button type="button" className="btn" onClick={onClose} data-gamepad-focusable>
+      <Button type="button" onClick={onClose} data-gamepad-focusable>
         {t('health.fillPopup.cancel')}
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
-        className="btn btn--accent"
+        variant="accent"
         disabled={!hasSelection || busy}
         onClick={() => onConfirm(fields)}
         data-gamepad-focusable
       >
         {busy ? <Loader2 size={14} className="bulk-fill-modal__spin" /> : null}
         {t('health.fillPopup.confirm')}
-      </button>
+      </Button>
     </>
   );
 

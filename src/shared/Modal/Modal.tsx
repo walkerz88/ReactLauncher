@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 
 import { useTranslation } from '@/app/i18n';
+import { IconButton } from '@/shared/IconButton';
 
 import './Modal.css';
 
@@ -57,15 +58,14 @@ export const Modal: FC<ModalProps> = ({
         <div className="modal__header">
           <h2 className="modal__title">{title}</h2>
           {showCloseButton ? (
-            <button
+            <IconButton
               type="button"
-              className="icon-btn"
               onClick={onClose}
               aria-label={t('modal.close')}
               data-gamepad-focusable
             >
               <X size={18} />
-            </button>
+            </IconButton>
           ) : null}
         </div>
 
