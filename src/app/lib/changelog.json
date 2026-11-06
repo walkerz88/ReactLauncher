@@ -938,5 +938,26 @@
         "en": "Tag and genre filters are multi-select (any of the chosen); the tag, genre and series dropdowns now have a search"
       }
     ]
+  },
+  {
+    "version": "1.16.0",
+    "title": {
+      "ru": "Витрина",
+      "en": "Showcase"
+    },
+    "changes": [
+      {
+        "ru": "Витрина — удалённый каталог игр с сервера",
+        "en": "Showcase — a remote game catalog from a server"
+      },
+      {
+        "ru": "Поддержка нескольких витрин с перетаскиванием для изменения порядка; статус каждой витрины виден в списке",
+        "en": "Multiple showcases with drag-and-drop reordering; each showcase's status is shown in the list"
+      },
+      {
+        "ru": "Мастер добавления через торрент упрощён",
+        "en": "Torrent add wizard simplified"
+      }
+    ]
   }
 ]

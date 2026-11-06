@@ -1,7 +1,6 @@
 import type { FC } from 'react';
 
 import { useTranslation } from '@/app/i18n';
-import { Message } from '@/shared/Message';
 import { PathField } from '@/shared/PathField';
 import type { PathField as PathFieldName } from '@/electron';
 
@@ -72,8 +71,6 @@ export const PathsStep: FC<PathsStepProps> = ({ paths, folderId, onChange, onBro
   return (
     <div className="add-game__step-body" data-id="PathsStep">
       <p className="add-game__intro">{t('addGame.paths.intro')}</p>
-
-      <Message type="warning">{t('addGame.paths.defaultsNote')}</Message>
 
       {FIELDS.map(({ field, labelKey, placeholder, defaultKey, supportsFolder }) => (
         <div key={field} className="add-game__path">

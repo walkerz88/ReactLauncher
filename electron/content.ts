@@ -468,7 +468,7 @@ const APP_SUBFOLDERS = ['data', 'assets', 'installer', 'bonus', 'screenshots'];
 const WINDOWS_RESERVED_NAMES = /^(con|prn|aux|nul|com[1-9]|lpt[1-9])$/i;
 
 /** Turns a game title into a folder name that is valid on Windows; `null` if nothing usable is left. */
-function toFolderName(title: string): string | null {
+export function toFolderName(title: string): string | null {
   const cleaned = title
     // eslint-disable-next-line no-control-regex
     .replace(/[<>:"/\\|?*%\x00-\x1f]/g, '')

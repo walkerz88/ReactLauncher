@@ -156,6 +156,11 @@ const electronAPI = {
     openCustomButton: (id: string, index: number) =>
       ipcRenderer.invoke('content:open-custom-button', id, index),
   },
+  showcase: {
+    load: (url: string) => ipcRenderer.invoke('showcase:load', url),
+    import: (gameId: string, overwrite: boolean) => ipcRenderer.invoke('showcase:import', gameId, overwrite),
+    openFolder: (folderName: string) => ipcRenderer.invoke('showcase:open-folder', folderName),
+  },
   capture: {
     list: (gameId: string) => ipcRenderer.invoke('capture:list', gameId),
     sizes: () => ipcRenderer.invoke('capture:sizes'),

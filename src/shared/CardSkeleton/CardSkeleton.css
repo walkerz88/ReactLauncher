@@ -1,0 +1,22 @@
+.card-skeleton {
+  display: block;
+  border-radius: 10px;
+  background-color: var(--color-surface);
+  animation: card-skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+.card-skeleton--text {
+  min-height: 0;
+  height: calc(2 * 1.35em);
+  border-radius: 6px;
+}
+
+@keyframes card-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}

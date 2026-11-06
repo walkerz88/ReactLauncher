@@ -2,8 +2,19 @@
   max-width: 440px;
 }
 
+.confirm-modal__left-actions {
+  margin-right: auto;
+  display: flex;
+  gap: 10px;
+}
+
 .confirm-modal__message {
   margin: 0;
   line-height: 1.5;
   color: var(--color-text);
+  white-space: pre-line;
+}
+
+.confirm-modal__message + .message {
+  margin-top: 12px;
 }

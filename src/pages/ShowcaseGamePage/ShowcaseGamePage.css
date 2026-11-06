@@ -1,0 +1,5 @@
+/* ShowcaseGamePage reuses app-page styles from PreviewPage.css */
+
+.showcase-overwrite-modal {
+  max-width: 540px;
+}

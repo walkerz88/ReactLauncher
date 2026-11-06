@@ -9,6 +9,7 @@ import { initDemo } from './demo';
 import { initContent } from './content';
 import { initProfiles } from './profiles';
 import { initProgress } from './progressIpc';
+import { initShowcase } from './showcase';
 import { initSteam } from './steam';
 import { initTorrents } from './torrents';
 import { initTranslate } from './translate';
@@ -123,6 +124,7 @@ app.whenReady().then(() => {
   initContent();
   initTorrents();
   initDemo();
+  initShowcase();
   initSteam();
   initTranslate();
   initUpdater();

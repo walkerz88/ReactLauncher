@@ -23,8 +23,6 @@
 }
 
 .downloads__plus {
-  position: relative;
-  top: -2px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -180,7 +178,7 @@
   width: 96px;
   height: 96px;
   border: 2px dashed var(--color-accent);
-  border-radius: 50%;
+  border-radius: 10px;
   background-color: var(--color-accent-subtle);
   color: var(--color-accent);
   cursor: pointer;

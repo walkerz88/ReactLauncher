@@ -11,6 +11,7 @@ interface SectionsState {
   favoritesEnabled: boolean;
   addGameEnabled: boolean;
   torrentEnabled: boolean;
+  showcaseEnabled: boolean;
   showCounts: boolean;
   setLuckyEnabled: (enabled: boolean) => void;
   setReadyEnabled: (enabled: boolean) => void;
@@ -19,6 +20,7 @@ interface SectionsState {
   setFavoritesEnabled: (enabled: boolean) => void;
   setAddGameEnabled: (enabled: boolean) => void;
   setTorrentEnabled: (enabled: boolean) => void;
+  setShowcaseEnabled: (enabled: boolean) => void;
   setShowCounts: (show: boolean) => void;
 }
 
@@ -33,6 +35,7 @@ export const useSectionsStore = create<SectionsState>()(
       favoritesEnabled: true,
       addGameEnabled: true,
       torrentEnabled: true,
+      showcaseEnabled: false,
       showCounts: true,
       setLuckyEnabled: (luckyEnabled) => set({ luckyEnabled }),
       setReadyEnabled: (readyEnabled) => set({ readyEnabled }),
@@ -41,6 +44,7 @@ export const useSectionsStore = create<SectionsState>()(
       setFavoritesEnabled: (favoritesEnabled) => set({ favoritesEnabled }),
       setAddGameEnabled: (addGameEnabled) => set({ addGameEnabled }),
       setTorrentEnabled: (torrentEnabled) => set({ torrentEnabled }),
+      setShowcaseEnabled: (showcaseEnabled) => set({ showcaseEnabled }),
       setShowCounts: (showCounts) => set({ showCounts }),
     }),
     {
@@ -63,6 +67,8 @@ export const useSectionsStore = create<SectionsState>()(
             typeof stored.addGameEnabled === 'boolean' ? stored.addGameEnabled : current.addGameEnabled,
           torrentEnabled:
             typeof stored.torrentEnabled === 'boolean' ? stored.torrentEnabled : current.torrentEnabled,
+          showcaseEnabled:
+            typeof stored.showcaseEnabled === 'boolean' ? stored.showcaseEnabled : current.showcaseEnabled,
           showCounts: typeof stored.showCounts === 'boolean' ? stored.showCounts : current.showCounts,
         };
       },

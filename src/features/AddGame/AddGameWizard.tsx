@@ -17,6 +17,7 @@ import { FilesStep } from './components/FilesStep';
 import { ModeStep } from './components/ModeStep';
 import { PathsStep } from './components/PathsStep';
 import { StructureStep } from './components/StructureStep';
+import { TorrentProgress } from './components/TorrentProgress';
 import { TorrentStep } from './components/TorrentStep';
 import {
   buildConfig,
@@ -35,6 +36,16 @@ import './AddGame.css';
 export interface AddGameWizardProps {
   /** Skips the "by hand or by torrent" question and starts that flow right away. */
   initialMode?: AddMode;
+  /** Pre-filled torrent magnet (from showcase). */
+  initialTorrentMagnet?: string;
+  /** Pre-filled basics data (from showcase). */
+  initialBasics?: Partial<BasicsDraft>;
+  /** Start at a specific step index (e.g. 1 to skip torrent step). */
+  initialStepIndex?: number;
+  /** Pre-created folder id (from showcase import) — skips folder creation. */
+  initialFolderId?: string;
+  /** Whether this wizard was opened from the showcase — skips files/paths steps. */
+  fromShowcase?: boolean;
   onClose: () => void;
 }
 
@@ -45,18 +56,20 @@ const STEP_LABELS = {
   download: 'addGame.step.download',
   files: 'addGame.step.files',
   paths: 'addGame.step.paths',
+  done: 'addGame.step.done',
 } as const;
 
 type StepId = keyof typeof STEP_LABELS;
 
 const MANUAL_STEPS: StepId[] = ['basics', 'structure', 'files', 'paths'];
-const TORRENT_STEPS: StepId[] = ['torrent', 'basics', 'structure', 'download', 'files', 'paths'];
+const TORRENT_STEPS: StepId[] = ['torrent', 'basics', 'structure', 'download', 'done'];
+const SHOWCASE_STEPS: StepId[] = ['download', 'done'];
 
 /**
  * Step-by-step "add a game" flow: [how: by hand or by torrent →] [torrent source →] basics → create folders →
  * [download folder →] where to put files → file paths. With torrent adding switched off in the settings the "how" question is skipped.
  */
-export const AddGameWizard: FC<AddGameWizardProps> = ({ initialMode, onClose }) => {
+export const AddGameWizard: FC<AddGameWizardProps> = ({ initialMode, initialTorrentMagnet, initialBasics, initialStepIndex, initialFolderId, fromShowcase, onClose }) => {
   const t = useTranslation();
   const navigate = useNavigate();
   const libraryDir = useContentStore((state) => state.dir);
@@ -64,18 +77,21 @@ export const AddGameWizard: FC<AddGameWizardProps> = ({ initialMode, onClose }) 
   const torrentEnabled = useSectionsStore((state) => state.torrentEnabled);
 
   const [mode, setMode] = useState<AddMode | null>(initialMode ?? (torrentEnabled ? null : 'manual'));
-  const [stepIndex, setStepIndex] = useState(0);
-  const [basics, setBasics] = useState<BasicsDraft>(EMPTY_BASICS);
+  const [stepIndex, setStepIndex] = useState(initialStepIndex ?? 0);
+  const [basics, setBasics] = useState<BasicsDraft>({ ...EMPTY_BASICS, ...initialBasics });
   const [paths, setPaths] = useState<PathsDraft>(EMPTY_PATHS);
-  const [torrent, setTorrent] = useState<TorrentDraft>(EMPTY_TORRENT);
-  const [folderId, setFolderId] = useState<string | null>(null);
+  const [torrent, setTorrent] = useState<TorrentDraft>({
+    ...EMPTY_TORRENT,
+    magnet: initialTorrentMagnet || '',
+  });
+  const [folderId, setFolderId] = useState<string | null>(initialFolderId ?? null);
   const [downloadDir, setDownloadDir] = useState<string | null>(null);
   const [torrentStarted, setTorrentStarted] = useState(false);
   const [assetsStatus, setAssetsStatus] = useState<'idle' | 'loading' | 'done' | 'failed'>('idle');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const steps = mode === 'torrent' ? TORRENT_STEPS : MANUAL_STEPS;
+  const steps = fromShowcase ? SHOWCASE_STEPS : mode === 'torrent' ? TORRENT_STEPS : MANUAL_STEPS;
   const lastStep = steps.length - 1;
   const step = steps[stepIndex];
   const nameFilled = basics.name.trim().length > 0;
@@ -242,6 +258,17 @@ export const AddGameWizard: FC<AddGameWizardProps> = ({ initialMode, onClose }) 
 
   const handleNext = async () => {
     if (stepIndex === lastStep) {
+      if (fromShowcase || step === 'done') {
+        await loadApps();
+        onClose();
+
+        if (folderId) {
+          navigate(`/app/${encodeURIComponent(folderId)}`);
+        }
+
+        return;
+      }
+
       await finish();
 
       return;
@@ -289,13 +316,13 @@ export const AddGameWizard: FC<AddGameWizardProps> = ({ initialMode, onClose }) 
       cancelButton
     ) : (
       <>
-        {cancelButton}
-        {step === 'files' ? (
+        {step !== 'done' ? cancelButton : null}
+        {step === 'files' || step === 'done' ? (
           <Button type="button" onClick={() => void openFolder()} data-gamepad-focusable>
             <FolderOpen size={16} />
             {t('addGame.files.open')}
           </Button>
-        ) : stepIndex > 0 || (torrentEnabled && !initialMode) ? (
+        ) : step !== 'download' && (stepIndex > 0 || (torrentEnabled && !initialMode)) ? (
           <Button type="button" disabled={busy} onClick={goBack} data-gamepad-focusable>
             {t('addGame.back')}
           </Button>
@@ -310,7 +337,7 @@ export const AddGameWizard: FC<AddGameWizardProps> = ({ initialMode, onClose }) 
           {stepIndex === lastStep
             ? busy
               ? t('addGame.finishing')
-              : t('addGame.finish')
+              : t('addGame.done')
             : busy && step === 'structure'
               ? t('addGame.structure.creating')
               : busy && step === 'download'
@@ -388,10 +415,16 @@ export const AddGameWizard: FC<AddGameWizardProps> = ({ initialMode, onClose }) 
                 onBrowse={(field, fieldMode) => void browsePath(field, fieldMode)}
               />
             ) : null}
+
+            {step === 'done' ? (
+              <div className="add-game__done">
+                {folderId && torrentStarted ? <TorrentProgress gameId={folderId} /> : null}
+              </div>
+            ) : null}
           </>
         )}
 
-        {error ? <Message type="error">{error}</Message> : null}
+        {error ? <Message type="error" className='add-game__error-messsage'>{error}</Message> : null}
       </div>
     </Modal>
   );

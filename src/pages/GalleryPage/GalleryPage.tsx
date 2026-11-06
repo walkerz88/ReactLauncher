@@ -7,6 +7,7 @@ import { useRecentStore } from '@/app/store/recentStore';
 import { useSectionsStore } from '@/app/store/sectionsStore';
 import { useTranslation } from '@/app/i18n';
 import { LuckyPage } from '@/pages/LuckyPage';
+import { CardSkeleton } from '@/shared/CardSkeleton';
 import { AppCollection } from '@/widgets/AppCollection';
 import { HomeTabs, type HomeTab } from '@/widgets/HomeTabs';
 
@@ -93,10 +94,7 @@ export const GalleryPage: FC = () => {
           <ul className="app-grid" aria-hidden>
             {Array.from({ length: 6 }, (_, index) => (
               <li key={index}>
-                <div className="app-card">
-                  <span className="app-card__cover home-skeleton" />
-                  <span className="app-card__name home-skeleton home-skeleton--text" />
-                </div>
+                <CardSkeleton />
               </li>
             ))}
           </ul>

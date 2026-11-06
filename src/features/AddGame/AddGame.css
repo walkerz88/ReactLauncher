@@ -275,3 +275,13 @@
   flex-wrap: wrap;
   gap: 8px;
 }
+
+.add-game__done {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.add-game__error-messsage {
+  margin-top: 12px;
+}

@@ -1,12 +1,13 @@
 import { useState, type FC } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Download, Heart, Home, LogOut, Maximize, Minimize, RotateCw, Settings, UserRound } from 'lucide-react';
+import { Download, Heart, Home, LogOut, Maximize, Minimize, RotateCw, Settings, ShoppingBag, UserRound } from 'lucide-react';
 
 import { useFullscreenState } from '@/app/hooks/useFullscreenState';
 import { useFavoritesStore } from '@/app/store/favoritesStore';
 import { useContentStore } from '@/app/store/contentStore';
 import { useNotificationStore } from '@/app/store/notificationStore';
 import { useSectionsStore } from '@/app/store/sectionsStore';
+import { useShowcaseStore } from '@/app/store/showcaseStore';
 import { useTorrentsStore } from '@/app/store/torrentsStore';
 import { useTranslation } from '@/app/i18n';
 import { AddGameButton } from '@/features/AddGame';
@@ -24,6 +25,8 @@ export const AppNavigation: FC = () => {
   const favoritesEnabled = useSectionsStore((state) => state.favoritesEnabled);
   const addGameEnabled = useSectionsStore((state) => state.addGameEnabled);
   const torrentEnabled = useSectionsStore((state) => state.torrentEnabled);
+  const showcaseEnabled = useSectionsStore((state) => state.showcaseEnabled);
+  const hasShowcase = showcaseEnabled;
   const hasTorrents = useTorrentsStore((state) => state.torrents.length > 0);
   const showDownloads = torrentEnabled || hasTorrents;
   const isDownloading = useTorrentsStore((state) =>
@@ -35,7 +38,14 @@ export const AppNavigation: FC = () => {
 
   const handleRescan = async () => {
     try {
-      await rescan();
+      const showcaseStore = useShowcaseStore.getState();
+      const tasks: Promise<unknown>[] = [rescan()];
+
+      if (showcaseStore.entries.length > 0) {
+        tasks.push(showcaseStore.refreshAll());
+      }
+
+      await Promise.all(tasks);
 
       if (useContentStore.getState().status === 'ready') {
         useNotificationStore.getState().pushNotification(t('nav.rescanSuccess'));
@@ -72,6 +82,14 @@ export const AppNavigation: FC = () => {
           <NavLink to="/downloads" className="app-navigation__item" aria-label={t('nav.downloads')} data-gamepad-focusable>
             <Download size={ICON_SIZE} />
             {isDownloading ? <span className="app-navigation__badge" aria-hidden="true" /> : null}
+          </NavLink>
+        </Tooltip>
+      ) : null}
+
+      {hasShowcase ? (
+        <Tooltip label={t('nav.showcase')} placement="right">
+          <NavLink to="/showcase" className="app-navigation__item" aria-label={t('nav.showcase')} data-gamepad-focusable>
+            <ShoppingBag size={ICON_SIZE} />
           </NavLink>
         </Tooltip>
       ) : null}

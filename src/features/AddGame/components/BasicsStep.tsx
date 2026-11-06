@@ -6,6 +6,7 @@ import { FormField } from '@/shared/FormField';
 import { MarkdownEditor } from '@/shared/MarkdownEditor';
 import { Message } from '@/shared/Message';
 import { SearchSelect } from '@/shared/SearchSelect';
+import { TranslateButton } from '@/shared/TranslateButton';
 
 import type { BasicsDraft } from '../draft';
 
@@ -61,11 +62,31 @@ export const BasicsStep: FC<BasicsStepProps> = ({ basics, onChange }) => {
         />
       </FormField>
 
-      <FormField label={t('editConfig.descriptionRu')} plain>
+      <FormField
+        label={t('editConfig.descriptionRu')}
+        action={
+          <TranslateButton
+            source={basics.descriptionRu || basics.descriptionEn}
+            target="ru"
+            onApply={(text) => onChange({ descriptionRu: text })}
+          />
+        }
+        plain
+      >
         <MarkdownEditor value={basics.descriptionRu} onChange={(value) => onChange({ descriptionRu: value })} />
       </FormField>
 
-      <FormField label={t('editConfig.descriptionEn')} plain>
+      <FormField
+        label={t('editConfig.descriptionEn')}
+        action={
+          <TranslateButton
+            source={basics.descriptionEn || basics.descriptionRu}
+            target="en"
+            onApply={(text) => onChange({ descriptionEn: text })}
+          />
+        }
+        plain
+      >
         <MarkdownEditor value={basics.descriptionEn} onChange={(value) => onChange({ descriptionEn: value })} />
       </FormField>
     </div>

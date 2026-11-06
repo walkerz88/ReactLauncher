@@ -24,6 +24,8 @@ import { GalleryPage } from '@/pages/GalleryPage';
 import { PreviewPage } from '@/pages/PreviewPage';
 import { ProfileSetupPage } from '@/pages/ProfileSetupPage';
 import { SettingsPage } from '@/pages/SettingsPage';
+import { ShowcaseGamePage } from '@/pages/ShowcaseGamePage';
+import { ShowcasePage } from '@/pages/ShowcasePage';
 
 import './App.css';
 
@@ -59,6 +61,8 @@ export const App: FC = () => {
                 <Route path="/achievements" element={<AchievementsPage />} />
                 <Route path="/app/:id" element={<PreviewPage />} />
                 <Route path="/downloads" element={<DownloadsPage />} />
+                <Route path="/showcase" element={<ShowcasePage />} />
+                <Route path="/showcase/:id" element={<ShowcaseGamePage />} />
                 <Route path="/settings" element={<SettingsPage />} />
               </Routes>
             </main>

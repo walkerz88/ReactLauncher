@@ -506,6 +506,30 @@ export interface DemoAPI {
   onProgress: (callback: (progress: DemoProgress) => void) => () => void;
 }
 
+export interface ShowcaseGame {
+  id: string;
+  name: string;
+  rating: number | null;
+  description: { ru: string | null; en: string | null } | null;
+  genre: string | null;
+  facts: Array<{ label: { ru: string | null; en: string | null }; value: { ru: string | null; en: string | null } }>;
+  torrentMagnet: string;
+  coverVertical: string | null;
+  coverHorizontal: string | null;
+  coverHorizontalPosition: 'top' | 'center' | 'bottom';
+  screenshots: string[];
+  trailer: string | null;
+}
+
+export interface ShowcaseData {
+  games: ShowcaseGame[];
+}
+
+export type ShowcaseCheckResult =
+  | { status: 'disabled' }
+  | { status: 'error' }
+  | { status: 'available'; data: ShowcaseData };
+
 export interface ElectronAPI {
   /** Quit the whole application. */
   quit: () => Promise<void>;
@@ -549,6 +573,14 @@ export interface ElectronAPI {
     onProgress: (callback: (progress: { received: number; total: number }) => void) => () => void;
   };
   demo: DemoAPI;
+  showcase: {
+    /** Load showcase from a specific URL. */
+    load: (url: string) => Promise<ShowcaseCheckResult>;
+    /** Import a showcase game: create folder, write config, download media. Returns the new game id. */
+    import: (gameId: string, overwrite: boolean) => Promise<{ ok: boolean; id?: string; error?: string; folderName?: string }>;
+    /** Open the showcase game folder in the OS file manager. */
+    openFolder: (folderName: string) => Promise<{ ok: boolean; error?: string }>;
+  };
   torrents: TorrentsAPI;
   translate: {
     /** Machine-translates `text` (source language auto-detected) into `target`; `null` on failure. */

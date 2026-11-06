@@ -304,6 +304,7 @@ React Launcher/
 │   │   ├── FavoritesPage/     # route "/favorites" — favorites only
 │   │   ├── AchievementsPage/  # route "/achievements" — level, achievements, stats
 │   │   ├── PreviewPage/       # route "/app/:id" — cover header, play / favorite / gear menu
+│   │   ├── DownloadsPage/     # route "/downloads" — torrent downloads
 │   │   ├── ProfileSetupPage/  # first-profile creation screen (no route of its own)
 │   │   └── SettingsPage/      # route "/settings"
 │   ├── widgets/
@@ -353,7 +354,8 @@ The sidebar doesn't participate in dragging.
 `ProfileSetupPage` is shown instead of the whole UI (creating the first
 profile, with no route of its own). After that, the routes are: `/` →
 `GalleryPage`, `/favorites` → `FavoritesPage`, `/achievements` →
-`AchievementsPage`, `/app/:id` → `PreviewPage`, `/settings` → `SettingsPage`.
+`AchievementsPage`, `/app/:id` → `PreviewPage`, `/downloads` →
+`DownloadsPage`, `/settings` → `SettingsPage`.
 The sidebar uses `NavLink`, and the active route's icon is highlighted via
 the `.active` class. The **Favorites** icon only shows up once at least one
 app is favorited (`favoritesStore`).

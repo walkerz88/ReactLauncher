@@ -21,6 +21,7 @@ import { RecentSectionToggle } from '@/features/RecentSectionToggle';
 import { ReadySectionToggle } from '@/features/ReadySectionToggle';
 import { InstallableSectionToggle } from '@/features/InstallableSectionToggle';
 import { LuckySectionToggle } from '@/features/LuckySectionToggle';
+import { ShowcaseSectionToggle } from '@/features/ShowcaseSectionToggle';
 import { UniqueThemes } from '@/features/UniqueThemes';
 import { WelcomeAnimationStyle } from '@/features/WelcomeAnimationStyle';
 import { WelcomeAnimationToggle } from '@/features/WelcomeAnimationToggle';
@@ -108,6 +109,7 @@ export const SettingsPage: FC = () => {
             <FavoritesSectionToggle />
             <AddGameSectionToggle />
             <TorrentAddToggle />
+            <ShowcaseSectionToggle />
             <ShowCountsToggle />
           </section>
 

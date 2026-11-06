@@ -1,0 +1,218 @@
+/* ShowcasePage reuses app-grid and app-card styles from AppGrid.css */
+
+.page[data-id="ShowcasePage"] {
+  display: flex;
+  flex-direction: column;
+}
+
+.showcase-header {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* --- plus button (same style as downloads__plus) --- */
+
+.showcase-plus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.showcase-plus:hover,
+.showcase-plus:focus-visible {
+  background-color: var(--color-accent);
+  color: var(--color-accent-text);
+}
+
+/* --- empty state (centered big + button) --- */
+
+.showcase-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.showcase-empty__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  pointer-events: none;
+}
+
+.showcase-empty__add {
+  display: flex;
+  pointer-events: auto;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  border: 2px dashed var(--color-accent);
+  border-radius: 10px;
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.showcase-empty__add:hover,
+.showcase-empty__add:focus-visible {
+  background-color: var(--color-accent);
+  color: var(--color-accent-text);
+  transform: scale(1.06);
+}
+
+.showcase-empty__icon {
+  color: var(--color-text-muted);
+  opacity: 0.4;
+  width: 64px;
+  height: 64px;
+}
+
+.showcase-empty__text {
+  margin: 0;
+  font-size: 16px;
+  color: var(--color-text-muted);
+}
+
+/* --- side panel content --- */
+
+.showcase-panel__content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.showcase-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.showcase-input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+.showcase-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.showcase-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.showcase-load-btn {
+  height: auto;
+  flex-shrink: 0;
+}
+
+/* --- showcase list --- */
+
+.showcase-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.showcase-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+}
+
+.showcase-row__drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  color: var(--color-text-muted);
+  cursor: grab;
+  touch-action: none;
+}
+
+.showcase-row__drag-handle:active {
+  cursor: grabbing;
+}
+
+.showcase-row__drag-handle:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.showcase-row__status {
+  flex-shrink: 0;
+}
+
+.showcase-row__status--loaded {
+  color: var(--color-success);
+}
+
+.showcase-row__status--error {
+  color: var(--color-danger);
+}
+
+.showcase-row__spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: showcase-spin 0.8s linear infinite;
+}
+
+@keyframes showcase-spin {
+  to { transform: rotate(360deg); }
+}
+
+.showcase-row__url {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.showcase-row__remove {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+}

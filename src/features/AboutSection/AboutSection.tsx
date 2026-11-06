@@ -1,5 +1,5 @@
 import { useState, type FC } from 'react';
-import { Globe, Link2, Mail, Tag, User } from 'lucide-react';
+import { Globe, Link2, Loader2, Mail, Tag, User } from 'lucide-react';
 
 import { useTranslation } from '@/app/i18n';
 import { useNotificationStore } from '@/app/store/notificationStore';
@@ -77,7 +77,8 @@ export const AboutSection: FC = () => {
             onClick={handleCheckUpdates}
             data-gamepad-focusable
           >
-            {checking ? t('settings.about.checkingUpdates') : t('settings.about.checkUpdates')}
+            {checking ? <Loader2 size={16} className="spin" /> : null}
+            {t('settings.about.checkUpdates')}
           </Button>
         ) : null}
       </div>
